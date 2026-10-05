@@ -160,14 +160,29 @@ export function createRedirect(module: RedirectModule): RedirectChannel {
           }
           cmdsize = 9 + authDataLen
           switch (module.protocol) {
-            case 1:
+            case 1: {
+              // Serial-over-LAN: the first thing the device must see after auth
+              // is its serial settings, or it drops the session outright
+              // (amt-redir-ws-0.1.0.js:185-193).
+              const MAX_TX_BUFFER = 10000
+              const TX_TIMEOUT = 100
+              const TX_OVERFLOW_TIMEOUT = 0
+              const RX_TIMEOUT = 10000
+              const RX_FLUSH_TIMEOUT = 100
+              const HEARTBEAT = 0
               sendText(
-                String.fromCharCode(0x40, 0x00, 0x00, 0x00) +
+                String.fromCharCode(0x20, 0x00, 0x00, 0x00) +
                   intToStrX(amtsequence++) +
-                  String.fromCharCode(0x00, 0x00, 0x00, 0x00) +
-                  String.fromCharCode(0x00, 0x00, 0x00, 0x00),
+                  shortToStrX(MAX_TX_BUFFER) +
+                  shortToStrX(TX_TIMEOUT) +
+                  shortToStrX(TX_OVERFLOW_TIMEOUT) +
+                  shortToStrX(RX_TIMEOUT) +
+                  shortToStrX(RX_FLUSH_TIMEOUT) +
+                  shortToStrX(HEARTBEAT) +
+                  intToStrX(0),
               )
               break
+            }
             case 2:
               sendText(String.fromCharCode(0x40, 0x00, 0x00, 0x00) + intToStrX(amtsequence++))
               break
