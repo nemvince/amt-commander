@@ -81,6 +81,22 @@ export const ChevronIcon = (p: IconProps) => (
   </svg>
 )
 
+/** Sliders, used for the settings menus in the media-page toolbars. */
+export const SettingsIcon = (p: IconProps) => (
+  <svg {...Icon(p)} fill="currentColor">
+    <path d="M2 4h7.2v1.5H2V4zm10.6 0H14v1.5h-1.4V4zM2 10.5h1.4V12H2v-1.5zm4.8 0H14V12H6.8v-1.5z" />
+    <circle cx="10.6" cy="4.75" r="1.75" />
+    <circle cx="5.4" cy="11.25" r="1.75" />
+  </svg>
+)
+
+/** Four corner brackets, for full screen. */
+export const ExpandIcon = (p: IconProps) => (
+  <svg {...Icon(p)} fill="currentColor">
+    <path d="M2 2h5v2H4v3H2V2zm7 0h5v5h-2V4H9V2zM2 9h2v3h3v2H2V9zm7 5h5V9h-2v3H9v2z" />
+  </svg>
+)
+
 /** Nav glyphs: one per top-level view, drawn on a 16x16 grid. */
 const NAV_PATHS: Record<string, string> = {
   system: 'M2 2h12v3H2V2zm0 4h12v2H2V6zm0 3h12v2H2V9zm0 3h8v2H2v-2z',

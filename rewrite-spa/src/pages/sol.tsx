@@ -4,6 +4,8 @@ import { createRedirect, type RedirectChannel, type RedirectModule } from '../li
 import { createTerminal, type Terminal, type TerminalEmulation } from '../lib/terminal'
 import { S } from '../strings'
 import { IderBar } from '../ui/ider-bar'
+import { NavIcon } from '../ui/icons'
+import { IconMenu, type MenuEntry } from '../ui/menu'
 
 /** Redirection states, in redirect-channel order. */
 const STATES = [S.disconnected, S.connecting, S.solSettingUp, S.connected]
@@ -83,8 +85,7 @@ export function SolPage() {
     else chan.Stop()
   }
 
-  const toggleSize = () => {
-    const next = size.w === SIZES[0].w ? SIZES[1] : SIZES[0]
+  const chooseSize = (next: { w: number; h: number }) => {
     setSize(next)
     terminal.resize(next.w, next.h)
     try {
@@ -95,18 +96,18 @@ export function SolPage() {
     setTick((t) => t + 1)
   }
 
-  const toggleLineFeed = () => {
-    terminal.lineFeed = terminal.lineFeed === '\r\n' ? '\n' : '\r\n'
+  const chooseLineFeed = (lf: '\r\n' | '\n') => {
+    terminal.lineFeed = lf
     setTick((t) => t + 1)
   }
 
-  const toggleFx = () => {
-    terminal.fxEmulation = ((terminal.fxEmulation + 1) % 3) as 0 | 1 | 2
+  const chooseFx = (mode: 0 | 1 | 2) => {
+    terminal.fxEmulation = mode
     setTick((t) => t + 1)
   }
 
-  const toggleEncoding = () => {
-    terminal.emulation = ((terminal.emulation + 1) % 3) as TerminalEmulation
+  const chooseEncoding = (mode: TerminalEmulation) => {
+    terminal.emulation = mode
     setTick((t) => t + 1)
   }
 
@@ -123,8 +124,52 @@ export function SolPage() {
     if (text) terminal.sendKeys(text)
   }
 
-  const encoding = [S.solEncUtf8, S.solEncAscii, S.solEncIntel][terminal.emulation]
-  const fxKeys = [S.solFxIntel, S.solFxAlt, S.solFxVt100][terminal.fxEmulation]
+  /** Line ending, encoding, F-keys and size all collapse into one menu. */
+  const terminalMenu: MenuEntry[] = []
+  terminalMenu.push({ id: 'lf-h', heading: S.solLineEnding })
+  terminalMenu.push({
+    id: 'lf-crlf',
+    label: S.solCrLf,
+    checked: terminal.lineFeed === '\r\n',
+    onSelect: () => chooseLineFeed('\r\n'),
+  })
+  terminalMenu.push({
+    id: 'lf-lf',
+    label: S.solLf,
+    checked: terminal.lineFeed === '\n',
+    onSelect: () => chooseLineFeed('\n'),
+  })
+  if (FEAT_TerminalEnumationAll) {
+    terminalMenu.push({ id: 'enc-h', heading: S.solEncoding })
+    ;[S.solEncUtf8, S.solEncAscii, S.solEncIntel].forEach((label, i) => {
+      terminalMenu.push({
+        id: 'enc' + i,
+        label,
+        checked: terminal.emulation === i,
+        onSelect: () => chooseEncoding(i as TerminalEmulation),
+      })
+    })
+  }
+  terminalMenu.push({ id: 'fx-h', heading: S.solFxKeys })
+  ;[S.solFxIntel, S.solFxAlt, S.solFxVt100].forEach((label, i) => {
+    terminalMenu.push({
+      id: 'fx' + i,
+      label,
+      checked: terminal.fxEmulation === i,
+      onSelect: () => chooseFx(i as 0 | 1 | 2),
+    })
+  })
+  if (FEAT_TerminalSize) {
+    terminalMenu.push({ id: 'sz-h', heading: S.solSize })
+    SIZES.forEach((s) => {
+      terminalMenu.push({
+        id: 'sz' + s.w,
+        label: s.w + 'x' + s.h,
+        checked: size.w === s.w && size.h === s.h,
+        onSelect: () => chooseSize(s),
+      })
+    })
+  }
 
   return (
     <div class="media-page">
@@ -133,22 +178,7 @@ export function SolPage() {
         <button type="button" class="btn btn-primary" onClick={toggleConnect}>
           {state === 0 ? S.solConnect : S.solDisconnect}
         </button>
-        <button type="button" class="btn" title={S.solCrTitle} onClick={toggleLineFeed}>
-          {terminal.lineFeed === '\r\n' ? S.solCrLf : S.solLf}
-        </button>
-        <button type="button" class="btn" title={S.solFxTitle} onClick={toggleFx}>
-          {fxKeys}
-        </button>
-        {FEAT_TerminalSize && (
-          <button type="button" class="btn" title={S.solSizeTitle} onClick={toggleSize}>
-            {size.w}x{size.h}
-          </button>
-        )}
-        {FEAT_TerminalEnumationAll && (
-          <button type="button" class="btn" title={S.solEncTitle} onClick={toggleEncoding}>
-            {encoding}
-          </button>
-        )}
+        <IconMenu label={S.solSettings} icon={<NavIcon name="sol" size={14} />} entries={terminalMenu} />
       </div>
 
       {FEAT_IDER ? <IderBar /> : null}

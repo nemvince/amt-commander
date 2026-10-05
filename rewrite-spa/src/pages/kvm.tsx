@@ -15,6 +15,8 @@ import {
   type KvmSettings,
 } from '../lib/kvm'
 import { Dialog } from '../ui/dialog'
+import { ExpandIcon, NavIcon, SettingsIcon } from '../ui/icons'
+import { IconMenu, type MenuEntry } from '../ui/menu'
 import { IderBar } from '../ui/ider-bar'
 import type { WsmanNode } from '../lib/wsman'
 
@@ -378,69 +380,97 @@ export function KvmPage() {
         : S.disconnected
   const injectable = live && !viewOnly
 
+  /** Screens to offer in the display menu; null unless the device has several. */
+  const multiScreens =
+    FEAT_DesktopMulti && screens != null && screens.isActive.filter(Boolean).length > 1 ? screens : null
+
+  /** Focus, rotation and screen switching collapse into one toolbar menu. */
+  const displayMenu: MenuEntry[] = []
+  if (FEAT_DesktopFocus) {
+    displayMenu.push({ id: 'focus-h', heading: S.kvmFocus })
+    ;[S.kvmFocusAll, S.kvmFocusSmall, S.kvmFocusLarge].forEach((label, i) => {
+      displayMenu.push({
+        id: 'focus' + i,
+        label,
+        checked: focusLevel / 64 === i,
+        onSelect: () => {
+          setFocusLevel(i * 64)
+          const session = sessionRef.current
+          if (session != null) session.focusMode = i * 64
+        },
+      })
+    })
+  }
+  if (FEAT_DesktopRotation) {
+    displayMenu.push({ id: 'rot-h', heading: S.kvmRotate })
+    displayMenu.push({ id: 'rot-l', label: S.kvmRotateLeft, onSelect: () => rotate(-1) })
+    displayMenu.push({ id: 'rot-r', label: S.kvmRotateRight, onSelect: () => rotate(1) })
+  }
+  if (multiScreens != null) {
+    displayMenu.push({ id: 'scr-h', heading: S.kvmDisplay })
+    multiScreens.isActive.forEach((active, i) => {
+      if (!active) {
+        return
+      }
+      displayMenu.push({
+        id: 'scr' + i,
+        label: S.kvmSwitchTo.replace('{0}', String(i + 1)),
+        checked: i === multiScreens.defaultScreen,
+        onSelect: () => switchScreen(i),
+      })
+    })
+  }
+
   return (
     <div class={'media-page' + (full ? ' kvm-fullscreen' : '')}>
       {/* Actions and settings on top, like a desktop viewer's toolbar. */}
       <div class="media-bar">
-            <button type="button" class="btn" onClick={live ? () => channelRef.current?.Stop() : start}>
-              {live ? S.kvmDisconnect : S.kvmConnect}
-            </button>
-            <button type="button" class="btn" onClick={toggleFullscreen}>
-              {full ? S.kvmExitFullscreen : S.kvmFullscreen}
-            </button>
-            {FEAT_DesktopFocus && (
-              <button
-                type="button"
-                class="btn"
-                onClick={() => {
-                  const next = (focusLevel + 64) % 192
-                  setFocusLevel(next)
-                  const session = sessionRef.current
-                  if (session != null) session.focusMode = next
-                }}
-              >
-                {[S.kvmFocusAll, S.kvmFocusSmall, S.kvmFocusLarge][focusLevel / 64]}
-              </button>
-            )}
-            {FEAT_DesktopRotation && (
-              <>
-                <button type="button" class="btn" title={S.kvmRotateLeft} onClick={() => rotate(-1)}>
-                  ↺
-                </button>
-                <button type="button" class="btn" title={S.kvmRotateRight} onClick={() => rotate(1)}>
-                  ↻
-                </button>
-              </>
-            )}
-            {FEAT_DesktopSettings && (
-              <button
-                type="button"
-                class="btn"
-                onClick={() => {
-                  const stack = getStack()
-                  // Grayscale needs a device that offers it (index.html:8977).
-                  if (stack != null && amtVersion.value > 15) {
-                    stack.Get('IPS_KVMRedirectionSettingData', (_s, _n, resp) => {
-                      setGraySupported(resp?.Body?.['GrayscalePixelFormatSupported'] === true)
-                    })
-                  }
-                  setDraft(settings)
-                  dialogOpen.current = true
-                  setShowSettings(true)
-                }}
-              >
-                {S.kvmSettings}
-              </button>
-            )}
-        {FEAT_DesktopMulti && screens != null && screens.isActive.filter(Boolean).length > 1 && (
+        <button type="button" class="btn" onClick={live ? () => channelRef.current?.Stop() : start}>
+          {live ? S.kvmDisconnect : S.kvmConnect}
+        </button>
+        <button
+          type="button"
+          class="btn"
+          title={full ? S.kvmExitFullscreen : S.kvmFullscreen}
+          aria-label={full ? S.kvmExitFullscreen : S.kvmFullscreen}
+          onClick={toggleFullscreen}
+        >
+          <ExpandIcon size={14} />
+        </button>
+        {displayMenu.length > 0 && (
+          <IconMenu label={S.kvmDisplay} icon={<NavIcon name="kvm" size={14} />} entries={displayMenu} />
+        )}
+        {FEAT_DesktopSettings && (
+          <button
+            type="button"
+            class="btn"
+            title={S.kvmSettings}
+            aria-label={S.kvmSettings}
+            onClick={() => {
+              const stack = getStack()
+              // Grayscale needs a device that offers it (index.html:8977).
+              if (stack != null && amtVersion.value > 15) {
+                stack.Get('IPS_KVMRedirectionSettingData', (_s, _n, resp) => {
+                  setGraySupported(resp?.Body?.['GrayscalePixelFormatSupported'] === true)
+                })
+              }
+              setDraft(settings)
+              dialogOpen.current = true
+              setShowSettings(true)
+            }}
+          >
+            <SettingsIcon size={14} />
+          </button>
+        )}
+        {multiScreens != null && (
           <>
             <span class="header-spacer" />
-            {screens.isActive.map((active, i) =>
+            {multiScreens.isActive.map((active, i) =>
               active ? (
                 <button
                   key={i}
                   type="button"
-                  class={'btn' + (i === screens.defaultScreen ? ' btn-primary' : '')}
+                  class={'btn' + (i === multiScreens.defaultScreen ? ' btn-primary' : '')}
                   title={S.kvmSwitchTo.replace('{0}', String(i + 1))}
                   onClick={() => switchScreen(i)}
                 >
