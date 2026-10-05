@@ -9,7 +9,8 @@
  *   bun scripts/build-firmware.ts
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
-import { brotliCompressSync, brotliDecompressSync, constants, gzipSync, gunzipSync } from 'node:zlib'
+import zopfli from '@gfx/zopfli'
+import { brotliCompressSync, brotliDecompressSync, constants, gunzipSync } from 'node:zlib'
 import { join } from 'node:path'
 
 const TIERS = ['small', 'medium', 'large'] as const
@@ -25,13 +26,22 @@ type Tier = (typeof TIERS)[number]
  */
 const ENCODING = process.env.ENCODING === 'br' ? 'br' : 'gzip'
 
-function compress(payload: Buffer): Buffer {
+/**
+ * gzip compression via zopfli (WASM) rather than zlib -9.
+ *
+ * Zopfli emits ordinary gzip -- the device, the loader and the browser need no
+ * changes -- but spends far more CPU picking better encodings: measured 3.7%
+ * smaller on this payload (78,447 vs 81,462 bytes for the large tier). It costs
+ * a couple of seconds per tier. 15 iterations beat 30 here, so more effort is
+ * not monotonic; leave it at 15.
+ */
+async function compress(payload: Buffer): Promise<Buffer> {
   if (ENCODING === 'br') {
     return brotliCompressSync(payload, {
       params: { [constants.BROTLI_PARAM_QUALITY]: 11, [constants.BROTLI_PARAM_LGWIN]: 24 },
     })
   }
-  return gzipSync(payload, { level: 9 })
+  return Buffer.from(await zopfli.gzipAsync(payload, { numiterations: 15 }))
 }
 
 function decompress(payload: Buffer): Buffer {
@@ -108,7 +118,7 @@ for (const tier of TIERS) {
   if (leftovers.length > 0) failures.push(`${tier}: un-inlined external reference(s): ${leftovers.join(', ')}`)
 
   const raw = Buffer.byteLength(inlined)
-  const packed = compress(Buffer.from(inlined, 'utf8'))
+  const packed = await compress(Buffer.from(inlined, 'utf8'))
   const artifact = join(outDir, `Firmware-${cap(tier)}.htm.${ENCODING === 'br' ? 'br' : 'gz'}`)
   writeFileSync(artifact, packed)
 
