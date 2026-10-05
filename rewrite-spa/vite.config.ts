@@ -1,3 +1,4 @@
+import { analyzer } from 'vite-bundle-analyzer'
 import preact from '@preact/preset-vite'
 import { defineConfig } from 'vite'
 
@@ -92,13 +93,23 @@ const flagDefines = Object.fromEntries(
 )
 
 export default defineConfig({
-  plugins: [preact()],
+  // `ANALYZE=1` writes dist/<tier>/bundle-stats.json for the treemap; the plugin
+  // is skipped otherwise so ordinary builds stay fast.
+  plugins: [
+    preact(),
+    ...(process.env.ANALYZE
+      ? [analyzer({ analyzerMode: 'json', fileName: 'bundle-stats.json', defaultSizes: 'gzip' })]
+      : []),
+  ],
   define: flagDefines,
   build: {
     outDir: 'dist/' + TIER,
     target: 'es2023',
     cssCodeSplit: false,
     assetsInlineLimit: 0,
+    // Measured: terser with aggressive settings came out ~900 B *larger*
+    // gzipped than the stock minifier here. Smaller minified output does not
+    // mean smaller gzipped output, so this is left at the default.
   },
   server: {
     proxy: {

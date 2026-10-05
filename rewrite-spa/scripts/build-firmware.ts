@@ -9,10 +9,35 @@
  *   bun scripts/build-firmware.ts
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { brotliCompressSync, brotliDecompressSync, constants, gzipSync, gunzipSync } from 'node:zlib'
 import { join } from 'node:path'
 
 const TIERS = ['small', 'medium', 'large'] as const
 type Tier = (typeof TIERS)[number]
+
+/**
+ * Payload encoding. AMT replays whatever `Content-Encoding` the storage metadata
+ * declares, so the device serves whichever of these we build with.
+ *
+ * Brotli is the default because it is ~15% smaller here and verified on real
+ * hardware: the device returned `Content-Encoding: br` with byte-identical
+ * content and the browser rendered it. `ENCODING=gzip` builds the gzip variant,
+ * which is the fallback if a different board refuses the br encoding.
+ */
+const ENCODING = process.env.ENCODING === 'gzip' ? 'gzip' : 'br'
+
+function compress(payload: Buffer): Buffer {
+  if (ENCODING === 'br') {
+    return brotliCompressSync(payload, {
+      params: { [constants.BROTLI_PARAM_QUALITY]: 11, [constants.BROTLI_PARAM_LGWIN]: 24 },
+    })
+  }
+  return gzipSync(payload, { level: 9 })
+}
+
+function decompress(payload: Buffer): Buffer {
+  return ENCODING === 'br' ? brotliDecompressSync(payload) : gunzipSync(payload)
+}
 
 /** AMT firmware file-storage limit; Small must fit or it cannot be flashed. */
 const SMALL_LIMIT = 65_536
@@ -84,12 +109,12 @@ for (const tier of TIERS) {
   if (leftovers.length > 0) failures.push(`${tier}: un-inlined external reference(s): ${leftovers.join(', ')}`)
 
   const raw = Buffer.byteLength(inlined)
-  const gzipped = Bun.gzipSync(Buffer.from(inlined, 'utf8'), { level: 9 })
-  const artifact = join(outDir, `Firmware-${cap(tier)}.htm.gz`)
-  writeFileSync(artifact, gzipped)
+  const packed = compress(Buffer.from(inlined, 'utf8'))
+  const artifact = join(outDir, `Firmware-${cap(tier)}.htm.${ENCODING === 'br' ? 'br' : 'gz'}`)
+  writeFileSync(artifact, packed)
 
-  results.push({ tier, raw, gz: gzipped.byteLength, legacy: legacySize(tier) })
-  console.log(`${(raw / 1024).toFixed(1)} KiB raw, ${(gzipped.byteLength / 1024).toFixed(1)} KiB gz`)
+  results.push({ tier, raw, gz: packed.byteLength, legacy: legacySize(tier) })
+  console.log(`${(raw / 1024).toFixed(1)} KiB raw, ${(packed.byteLength / 1024).toFixed(1)} KiB ${ENCODING}`)
 }
 
 // ------------------------------------------------------------------- report
@@ -132,8 +157,8 @@ const GATING: { tier: Tier; forbidden: string[] }[] = [
   { tier: 'medium', forbidden: ['script.mescript', 'ActionEac'] },
 ]
 for (const { tier, forbidden } of GATING) {
-  const artifact = join(outDir, `Firmware-${cap(tier)}.htm.gz`)
-  const text = new TextDecoder().decode(Bun.gunzipSync(readFileSync(artifact)))
+  const artifact = join(outDir, `Firmware-${cap(tier)}.htm.${ENCODING === 'br' ? 'br' : 'gz'}`)
+  const text = new TextDecoder().decode(decompress(readFileSync(artifact)))
   for (const needle of forbidden) {
     const count = text.split(needle).length - 1
     if (count > 0) failures.push(`${tier} artifact contains ${count} occurrence(s) of gated string "${needle}"`)

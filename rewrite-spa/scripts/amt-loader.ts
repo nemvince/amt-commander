@@ -21,6 +21,7 @@
  *   bun scripts/amt-loader.ts upload -h … -u … -p … dist/firmware/Firmware-Large.htm.gz
  */
 import { existsSync, statSync } from 'node:fs'
+import { brotliDecompressSync } from 'node:zlib'
 import { createInterface } from 'node:readline/promises'
 import { join } from 'node:path'
 import { hexMd5 } from '../src/lib/md5'
@@ -286,9 +287,24 @@ async function deleteEntry(creds: Creds, path: string): Promise<boolean> {
  * that precedes it, not a container. (Base64 only appears in the .NET build because
  * that is how the payload is stored inside the executable.)
  */
+/**
+ * Payload encoding, matching the build's `ENCODING` environment variable. AMT
+ * serves the entry back under whatever Content-Encoding we declare here, so this
+ * must agree with how the artifact was actually compressed. Brotli is the
+ * default because that is what the build produces; `ENCODING=gzip` for the
+ * gzip variant.
+ */
+const ENCODING = process.env.ENCODING === 'gzip' ? 'gzip' : 'br'
+
+function decompress(payload: Uint8Array): Uint8Array {
+  return ENCODING === 'br'
+    ? new Uint8Array(brotliDecompressSync(payload))
+    : Bun.gunzipSync(payload as unknown as Uint8Array<ArrayBuffer>)
+}
+
 function metadataHead(link: string | null): string {
   return (
-    '<metadata><headers><h>Content-Encoding:gzip</h>' +
+    `<metadata><headers><h>Content-Encoding:${ENCODING}</h>` +
     '<h>Content-Type:text/html</h></headers>' +
     (link ? `<link>${link}</link>` : '') +
     '</metadata>'
@@ -421,12 +437,13 @@ async function cmdUpload(o: Options) {
   }
 
   const gzip = new Uint8Array(await file.arrayBuffer())
-  const magic = gzip[0] === 0x1f && gzip[1] === 0x8b
+  // Brotli has no magic number, so only a gzip payload can be sanity-checked here.
+  const magic = ENCODING === 'br' || (gzip[0] === 0x1f && gzip[1] === 0x8b)
   banner('Intel(R) AMT console loader', `installing ${o.file}`)
 
   if (!magic) {
-    warn('this file does not start with a gzip magic number')
-    warn('AMT stores the console as-is, so it must already be gzipped')
+    warn(`this file does not start with a ${ENCODING} magic number`)
+    warn('AMT stores the console as-is, so it must already be compressed')
     if (!o.yes) return 2
   }
 
@@ -504,8 +521,9 @@ async function cmdUpload(o: Options) {
     return 1
   }
   const back = await readEntry(creds, o.path)
-  // The device stores gzip but serves it decoded, so compare against the inflated page.
-  const expected = Bun.gunzipSync(gzip as unknown as Uint8Array<ArrayBuffer>)
+  // AMT serves the stored bytes back verbatim under the declared
+  // Content-Encoding, so compare against the inflated page.
+  const expected = decompress(gzip)
   const same =
     back.bytes.length === expected.length && back.bytes.every((b, i) => b === expected[i])
   if (!same) {
