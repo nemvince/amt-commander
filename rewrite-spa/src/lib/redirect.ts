@@ -172,7 +172,13 @@ export function createRedirect(module: RedirectModule): RedirectChannel {
               sendText(String.fromCharCode(0x40, 0x00, 0x00, 0x00) + intToStrX(amtsequence++))
               break
             case 3:
-              sendText(String.fromCharCode(0x40, 0x00, 0x00, 0x00) + intToStrX(amtsequence++))
+              // IDER is ready the moment authentication succeeds: unlike KVM it
+              // has no 0x41 session-start opcode to wait for, so raise link state
+              // here. That drives the engine's own OPEN_SESSION, which carries the
+              // timeouts and protocol version the device expects
+              // (amt-redir-ws-0.1.0.js:197-201).
+              obj.connectstate = 1
+              stateChange(3)
               break
           }
           break
