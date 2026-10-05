@@ -16,15 +16,14 @@ const TIERS = ['small', 'medium', 'large'] as const
 type Tier = (typeof TIERS)[number]
 
 /**
- * Payload encoding. AMT replays whatever `Content-Encoding` the storage metadata
- * declares, so the device serves whichever of these we build with.
- *
- * Brotli is the default because it is ~15% smaller here and verified on real
- * hardware: the device returned `Content-Encoding: br` with byte-identical
- * content and the browser rendered it. `ENCODING=gzip` builds the gzip variant,
- * which is the fallback if a different board refuses the br encoding.
+ * Payload encoding. AMT does replay the `Content-Encoding` from the storage
+ * metadata -- a brotli entry comes back as `br` and curl reads it back
+ * byte-identical -- but a browser loading that entry through AMT fails with
+ * ERR_CONTENT_DECODING_FAILED. Verified on hardware, so brotli is NOT usable
+ * here despite being ~15% smaller: gzip is the default and br is kept only so
+ * the measurement can be repeated.
  */
-const ENCODING = process.env.ENCODING === 'gzip' ? 'gzip' : 'br'
+const ENCODING = process.env.ENCODING === 'br' ? 'br' : 'gzip'
 
 function compress(payload: Buffer): Buffer {
   if (ENCODING === 'br') {

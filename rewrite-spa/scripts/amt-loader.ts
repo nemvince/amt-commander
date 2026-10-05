@@ -289,12 +289,12 @@ async function deleteEntry(creds: Creds, path: string): Promise<boolean> {
  */
 /**
  * Payload encoding, matching the build's `ENCODING` environment variable. AMT
- * serves the entry back under whatever Content-Encoding we declare here, so this
- * must agree with how the artifact was actually compressed. Brotli is the
- * default because that is what the build produces; `ENCODING=gzip` for the
- * gzip variant.
+ * serves the entry under whatever Content-Encoding we declare here, so this must
+ * agree with how the artifact was compressed. gzip is the default: brotli is
+ * served back correctly but a browser cannot decode it through AMT (see
+ * build-firmware.ts).
  */
-const ENCODING = process.env.ENCODING === 'gzip' ? 'gzip' : 'br'
+const ENCODING = process.env.ENCODING === 'br' ? 'br' : 'gzip'
 
 function decompress(payload: Uint8Array): Uint8Array {
   return ENCODING === 'br'
