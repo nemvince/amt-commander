@@ -14,7 +14,6 @@
         "typescript": "~7.0.2",
         "vite": "^8.3.2",
         "vite-bundle-analyzer": "^1.3.9",
-        "zopfli": "^1.0.2",
       },
     },
   },
@@ -292,8 +291,6 @@
     "yallist": ["yallist@3.1.1", "", {}, "sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g=="],
 
     "zimmerframe": ["zimmerframe@1.1.5", "", {}, "sha512-msJxIvYDYcoNL+PJsu+7qmpDWsYmAxTY+2TNYXXF0hzBzBk0BMecOqDOG/EckUoKCuKwObfbugIl8QpqHDXeFA=="],
-
-    "zopfli": ["zopfli@1.0.2", "", { "bin": { "zfip": "bin/zfip" } }, "sha512-ZyJ1kPUHLlM7E5sdn93WG51N8dcyIJqPhSCDy/CJsvlxbRzRhbfu3NwCpLHM5udt6j0WixIwh9C3dcrvZS8ctw=="],
 
     "@prefresh/vite/@rollup/pluginutils": ["@rollup/pluginutils@4.2.1", "", { "dependencies": { "estree-walker": "^2.0.1", "picomatch": "^2.2.2" } }, "sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ=="],
 
