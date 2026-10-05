@@ -731,6 +731,9 @@ export function createKvmSession(canvas: HTMLCanvasElement, initial?: Partial<Kv
           everStreamed = true
           obj.connectTime = Date.now()
           obj.disconnectCode = DISCONNECT.AMT_DISCONNECT
+          // The link is only usable once the device has handed us a framebuffer.
+          // Without this the page stays non-live and silently drops all input.
+          obj.xxStateChange(3)
           sendRefresh()
           if (bpp * screenWidth * screenHeight > MAX_BUFFER) obj.disconnectCode = DISCONNECT.BUFFER_OVERFLOW
         } else if (state === RFB_STREAM) {

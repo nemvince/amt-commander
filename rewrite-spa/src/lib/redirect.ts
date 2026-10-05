@@ -18,6 +18,8 @@ export type RedirectProtocol = 1 | 2 | 3
 /** Consumer implemented by the terminal / desktop / IDER modules. */
 export interface RedirectModule {
   protocol: RedirectProtocol
+  /** Optional: receives the device's refusal status so the UI can explain it. */
+  disconnectCode?: number
   /** Called once the session is live and data can flow. */
   Start(): void
   /** Text payload (SOL). */
@@ -134,7 +136,10 @@ export function createRedirect(module: RedirectModule): RedirectChannel {
         case 0x11: // StartRedirectionSessionReply
           if (acc.length < 4) return
           if (acc[1] !== 0) {
-            obj.Stop(1)
+            // Non-zero status is the reason the device refused the session
+            // (2 = redirection port busy), and is the page's only clue why.
+            module.disconnectCode = acc[1]
+            obj.Stop(acc[1])
             return
           }
           if (acc.length < 13) return
