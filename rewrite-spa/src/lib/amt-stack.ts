@@ -527,14 +527,6 @@ export function format(template: string, ...args: (string | number)[]): string {
     return v === undefined ? m : String(v)
   })
 }
-export function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
 
 /** Unused import guard: SelectorSet is part of the public Exec* signature surface. */
 export type { SelectorSet }

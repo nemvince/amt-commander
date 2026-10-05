@@ -605,4 +605,3 @@ export const REALM_NAMES: readonly string[] =
     '|',
   )
 
-export type StringKey = keyof typeof S

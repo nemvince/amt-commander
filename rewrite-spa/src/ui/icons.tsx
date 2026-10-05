@@ -15,27 +15,9 @@ function Icon(props: IconProps): Record<string, string | number | undefined> {
   }
 }
 
-export const InfoIcon = (p: IconProps) => (
-  <svg {...Icon(p)} fill="currentColor">
-    <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3a1 1 0 110 2 1 1 0 010-2zm1 8H7V7h2v5z" />
-  </svg>
-)
-
 export const WarnIcon = (p: IconProps) => (
   <svg {...Icon(p)} fill="currentColor">
     <path d="M8 1L1 14h14L8 1zm0 4l4.5 8h-9L8 5zm-1 3v3h2V8H7zm0 4v2h2v-2H7z" />
-  </svg>
-)
-
-export const ErrorIcon = (p: IconProps) => (
-  <svg {...Icon(p)} fill="currentColor">
-    <path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7V4zm0 6h2v2H7v-2z" />
-  </svg>
-)
-
-export const OkIcon = (p: IconProps) => (
-  <svg {...Icon(p)} fill="currentColor">
-    <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm3.7 5.3l-4.2 4.2-2.8-2.8 1.4-1.4 1.4 1.4 2.8-2.8 1.4 1.4z" />
   </svg>
 )
 
@@ -72,12 +54,6 @@ export const TrashIcon = (p: IconProps) => (
 export const PowerIcon = (p: IconProps) => (
   <svg {...Icon(p)} fill="currentColor">
     <path d="M8 1v6h2V3.1a6 6 0 11-4 0V7h2V1H8z" />
-  </svg>
-)
-
-export const ChevronIcon = (p: IconProps) => (
-  <svg {...Icon(p)} fill="currentColor">
-    <path d="M6 3l5 5-5 5V3z" />
   </svg>
 )
 

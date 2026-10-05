@@ -32,8 +32,6 @@ export const amtVersionMinor = signal(0)
 /** Full "major.minor.patch" string exactly as the device reported it. */
 export const amtVersionString = signal('')
 export const powerState = signal<number>(-1)
-export const osPowerState = signal<number>(-1)
-export const bootCapabilities = signal<WsmanNode | null>(null)
 export const generalSettings = signal<WsmanNode | null>(null)
 export const serviceAvailability = signal<WsmanNode | null>(null)
 export const networkTime = signal(0)

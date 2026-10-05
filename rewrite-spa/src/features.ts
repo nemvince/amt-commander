@@ -13,52 +13,8 @@
  * cannot be written as an identifier at all).
  */
 
-export type FeatureFlag =
-  // Look and mode
-  | 'Look-Commander'
-  | 'Mode-Firmware'
-  // Shell
-  | 'VersionWarning'
-  | 'ContextMenus'
-  | 'FileSaver'
-  // Remote desktop
-  | 'Desktop'
-  | 'Desktop-Multi'
-  | 'DesktopRotation'
-  | 'Desktop-Settings'
-  | 'DesktopType'
-  | 'DesktopFocus'
-  // Serial over LAN
-  | 'Terminal'
-  | 'TerminalSize'
-  | 'Terminal-Enumation-All'
-  | 'Terminal-FxEnumation-All'
-  // IDER
-  | 'IDER'
-  | 'IDERStats'
-  // Feature pages
-  | 'HardwareInfo'
-  | 'EventLog'
-  | 'AuditLog'
-  | 'Storage'
-  | 'NetworkSettings'
-  | 'Wireless'
-  | 'SystemDefense'
-  | 'AgentPresence'
-  | 'Alarms'
-  | 'Scripting'
-  | 'Scripting-Editor'
-  | 'EventSubscriptions'
-  | 'RemoteAccess'
-  // Power
-  | 'PowerControl'
-  | 'PowerControl-Advanced'
-
 /** Every flag as a bare global, replaced by vite's `define` at build time. */
-declare const __FEAT_LookCommander__: boolean
-declare const __FEAT_ModeFirmware__: boolean
 declare const __FEAT_VersionWarning__: boolean
-declare const __FEAT_ContextMenus__: boolean
 declare const __FEAT_FileSaver__: boolean
 declare const __FEAT_Desktop__: boolean
 declare const __FEAT_DesktopMulti__: boolean
@@ -86,15 +42,10 @@ declare const __FEAT_ScriptingEditor__: boolean
 declare const __FEAT_EventSubscriptions__: boolean
 declare const __FEAT_RemoteAccess__: boolean
 declare const __FEAT_PowerControl__: boolean
-declare const __FEAT_PowerControlAdvanced__: boolean
 
-// Guard flags for a whole edition rather than a page.
-export const FEAT_LookCommander = __FEAT_LookCommander__
-export const FEAT_ModeFirmware = __FEAT_ModeFirmware__
 
 // Shell
 export const FEAT_VersionWarning = __FEAT_VersionWarning__
-export const FEAT_ContextMenus = __FEAT_ContextMenus__
 export const FEAT_FileSaver = __FEAT_FileSaver__
 
 // Remote desktop
@@ -132,4 +83,3 @@ export const FEAT_RemoteAccess = __FEAT_RemoteAccess__
 
 // Power
 export const FEAT_PowerControl = __FEAT_PowerControl__
-export const FEAT_PowerControlAdvanced = __FEAT_PowerControlAdvanced__
