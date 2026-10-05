@@ -10,7 +10,6 @@ import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 
 export type MenuEntry =
-  | { id: string; sep: true }
   | { id: string; heading: string }
   | { id: string; label: string; checked?: boolean; onSelect: () => void }
 
@@ -19,8 +18,6 @@ export interface IconMenuProps {
   label: string
   icon: ComponentChildren
   entries: MenuEntry[]
-  /** Hang the panel from the right edge; for triggers near the right side. */
-  align?: 'left' | 'right'
 }
 
 export function IconMenu(props: IconMenuProps) {
@@ -63,11 +60,8 @@ export function IconMenu(props: IconMenuProps) {
         {props.icon}
       </button>
       {open && (
-        <div class={'menu-panel' + (props.align === 'right' ? ' menu-right' : '')} role="menu">
+        <div class="menu-panel" role="menu">
           {props.entries.map((entry) => {
-            if ('sep' in entry) {
-              return <div key={entry.id} class="menu-sep" role="separator" />
-            }
             if ('heading' in entry) {
               return (
                 <div key={entry.id} class="menu-heading">
