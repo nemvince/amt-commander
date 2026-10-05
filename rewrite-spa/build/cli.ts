@@ -435,28 +435,43 @@ async function cmdUi(a: Args): Promise<number> {
     refresh()
   }
 
+  /** First body line currently shown; the feature list scrolls, nothing else. */
+  let scroll = 0
+
   const frame = (): string => {
     const width = process.stdout.columns ?? 100
+    const rows = process.stdout.rows ?? 40
     const live = ids()
-    const out: string[] = []
-    out.push(bold('MeshCommander build picker') + dim(`   theme ${theme} (t)   ${a.tier != null ? `tier ${a.tier}` : 'custom'}   ${live.length} features`))
-    out.push(
+
+    const head: string[] = []
+    head.push(bold('MeshCommander build picker') + dim(`   theme ${theme} (t)   ${a.tier != null ? `tier ${a.tier}` : 'custom'}   ${live.length} features`))
+    head.push(
       measured != null
         ? `${dim('total')} ${paint('32', `${bytes(measured)}  measured`)}`
         : est.bytes === 0 && est.unmeasured.length > 0
           ? `${dim('total')} ${paint('33', 'unknown  (cache cold, nothing measured yet)')}`
           : `${dim('total')} ${paint('33', `~${bytes(est.bytes)}  estimate`)}${est.exact ? dim(' (measured whole)') : est.unmeasured.length > 0 ? dim(` (${est.unmeasured.length} unmeasured)`) : dim(' (all parts measured)')}`,
     )
-    out.push(dim('space toggle · ↑↓ move · t theme · m measure · b build · i install · q quit'))
-    out.push('')
+    head.push(dim('space toggle · ↑↓ move · t theme · m measure · b build · i install · q quit'))
+    head.push('')
+
+    /*
+     * The body is taller than most terminals, so it scrolls: build every line,
+     * note where the cursor sits, then show a window around it. Group headings
+     * scroll with their features on purpose -- a heading pinned to the top of a
+     * window it does not belong to reads as a lie.
+     */
+    const body: string[] = []
+    let cursorLine = 0
     for (const [group, defs] of GROUPS) {
-      out.push(bold(group))
+      body.push(bold(group))
       for (const f of defs) {
         const cur = ROWS[cursor]?.id === f.id
+        if (cur) cursorLine = body.length
         const locked = MANDATORY.includes(f.id)
         const enabled = locked || live.includes(f.id)
         const cost = costOf(f.id)
-        const head = `${cur ? '>' : ' '} [${locked ? '•' : enabled ? 'x' : ' '}] ${f.label.padEnd(26)}`
+        const prefix = `${cur ? '>' : ' '} [${locked ? '•' : enabled ? 'x' : ' '}] ${f.label.padEnd(26)}`
         /*
          * A marginal can come out negative or zero: it is the difference between
          * two independent builds, so gzip variance and a stale cache can put it
@@ -470,13 +485,31 @@ async function cmdUi(a: Args): Promise<number> {
               : Math.abs(cost) < 64 ? '~0'
                 : `${cost > 0 ? '+' : '-'}${kb(Math.abs(cost))}`
         ).padStart(10)
-        const plain = `${head}${price}  ${f.id}  ${f.description ?? ''}`
-        out.push(cur ? paint('1;36', head) + dim(plain.slice(head.length)) : plain)
+        const plain = `${prefix}${price}  ${f.id}  ${f.description ?? ''}`
+        body.push(cur ? paint('1;36', prefix) + dim(plain.slice(prefix.length)) : plain)
       }
-      out.push('')
+      body.push('')
     }
-    out.push(status === '' ? dim('ready') : paint('36', status))
-    return out.map((l) => (l.length > width ? clamp(l, width) : l)).join('\n')
+
+    const foot: string[] = ['', status === '' ? dim('ready') : paint('36', status)]
+
+    // Two rows are always reserved for the scroll hints so the window size does
+    // not change as they appear and disappear, which would make it jitter.
+    const viewH = Math.max(3, rows - head.length - foot.length - 2)
+    if (cursorLine < scroll) scroll = cursorLine
+    if (cursorLine >= scroll + viewH) scroll = cursorLine - viewH + 1
+    scroll = Math.max(0, Math.min(scroll, Math.max(0, body.length - viewH)))
+
+    const above = scroll
+    const below = Math.max(0, body.length - (scroll + viewH))
+    const lines = [
+      ...head,
+      above > 0 ? dim(`  ↑ ${above} more`) : '',
+      ...body.slice(scroll, scroll + viewH),
+      below > 0 ? dim(`  ↓ ${below} more`) : '',
+      ...foot,
+    ]
+    return lines.map((l) => (l.length > width ? clamp(l, width) : l)).join('\n')
   }
 
   const draw = () => process.stdout.write(`\x1b[H\x1b[2J${frame()}`)
@@ -507,6 +540,11 @@ async function cmdUi(a: Args): Promise<number> {
   }
 
   process.stdout.write('\x1b[?1049h\x1b[?25l')
+  // A resize changes how much of the list fits; redraw now rather than waiting
+  // for the next keypress. `on` is optional because not every runtime emits
+  // 'resize' on stdout -- without it the viewport still adapts on the next key.
+  const onResize = () => draw()
+  process.stdout.on?.('resize', onResize)
   try {
     draw()
     for await (const key of readKeys()) {
@@ -569,6 +607,7 @@ async function cmdUi(a: Args): Promise<number> {
       draw()
     }
   } finally {
+    process.stdout.off?.('resize', onResize)
     process.stdout.write('\x1b[?25h\x1b[?1049l')
     process.stdin.setRawMode?.(false)
   }
