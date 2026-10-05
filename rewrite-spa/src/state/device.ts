@@ -202,7 +202,7 @@ export function PullHardware() {
       'CIM_PhysicalMemory',
       'CIM_MediaAccessDevice',
       'CIM_PhysicalPackage',
-      '*CIM_Battery',
+      'CIM_Battery',
     ],
     (_stack, _batchname, results) => {
       batch(() => {
@@ -265,9 +265,18 @@ export function PullAgentPresence() {
 export function PullSubscriptions() {
   const stack = amtstack
   if (stack == null) return
-  stack.Enum('AMT_EventSubscriptionService', (_stack, _name, items) => {
+  // Legacy PullEventSubscriptions enumerates destinations and their associated
+  // CIM_FilterCollectionSubscription objects; EventSubscriptionService is not a resource.
+  stack.BatchEnum('', ['CIM_ListenerDestination', 'CIM_FilterCollectionSubscription'], (_stack, _batchname, results) => {
+    const listeners = results['CIM_ListenerDestination']?.responses
+    const subscriptionItems = results['CIM_FilterCollectionSubscription']?.responses
+    const destinations = Array.isArray(listeners) ? listeners : []
+    const links = Array.isArray(subscriptionItems) ? subscriptionItems : []
     batch(() => {
-      subscriptions.value = (items as WsmanNode[]) ?? []
+      subscriptions.value = links.map((link, i) => ({
+        ...link,
+        Destination: destinations[i]?.['Destination']
+      }))
     })
   })
 }

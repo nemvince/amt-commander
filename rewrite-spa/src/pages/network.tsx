@@ -27,11 +27,11 @@ const NET_CLASSES = [
 
 /** Wireless-side classes, verbatim from index.html:7648. */
 const WIFI_CLASSES = [
-  '*CIM_WiFiPortCapabilities',
-  '*CIM_WiFiPort',
-  '*CIM_WiFiEndpoint',
+  'CIM_WiFiPortCapabilities',
+  'CIM_WiFiPort',
+  'CIM_WiFiEndpoint',
   'CIM_WiFiEndpointSettings',
-  '*AMT_WiFiPortConfigurationService'
+  'AMT_WiFiPortConfigurationService'
 ]
 
 const LINK_POLICY: Record<number, string> = { 1: 'S0/AC', 14: 'Sx/AC', 16: 'S0/DC', 224: 'Sx/DC' }

@@ -105,7 +105,7 @@ export function PresencePage() {
 
   const pull = () => {
     PullAgentPresence()
-    getStack()?.Get('*AMT_AgentPresenceCapabilities', (_s, _name, resp) => {
+    getStack()?.Get('AMT_AgentPresenceCapabilities', (_s, _name, resp) => {
       capabilities.value = (resp?.Body as WsmanNode) ?? null
     }, undefined, 1)
   }

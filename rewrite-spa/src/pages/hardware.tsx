@@ -28,7 +28,7 @@ const HW_CLASSES = [
   'CIM_PhysicalMemory',
   'CIM_MediaAccessDevice',
   'CIM_PhysicalPackage',
-  '*CIM_Battery'
+  'CIM_Battery',
 ]
 
 /** DSP0134 2.7.1 enumerations, verbatim from index.html:8052-8064. */
