@@ -158,9 +158,12 @@ export function PullSystemStatus() {
     if (body) networkTime.value = (body['Ta0'] as number) ?? 0
   })
   stack.Enum('CIM_ServiceAvailableToElement', (_stack, _name, items) => {
-    serviceAvailability.value = (items?.[0] as WsmanNode) ?? null
+    const first = items?.[0] as WsmanNode | undefined
+    serviceAvailability.value = first ?? null
+    // This same record drives the legacy status display; do not wait for the
+    // idle-only poll below, which necessarily refuses while the boot batch is busy.
+    powerState.value = (first?.['PowerState'] as number) ?? -1
   })
-  PullPowerState()
 }
 
 export function PullPowerState() {

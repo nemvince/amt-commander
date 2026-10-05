@@ -19,6 +19,7 @@ type WebSocketData = {
   protocol: number
   /** KVM RFB handshake progress; undefined for non-KVM sessions. */
   rfb?: number
+  rfbBpp?: number
 }
 
 const PORT = Number(process.env.PORT ?? 8765)
@@ -76,11 +77,12 @@ let auditLog: string[] = classes.get(AMT + 'AMT_AuditLog') ?? []
  * -> GetRecords -> RecordArray), not by enumeration. These are real RecordArray
  * payloads captured from the device, so the page decodes genuine records.
  */
-const messageRecords: string[] = (() => {
+const seededMessageRecords: string[] = (() => {
   const f = join(REAL_DIR, 'message-log-records.txt')
   if (!existsSync(f)) return []
   return readFileSync(f, 'utf8').split('\n').filter((l) => l.trim() !== '')
 })()
+let messageRecords = [...seededMessageRecords]
 
 /** Iteration state for the in-progress message-log read. */
 const iterations = new Map<string, number>()
@@ -286,6 +288,7 @@ function handleMethod(method: string, resuri: string, body: string): string {
     }
     case 'AMT_MessageLog.ClearLog': {
       eventLog = []
+      messageRecords = []
       requestLog.push('event-log-cleared')
       return methodOutput('ClearLog', { ReturnValue: 0 })
     }
@@ -382,10 +385,12 @@ function handleMethod(method: string, resuri: string, body: string): string {
       return methodOutput('FreezeLog', { ReturnValue: 0 })
     case 'AMT_MessageLog.ClearLog':
       eventLog = []
+      messageRecords = []
       requestLog.push('event-log-cleared')
       return methodOutput('ClearLog', { ReturnValue: 0 })
     case 'CIM_RecordLog.ClearLog':
       eventLog = []
+      messageRecords = []
       requestLog.push('event-log-cleared')
       return methodOutput('ClearLog', { ReturnValue: 0 })
     case 'IPS_ScreenSettingData.Get':
@@ -448,6 +453,9 @@ function openRedirect(ws: ServerWebSocket<WebSocketData>) {
 function onRedirectMessage(ws: ServerWebSocket<WebSocketData>, raw: Buffer) {
   const b = new Uint8Array(raw)
   const st = ws.data
+  if (st.protocol === 2 && st.rfb !== undefined) {
+    requestLog.push(`kvm-client-msg rfb=${st.rfb} len=${b.length} first=${b[0] ?? -1}`)
+  }
 
   if (b[0] === 0x10) {
     // Protocol comes from the ASCII tag at bytes 4..7 -- SOL and IDER share a 0
@@ -469,10 +477,15 @@ function onRedirectMessage(ws: ServerWebSocket<WebSocketData>, raw: Buffer) {
     return
   }
   if (b[0] === 0x40) {
+    if (st.protocol === 3 && st.phase === 'settings') {
+      // IDER OPEN_SESSION reply: the IDER engine consumes this opcode itself.
+      requestLog.push('ider-open-session')
+      send(ws, new Uint8Array([0x41, 0, 0, 0, 0, 0, 0, 0]))
+      return
+    }
     st.phase = 'settings'
     requestLog.push('redirect-settings-request')
-    // Response-to-settings (0x21): the client keys on the opcode byte, so a bare
-    // 23-byte zero buffer would be rejected as an unknown command.
+    // Response-to-settings (0x21): the client keys on the opcode byte.
     const settingsReply = new Uint8Array(23)
     settingsReply[0] = 0x21
     send(ws, settingsReply)
@@ -521,10 +534,19 @@ function onRedirectMessage(ws: ServerWebSocket<WebSocketData>, raw: Buffer) {
       send(ws, rfbServerInit())
       return
     }
-    if (st.rfb === 4) {
+    if (st.rfb === 4 && b[0] === 2) {
+      requestLog.push('kvm-set-encodings')
+      return
+    }
+    if (st.rfb === 4 && b[0] === 0) {
+      st.rfbBpp = b[4] === 16 ? 2 : 1
       st.rfb = 5
+      requestLog.push(`kvm-pixel-format bpp=${st.rfbBpp}`)
+      return
+    }
+    if (st.rfb === 5 && b[0] === 3) {
       requestLog.push('kvm-framebuffer-update')
-      send(ws, rfbFramebufferUpdate())
+      send(ws, rfbFramebufferUpdate(st.rfbBpp ?? 1))
       return
     }
   }
@@ -576,50 +598,63 @@ function rfbServerInit(): Uint8Array {
   const name = 'Mock AMT KVM'
   const buf = new Uint8Array(24 + name.length)
   const dv = new DataView(buf.buffer)
-  buf[0] = 3 // ServerInit
-  dv.setUint16(4, RFB_W, true)
-  dv.setUint16(6, RFB_H, true)
-  // Pixel format: bpp, depth, big-endian, true-colour, max/shift for R,G,B.
-  buf[8] = 16
-  buf[9] = 16
-  buf[10] = 0
-  buf[11] = 1
-  dv.setUint16(12, 31, true)
-  dv.setUint16(14, 10, true)
-  dv.setUint16(16, 5, true)
-  buf[18] = 0
-  buf[19] = 5
-  buf[20] = 0
-  buf[21] = 0
-  dv.setUint32(20, name.length, true)
+  // ServerInit starts with width/height; unlike server messages, it has no type byte.
+  dv.setUint16(0, RFB_W, false)
+  dv.setUint16(2, RFB_H, false)
+  // Pixel format: RGB565, little-endian true colour.
+  buf[4] = 16
+  buf[5] = 16
+  buf[6] = 0
+  buf[7] = 1
+  dv.setUint16(8, 31, false)
+  dv.setUint16(10, 63, false)
+  dv.setUint16(12, 31, false)
+  buf[14] = 11
+  buf[15] = 5
+  buf[16] = 0
+  dv.setUint32(20, name.length, false)
   buf.set([...name].map((c) => c.charCodeAt(0)), 24)
   return buf
 }
 
-/** One full-screen RAW rectangle; the client forces RGB565 when bpp is 2. */
-function rfbFramebufferUpdate(): Uint8Array {
-  const header = 12 + RFB_W * RFB_H * 2
-  const buf = new Uint8Array(header)
+/** One RAW framebuffer update split into the 64x64 tiles the client accepts. */
+function rfbFramebufferUpdate(bpp: number): Uint8Array {
+  const pixelBytes = bpp === 2 ? 2 : 1
+  const tiles: { x: number; y: number; width: number; height: number }[] = []
+  for (let y = 0; y < RFB_H; y += 64) {
+    for (let x = 0; x < RFB_W; x += 64) {
+      tiles.push({ x, y, width: Math.min(64, RFB_W - x), height: Math.min(64, RFB_H - y) })
+    }
+  }
+  const size = 4 + tiles.reduce((n, t) => n + 12 + t.width * t.height * pixelBytes, 0)
+  const buf = new Uint8Array(size)
   const dv = new DataView(buf.buffer)
   buf[0] = 0 // FramebufferUpdate
-  dv.setUint16(2, 1, true) // one rectangle
-  dv.setUint16(4, 0, true) // x
-  dv.setUint16(6, 0, true) // y
-  dv.setUint16(8, RFB_W, true)
-  dv.setUint16(10, RFB_H, true)
-  dv.setUint32(12, 0, true) // encoding 0 = RAW
-  let p = 16
-  // RGB565 bands, so the canvas visibly paints rather than filling solid.
-  for (let y = 0; y < RFB_H; y++) {
-    const band = Math.floor((y / RFB_H) * 4)
-    for (let x = 0; x < RFB_W; x++) {
-      let c: number
-      if (band === 0) c = 0x001f
-      else if (band === 1) c = 0x07e0
-      else if (band === 2) c = 0x7c00
-      else c = ((x / RFB_W) * 0xffff) | 0
-      dv.setUint16(p, c, true)
-      p += 2
+  dv.setUint16(2, tiles.length, false)
+  let p = 4
+  for (const tile of tiles) {
+    dv.setUint16(p, tile.x, false)
+    dv.setUint16(p + 2, tile.y, false)
+    dv.setUint16(p + 4, tile.width, false)
+    dv.setUint16(p + 6, tile.height, false)
+    dv.setUint32(p + 8, 0, false) // encoding 0 = RAW
+    p += 12
+    for (let y = tile.y; y < tile.y + tile.height; y++) {
+      const band = Math.floor((y / RFB_H) * 4)
+      for (let x = tile.x; x < tile.x + tile.width; x++) {
+        const color = band === 0 ? 0xe0 : band === 1 ? 0x1c : band === 2 ? 0x03 : Math.floor((x / RFB_W) * 255)
+        if (pixelBytes === 2) {
+          // RGB565 little-endian pixel payload.
+          const r = (color >> 5) & 7
+          const g = (color >> 2) & 7
+          const b = color & 3
+          dv.setUint16(p, ((r * 31 / 7) << 11) | ((g * 63 / 7) << 5) | (b * 21), true)
+          p += 2
+        } else {
+          // RGB332 single-byte pixel payload.
+          buf[p++] = color
+        }
+      }
     }
   }
   return buf
@@ -647,6 +682,7 @@ Bun.serve<WebSocketData>({
       requestLog.length = 0
       userAcls = [{ DigestUsername: 'admin', DigestPassword: '', AccessPermission: 4, Realms: 'Intel(R) AMT' }]
       eventLog = classes.get(AMT + 'AMT_MessageLog') ?? []
+      messageRecords = [...seededMessageRecords]
       auditLog = classes.get(AMT + 'AMT_AuditLog') ?? []
       powerState = 2
       return Response.json({ ok: true })
