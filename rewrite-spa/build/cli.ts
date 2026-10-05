@@ -457,7 +457,19 @@ async function cmdUi(a: Args): Promise<number> {
         const enabled = locked || live.includes(f.id)
         const cost = costOf(f.id)
         const head = `${cur ? '>' : ' '} [${locked ? '•' : enabled ? 'x' : ' '}] ${f.label.padEnd(26)}`
-        const price = (cost == null ? '?' : cost === 0 ? 'core' : `+${kb(cost)}`).padStart(10)
+        /*
+         * A marginal can come out negative or zero: it is the difference between
+         * two independent builds, so gzip variance and a stale cache can put it
+         * below the baseline. Rendering that as `+-0.1 KiB` was the bug.
+         * `core` is reserved for the locked features; an optional feature that
+         * happens to measure as free reads `~0` instead.
+         */
+        const price = (
+          cost == null ? '?'
+            : locked ? 'core'
+              : Math.abs(cost) < 64 ? '~0'
+                : `${cost > 0 ? '+' : '-'}${kb(Math.abs(cost))}`
+        ).padStart(10)
         const plain = `${head}${price}  ${f.id}  ${f.description ?? ''}`
         out.push(cur ? paint('1;36', head) + dim(plain.slice(head.length)) : plain)
       }
