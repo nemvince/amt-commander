@@ -1,0 +1,49 @@
+/*
+ * Paper: warm off-white stock, soft borders, sepia ink.
+ *
+ * Deliberately the quietest of the themes -- nothing is pure white and nothing
+ * is pure black, so the page reads like a printed report. The dark variant is
+ * a warm charcoal rather than a blue-grey one.
+ */
+
+:root[data-theme='paper'] {
+  --bg: #f6f1e4;
+  --panel: #fffdf6;
+  --panel-alt: #efe8d6;
+  --border: #ddd2b8;
+  --border-strong: #bfae8b;
+  --text: #3a3428;
+  --text-dim: #6a6151;
+  --accent: #8a5a1c;
+  --accent-text: #fffdf6;
+  --link: #7a4a10;
+  --ok: #3f6b33;
+  --warn: #7d5b12;
+  --warn-bg: #f6ecd0;
+  --error: #9c3a2a;
+  --error-bg: #f7e3dc;
+  --row-hover: #f1ead9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme='paper'] {
+    --bg: #1b1813;
+    --panel: #241f18;
+    --panel-alt: #2c261d;
+    --border: #42392a;
+    --border-strong: #5d5138;
+    --text: #eae2d2;
+    --text-dim: #b0a492;
+    --accent: #d9a05b;
+    --accent-text: #241f18;
+    /* Paper-coloured rather than orange: the accent would only reach 7.7:1
+       where a plain warm grey reads better as a link. */
+    --link: #e2b273;
+    --ok: #93c07f;
+    --warn: #d9b45e;
+    --warn-bg: #322812;
+    --error: #e88b7a;
+    --error-bg: #331d18;
+    --row-hover: #2a241b;
+  }
+}

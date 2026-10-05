@@ -25,3 +25,6 @@ dist-ssr
 
 # Real-device capture corpus (contains device identifiers, not source)
 dev/mock/real/
+
+# Feature-size measurement cache (rebuild with `bun run measure`)
+build/.size-cache.json

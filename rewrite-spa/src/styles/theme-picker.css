@@ -1,0 +1,59 @@
+/*
+ * Development-only theme switcher.
+ *
+ * Imported by theme-picker.tsx, which is rendered only under
+ * `import.meta.env.DEV` -- so this import is tree-shaken from a build along with
+ * the component, and the styles cost nothing in a firmware artifact.
+ *
+ * Fixed to the bottom-right corner: the nav owns the left edge and the header
+ * the top, so this corner is free of app controls. Being out of flow, it never
+ * pushes the page around.
+ */
+
+.theme-picker {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  background: color-mix(in srgb, var(--panel) 85%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: 0 1px 8px rgb(0 0 0 / 0.3);
+  font-size: 11px;
+  opacity: 0.6;
+  transition: opacity 0.12s ease;
+}
+
+/* Dim until you reach for it -- theme names are not news to a developer. */
+.theme-picker:hover,
+.theme-picker:focus-within {
+  opacity: 1;
+}
+
+.theme-swatch {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--text-dim);
+  font: inherit;
+  line-height: 1.6;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.theme-swatch:hover {
+  background: var(--row-hover);
+  color: var(--text);
+}
+
+.theme-swatch.active {
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}

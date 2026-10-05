@@ -1,0 +1,51 @@
+/*
+ * Midnight: maximum contrast, near-black pages and deep-blue accents.
+ *
+ * The dark variant is the point of this theme (true black background, 18:1
+ * body text); the light variant keeps the same hard-edged character rather
+ * than softening into grey.
+ */
+
+:root[data-theme='midnight'] {
+  --bg: #ffffff;
+  --panel: #f4f7fa;
+  --panel-alt: #e8eef4;
+  --border: #c3cedb;
+  --border-strong: #8d9bab;
+  --text: #080c11;
+  --text-dim: #42505f;
+  --accent: #0b5fbf;
+  --accent-text: #ffffff;
+  /* Darker than the accent: links sit on --bg, where the accent is 6.2:1 and
+     these are 8.0:1. */
+  --link: #0b4f9e;
+  --ok: #116329;
+  --warn: #7a4f00;
+  --warn-bg: #fff3cd;
+  --error: #b3261e;
+  --error-bg: #fdecea;
+  --row-hover: #e8eef4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme='midnight'] {
+    --bg: #04070c;
+    --panel: #0c1219;
+    --panel-alt: #131b24;
+    --border: #26313d;
+    --border-strong: #455468;
+    --text: #f2f7fc;
+    --text-dim: #a9b7c6;
+    --accent: #58a6ff;
+    --accent-text: #04070c;
+    /* Brighter than the accent: links are read as body text, the accent is
+       mostly fills and borders. */
+    --link: #8ecbff;
+    --ok: #4fd07a;
+    --warn: #e0ae3c;
+    --warn-bg: #2f2508;
+    --error: #ff8a80;
+    --error-bg: #331714;
+    --row-hover: #111a23;
+  }
+}

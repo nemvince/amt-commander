@@ -7,11 +7,24 @@
  * under the 64 KiB AMT file-storage limit (readme.md:50).
  *
  *   bun scripts/build-firmware.ts
+ *
+ * With `FEATURES` (explicit selection) or `BUILD_NAME` set the script builds
+ * exactly one selection instead of the tiers, writes it to `OUT` (default
+ * `dist/firmware/<BUILD_NAME>.htm.gz`) and prints a single machine-readable
+ * line `size: <bytes>`. `build/estimate.ts` and the pickers drive that mode.
  */
-import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+  writeSync,
+} from 'node:fs'
 import zopfli from '@gfx/zopfli'
 import { brotliCompressSync, brotliDecompressSync, constants, gunzipSync } from 'node:zlib'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 
 const TIERS = ['small', 'medium', 'large'] as const
 type Tier = (typeof TIERS)[number]
@@ -72,19 +85,66 @@ function cap(s: string): string {
 function inlineAssetTags(html: string): string {
   return html
     .replace(/<script([^>]*)\ssrc="([^"]+)"([^>]*)><\/script>/g, (_m, before, src, after) => {
-      const file = join(distDir, currentTier, src.replace(/^\//, ''))
+      const file = join(distDir, currentBuild, src.replace(/^\//, ''))
       if (!existsSync(file)) return _m
       const code = readFileSync(file, 'utf8')
       return `<script${before.replace(/\scrossorigin/, '')}${after.replace(/\s*crossorigin="[^"]*"/, '')}>${code}</script>`
     })
     .replace(/<link([^>]*)rel="stylesheet"([^>]*)href="([^"]+)"[^>]*>/g, (m, _a, _b, href) => {
-      const file = join(distDir, currentTier, href.replace(/^\//, ''))
+      const file = join(distDir, currentBuild, href.replace(/^\//, ''))
       if (!existsSync(file)) return m
       return `<style>${readFileSync(file, 'utf8')}</style>`
     })
 }
 
-let currentTier: Tier = 'large'
+/** `src`/`href` values still pointing outside the file: the artifact must be self-contained. */
+function externalRefs(html: string): string[] {
+  return [...html.matchAll(/<(?:script[^>]*\ssrc|link[^>]*href)="([^"]+)"/g)]
+    .map((m) => m[1])
+    .filter((u) => !u.startsWith('data:'))
+}
+
+let currentBuild = 'large'
+
+// ------------------------------------------------------------- single build
+//
+// One ad-hoc selection, no tiers: spawn vite for exactly this feature set and
+// write the packaged artifact. The contract with `build/estimate.ts` and the
+// pickers is stdout -- a single `size: <bytes>` line equal to the written
+// artifact's size -- so nothing else is printed here and the line is flushed
+// before exiting.
+
+if (process.env.FEATURES || process.env.BUILD_NAME) {
+  const buildName = process.env.BUILD_NAME || process.env.TIER || 'custom'
+  const proc = Bun.spawnSync(['bunx', 'vite', 'build'], {
+    cwd: root,
+    env: { ...process.env, BUILD_NAME: buildName },
+    stdout: 'pipe',
+    stderr: 'pipe',
+  })
+  if (proc.exitCode !== 0) {
+    console.error(proc.stderr.toString())
+    throw new Error(`vite build failed for ${buildName}`)
+  }
+
+  currentBuild = buildName
+  const html = readFileSync(join(distDir, buildName, 'index.html'), 'utf8')
+  const inlined = inlineAssetTags(html)
+  const leftovers = externalRefs(inlined)
+  if (leftovers.length > 0) {
+    throw new Error(`${buildName}: un-inlined external reference(s): ${leftovers.join(', ')}`)
+  }
+
+  const packed = await compress(Buffer.from(inlined, 'utf8'))
+  const artifact = process.env.OUT || join(outDir, `${buildName}.htm.${ENCODING === 'br' ? 'br' : 'gz'}`)
+  mkdirSync(dirname(artifact), { recursive: true })
+  writeFileSync(artifact, packed)
+
+  // writeSync rather than console.log: process.exit() immediately after must
+  // not race the pipe buffer, or callers parsing stdout see no size line.
+  writeSync(1, `size: ${packed.byteLength}\n`)
+  process.exit(0)
+}
 
 rmSync(outDir, { recursive: true, force: true })
 mkdirSync(outDir, { recursive: true })
@@ -93,7 +153,7 @@ const results: { tier: Tier; raw: number; gz: number; legacy: number | null }[] 
 const failures: string[] = []
 
 for (const tier of TIERS) {
-  currentTier = tier
+  currentBuild = tier
   process.stdout.write(`building ${tier} ... `)
   const proc = Bun.spawnSync(['bunx', 'vite', 'build'], {
     cwd: root,
@@ -112,9 +172,7 @@ for (const tier of TIERS) {
   const inlined = inlineAssetTags(html)
 
   // Nothing external may remain: the artifact is served with no sibling files.
-  const leftovers = [...inlined.matchAll(/<(?:script[^>]*\ssrc|link[^>]*href)="([^"]+)"/g)]
-    .map((m) => m[1])
-    .filter((u) => !u.startsWith('data:'))
+  const leftovers = externalRefs(inlined)
   if (leftovers.length > 0) failures.push(`${tier}: un-inlined external reference(s): ${leftovers.join(', ')}`)
 
   const raw = Buffer.byteLength(inlined)

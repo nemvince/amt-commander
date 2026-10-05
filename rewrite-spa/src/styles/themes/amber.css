@@ -1,0 +1,50 @@
+/*
+ * Amber: high-visibility warm palette -- safety-orange accents on a white or
+ * near-black-brown ground, with amber-tinted panels.
+ *
+ * Built for a bright room or a bad panel: the accent is saturated enough to
+ * read at a glance, and the dark variant keeps the warmth instead of turning
+ * blue-grey like every other dark scheme.
+ */
+
+:root[data-theme='amber'] {
+  --bg: #fffdf4;
+  --panel: #fff6e4;
+  --panel-alt: #ffefd0;
+  --border: #f0d7a5;
+  --border-strong: #d9a94e;
+  --text: #241a05;
+  --text-dim: #6b5326;
+  /* Darker than a "true" amber: #b45309 is 4.5:1 as text on --panel-alt,
+     which is where the menu tick and ider labels land. */
+  --accent: #a94c06;
+  --accent-text: #ffffff;
+  --link: #8f4205;
+  --ok: #2f6b2a;
+  --warn: #8a5300;
+  --warn-bg: #ffe9b8;
+  --error: #b3261e;
+  --error-bg: #ffe2dd;
+  --row-hover: #fff3dc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme='amber'] {
+    --bg: #171004;
+    --panel: #241a08;
+    --panel-alt: #2e220b;
+    --border: #4a3813;
+    --border-strong: #6f5518;
+    --text: #fbf0d8;
+    --text-dim: #c2ab84;
+    --accent: #f5a524;
+    --accent-text: #1a1206;
+    --link: #ffc352;
+    --ok: #6fc26a;
+    --warn: #e5b53f;
+    --warn-bg: #38290a;
+    --error: #ff9f8f;
+    --error-bg: #3a1a15;
+    --row-hover: #2c2109;
+  }
+}

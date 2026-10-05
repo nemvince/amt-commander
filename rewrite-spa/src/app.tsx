@@ -4,6 +4,7 @@ import { S } from './strings'
 import { connError, connState, pending } from './state/device'
 import { NavIcon } from './ui/icons'
 import { VersionWarning } from './ui/version-warning'
+import { ThemePicker } from './ui/theme-picker'
 
 
 import { SystemPage } from './pages/system'
@@ -161,6 +162,10 @@ export function App() {
           {page?.render()}
         </div>
       </main>
+
+      {/* Dev only: the constant folds away in a build, taking the picker and
+          the theme list with it. */}
+      {import.meta.env.DEV && <ThemePicker />}
     </div>
   )
 }
