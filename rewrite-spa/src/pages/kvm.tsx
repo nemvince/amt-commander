@@ -326,12 +326,30 @@ export function KvmPage() {
     saveKvmSettings(next)
   }
 
+  /**
+   * The Fullscreen API is the source of truth; `full` only drives the fallback
+   * CSS takeover for browsers without it. Reading the real state (rather than
+   * flipping a flag) means Esc and browser-initiated exits stay in sync instead
+   * of stranding the page in fullscreen layout with no way back.
+   */
   const toggleFullscreen = () => {
-    const next = !full
-    setFull(next)
-    if (next) stageRef.current?.requestFullscreen?.()
-    else if (document.fullscreenElement != null) document.exitFullscreen?.()
+    const stage = stageRef.current
+    if (document.fullscreenElement != null) {
+      void document.exitFullscreen?.()
+      return
+    }
+    if (stage?.requestFullscreen != null) {
+      void stage.requestFullscreen()
+      return
+    }
+    setFull(!full)
   }
+
+  useEffect(() => {
+    const sync = () => setFull(document.fullscreenElement != null)
+    document.addEventListener('fullscreenchange', sync)
+    return () => document.removeEventListener('fullscreenchange', sync)
+  }, [])
 
   /** index.html:9083: one character per tick, down then up, US layout. */
   const sendTypedText = () => {

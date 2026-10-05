@@ -429,15 +429,42 @@ export function createKvmSession(canvas: HTMLCanvasElement, initial?: Partial<Kv
    * `inflate().then()` per tile would not.
    */
   let inflateChain: Promise<void> = Promise.resolve()
+  let failedTiles = 0
+  let fullRefreshAt = 0
+
+  /** Ask for incremental=0, i.e. repaint every tile rather than changed ones. */
+  function sendFullRefresh(): void {
+    send(String.fromCharCode(3, 0, 0, 0, 0, 0) + shortToStr(rwidth) + shortToStr(rheight))
+  }
+
+  /**
+   * A tile we cannot decode stays black until something repaints that region,
+   * and the device only sends what changes. So a lost tile is permanent unless
+   * we ask for a full repaint -- throttled, so a persistently bad tile cannot
+   * turn into a refresh loop against an already-struggling device.
+   */
+  function noteTileFailure(x: number, y: number): void {
+    failedTiles++
+    console.warn('[kvm] tile at ' + x + ',' + y + ' failed to decode (' + failedTiles + ' total)')
+    const now = Date.now()
+    if (now - fullRefreshAt > 1000) {
+      fullRefreshAt = now
+      sendFullRefresh()
+    }
+  }
 
   function queueInflate(data: Uint8Array, x: number, y: number, width: number, height: number, s: number): void {
     inflateChain = inflateChain.then(async () => {
       try {
         const inflated = await inflateRawDeflate(data)
-        if (inflated.length === 0) return
+        if (inflated.length === 0) {
+          noteTileFailure(x, y)
+          return
+        }
         decodeLRE(inflated, 0, x, y, width, height, s)
       } catch {
         // A malformed tile only costs us that tile; keep the session alive.
+        noteTileFailure(x, y)
       }
     })
   }
