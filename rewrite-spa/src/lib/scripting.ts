@@ -21,6 +21,7 @@
  */
 
 import type { AmtStack } from './amt-stack'
+import { intToStr, intToStrX, readShort, shortToStr, shortToStrX } from './bytes'
 import { rstrMd5 } from './md5'
 import { getSidString, sidToBytes } from './sid'
 import {
@@ -94,9 +95,6 @@ export function blocksToScript(list: ScriptBlockInstance[]): string {
 
 /* ------------------------------------------------------------ binary helpers */
 
-function readShort(v: string, p: number): number {
-  return (v.charCodeAt(p) << 8) + v.charCodeAt(p + 1)
-}
 function readInt(v: string, p: number): number {
   // * 0x1000000 rather than << 24: the shift would force this into a signed int32.
   return v.charCodeAt(p) * 0x1000000 + (v.charCodeAt(p + 1) << 16) + (v.charCodeAt(p + 2) << 8) + v.charCodeAt(p + 3)
@@ -109,18 +107,6 @@ function readShortX(v: string, p: number): number {
 }
 function readIntX(v: string, p: number): number {
   return v.charCodeAt(p + 3) * 0x1000000 + (v.charCodeAt(p + 2) << 16) + (v.charCodeAt(p + 1) << 8) + v.charCodeAt(p)
-}
-function shortToStr(v: number): string {
-  return String.fromCharCode((v >> 8) & 0xff, v & 0xff)
-}
-function shortToStrX(v: number): string {
-  return String.fromCharCode(v & 0xff, (v >> 8) & 0xff)
-}
-function intToStr(v: number): string {
-  return String.fromCharCode((v >> 24) & 0xff, (v >> 16) & 0xff, (v >> 8) & 0xff, v & 0xff)
-}
-function intToStrX(v: number): string {
-  return String.fromCharCode(v & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >> 24) & 0xff)
 }
 /** Hex text to the raw string the interpreter actually runs on. */
 function hex2rstr(d: string): string {

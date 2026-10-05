@@ -10,6 +10,7 @@
  * module is safe to import from a tier that never loads it.
  */
 import { signal } from '@preact/signals'
+import { intToStr, shortToStr } from './bytes'
 import type { RedirectChannel, RedirectModule } from './redirect'
 
 /**
@@ -147,15 +148,6 @@ export interface KvmSession extends RedirectModule {
   onMouseUp(e: MouseEvent): void
   onMouseMove(e: MouseEvent, force?: boolean): void
   onMouseWheel(e: WheelEvent): void
-}
-
-// ShortToStr / IntToStr are big-endian (common-0.0.1.js:29-31).
-function intToStr(v: number): string {
-  return String.fromCharCode((v >> 24) & 0xff, (v >> 16) & 0xff, (v >> 8) & 0xff, v & 0xff)
-}
-
-function shortToStr(v: number): string {
-  return String.fromCharCode((v >> 8) & 0xff, v & 0xff)
 }
 
 /** AMT hands out a 2-bit blue in the top of the byte; browsers want a full ramp. */

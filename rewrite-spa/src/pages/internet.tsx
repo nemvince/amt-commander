@@ -7,6 +7,7 @@
  * tables below have something to show on a device that is actually provisioned.
  */
 import { useEffect, useState } from 'preact/hooks'
+import { s, selectorValue } from '../lib/wsm'
 import { signal } from '@preact/signals'
 import { PullRemoteAccess, getStack, remoteAccess, amtVersion, amtVersionMinor } from '../state/device'
 import { format } from '../lib/amt-stack'
@@ -32,31 +33,8 @@ const servers = signal<WsmanNode[]>([])
 const rules = signal<WsmanNode[]>([])
 const applies = signal<WsmanNode[]>([])
 
-function s(node: WsmanNode | undefined, key: string): string {
-  const v = node?.[key]
-  if (v == null) return ''
-  if (typeof v === 'object' && !Array.isArray(v)) return String((v as WsmanNode)['Value'] ?? '')
-  return Array.isArray(v) ? '' : String(v)
-}
 
 /** Depth-first search for a `<w:Selector Name="...">` value anywhere in a reference. */
-function selectorValue(node: unknown, attr: string): string {
-  if (node == null || typeof node !== 'object') return ''
-  if (Array.isArray(node)) {
-    for (const x of node) {
-      const v = selectorValue(x, attr)
-      if (v) return v
-    }
-    return ''
-  }
-  const o = node as WsmanNode
-  if (o['@Name'] === attr) return s(o, 'Value')
-  for (const key in o) {
-    const v = selectorValue(o[key], attr)
-    if (v) return v
-  }
-  return ''
-}
 
 /** Little-endian 32 bit, matching legacy IntToStr / ReadInt. */
 function intToStr(v: number): string {

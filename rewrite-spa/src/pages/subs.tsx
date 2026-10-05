@@ -6,6 +6,7 @@
  * to enumerate AMT_EventSubscriptionService, so the table is normally empty.
  */
 import { useEffect, useState } from 'preact/hooks'
+import { s, selectorValue } from '../lib/wsm'
 import { PullSubscriptions, getStack, subscriptions } from '../state/device'
 import type { SelectorSet, WsmanEndpoint, WsmanNode } from '../lib/wsman'
 import { S } from '../strings'
@@ -21,31 +22,8 @@ const DELIVERY_MODES: Record<string, string> = {
   5: S.pull,
 }
 
-function s(node: WsmanNode | undefined, key: string): string {
-  const v = node?.[key]
-  if (v == null) return ''
-  if (typeof v === 'object' && !Array.isArray(v)) return String((v as WsmanNode)['Value'] ?? '')
-  return Array.isArray(v) ? '' : String(v)
-}
 
 /** Depth-first search for a `<w:Selector Name="...">` value anywhere in a reference. */
-function selectorValue(node: unknown, attr: string): string {
-  if (node == null || typeof node !== 'object') return ''
-  if (Array.isArray(node)) {
-    for (const x of node) {
-      const v = selectorValue(x, attr)
-      if (v) return v
-    }
-    return ''
-  }
-  const o = node as WsmanNode
-  if (o['@Name'] === attr) return s(o, 'Value')
-  for (const key in o) {
-    const v = selectorValue(o[key], attr)
-    if (v) return v
-  }
-  return ''
-}
 
 /** UNSUBSCRIBE selectors for CIM_FilterCollectionSubscription, index.html:6215. */
 function unsubscribeSelectors(sub: WsmanNode): SelectorSet {

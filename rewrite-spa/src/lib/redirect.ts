@@ -12,6 +12,8 @@
  *   IDER selector 10 00 00 00 49 44 45 52
  */
 
+import { intToStrX, shortToStrX } from './bytes'
+
 /** 1 = SOL, 2 = KVM, 3 = IDER. */
 export type RedirectProtocol = 1 | 2 | 3
 
@@ -45,16 +47,6 @@ const SELECTORS: Record<RedirectProtocol, number[]> = {
   1: [0x10, 0x00, 0x00, 0x00, 0x53, 0x4f, 0x4c, 0x20], // SOL
   2: [0x10, 0x01, 0x00, 0x00, 0x4b, 0x56, 0x4d, 0x52], // KVM
   3: [0x10, 0x00, 0x00, 0x00, 0x49, 0x44, 0x45, 0x52], // IDER
-}
-
-function intToStrX(v: number): string {
-  const b = new Uint8Array(4)
-  new DataView(b.buffer).setUint32(0, v >>> 0, true)
-  return String.fromCharCode(b[0], b[1], b[2], b[3])
-}
-
-function shortToStrX(v: number): string {
-  return String.fromCharCode(v & 0xff, (v >> 8) & 0xff)
 }
 
 export function createRedirect(module: RedirectModule): RedirectChannel {

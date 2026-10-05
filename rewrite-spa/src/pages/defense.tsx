@@ -7,6 +7,7 @@
  * state instead of assuming a policy exists.
  */
 import { useEffect, useState } from 'preact/hooks'
+import { n, s, selectorValue, yes } from '../lib/wsm'
 import { signal } from '@preact/signals'
 import { PullSystemDefense, getStack, systemDefense } from '../state/device'
 import { S } from '../strings'
@@ -47,20 +48,8 @@ const IP_FILTER_FIELDS = [
 const filterStats = signal<Record<string, Record<string, number>>>({})
 
 /** Scalar property read that tolerates missing nodes and `{ Value }` wrappers. */
-function s(node: WsmanNode | undefined, key: string): string {
-  const v = node?.[key]
-  if (v == null) return ''
-  if (typeof v === 'object' && !Array.isArray(v)) return String((v as WsmanNode)['Value'] ?? '')
-  return Array.isArray(v) ? '' : String(v)
-}
 
-function n(node: WsmanNode | undefined, key: string): number {
-  return Number(s(node, key)) || 0
-}
 
-function yes(v: unknown): boolean {
-  return v === true || v === 'true'
-}
 
 /** Instances of one class out of the batch enum signal; tolerates either shape. */
 function instances(src: Record<string, WsmanNode[]>, key: string): WsmanNode[] {
@@ -70,23 +59,6 @@ function instances(src: Record<string, WsmanNode[]>, key: string): WsmanNode[] {
 }
 
 /** Depth-first search for a `<w:Selector Name="...">` value anywhere in a reference. */
-function selectorValue(node: unknown, attr: string): string {
-  if (node == null || typeof node !== 'object') return ''
-  if (Array.isArray(node)) {
-    for (const x of node) {
-      const v = selectorValue(x, attr)
-      if (v) return v
-    }
-    return ''
-  }
-  const o = node as WsmanNode
-  if (o['@Name'] === attr) return s(o, 'Value')
-  for (const key in o) {
-    const v = selectorValue(o[key], attr)
-    if (v) return v
-  }
-  return ''
-}
 
 function filterDescription(cls: string, f: WsmanNode): string {
   const proto = cls === 'AMT_Hdr8021Filter' ? n(f, 'HdrProtocolID8021') : n(f, 'HdrIPVersion')

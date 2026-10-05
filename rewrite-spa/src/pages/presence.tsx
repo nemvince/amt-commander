@@ -7,6 +7,7 @@
  * device; every read tolerates a missing node.
  */
 import { useEffect, useState } from 'preact/hooks'
+import { n, yes } from '../lib/wsm'
 import { signal } from '@preact/signals'
 import { PullAgentPresence, getStack, agentPresence } from '../state/device'
 import type { WsmanNode } from '../lib/wsman'
@@ -57,13 +58,7 @@ function s(node: WsmanNode | null | undefined, key: string): string {
   return Array.isArray(v) ? '' : String(v)
 }
 
-function n(node: WsmanNode | undefined, key: string): number {
-  return Number(s(node, key)) || 0
-}
 
-function yes(v: unknown): boolean {
-  return v === true || v === 'true'
-}
 
 /** Instances out of a batch-enum slot that may hold one node or a list. */
 function instances(slot: WsmanNode | WsmanNode[] | undefined): WsmanNode[] {

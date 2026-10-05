@@ -7,9 +7,11 @@
  * exposes a `network`/`wifi` pair but never writes it, so the page pulls directly.
  */
 import { useSignal } from '@preact/signals'
+import { items, num, text } from '../lib/wsm'
+import { Details, type Field } from '../ui/details'
 import { useEffect } from 'preact/hooks'
 import { FEAT_Wireless } from '../features'
-import { format, type AmtResult } from '../lib/amt-stack'
+import { format } from '../lib/amt-stack'
 import type { WsmanNode } from '../lib/wsman'
 import { getStack } from '../state/device'
 import { S } from '../strings'
@@ -74,38 +76,17 @@ const WIFI_ENCRYPTION: Record<number, string> = {
 
 type NetData = Record<string, WsmanNode[]>
 /** One definition row: the label and the value the device reported. */
-type Field = [string, string]
 
 /**
  * Every instance arrives wrapped in its class element, both in the GetResponse
  * body and per item of an enumeration (amt-0.2.0.js:94 flattens the same wrapper).
  */
-function unwrap(node: WsmanNode): WsmanNode {
-  const keys = Object.keys(node)
-  const only = keys.length === 1 ? node[keys[0]] : undefined
-  const wrapper = typeof only === 'object' && only != null && !Array.isArray(only)
-  return wrapper && /^[A-Z]/.test(keys[0]) ? (only as WsmanNode) : node
-}
 
 /** A GET-fetched class reports its instance in `response`, an enumerated one its
  * item array in `responses`, which the stack passes through untyped. */
-function items(result: AmtResult): WsmanNode[] {
-  if (result.status !== 200) return []
-  const body = result.response
-  if (body != null) return [unwrap(body)]
-  const many = result.responses as unknown
-  return Array.isArray(many) ? (many as WsmanNode[]).map(unwrap) : []
-}
 
 /** Scalar property as trimmed text; nested nodes and absent keys read as empty. */
-function text(node: WsmanNode | undefined, key: string): string {
-  const value = node?.[key]
-  return typeof value === 'string' || typeof value === 'number' ? String(value).trim() : ''
-}
 
-function num(node: WsmanNode | undefined, key: string): number {
-  return Number(node?.[key] ?? 0)
-}
 
 /** AMT reports the boolean configuration flags as 0/1 or as true/false. */
 function onOff(value: unknown): string {
@@ -130,23 +111,6 @@ function selectorValue(reference: WsmanNode | undefined): string {
   return text(selector, 'Value')
 }
 
-function Details(props: { title: string; fields: Field[] }) {
-  return (
-    <section class="table-panel">
-      <div class="table-titlebar">
-        <h2 class="table-title">{props.title}</h2>
-      </div>
-      <dl class="kv">
-        {props.fields.map(([label, value]) => (
-          <>
-            <dt>{label}</dt>
-            <dd class="mono">{value === '' ? '—' : value}</dd>
-          </>
-        ))}
-      </dl>
-    </section>
-  )
-}
 
 /** Legacy dynamic-DNS sentence, index.html:5715-5719. */
 function ddnsOf(gs: WsmanNode | undefined): string {

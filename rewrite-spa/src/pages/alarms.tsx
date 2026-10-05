@@ -6,18 +6,13 @@
  * normally empty until an alarm is added.
  */
 import { useEffect, useState } from 'preact/hooks'
+import { s } from '../lib/wsm'
 import { PullAlarms, getStack, alarms } from '../state/device'
 import type { WsmanNode } from '../lib/wsman'
 import { S } from '../strings'
 import { Dialog } from '../ui/dialog'
 import { Table, type Column } from '../ui/table'
 
-function s(node: WsmanNode | undefined, key: string): string {
-  const v = node?.[key]
-  if (v == null) return ''
-  if (typeof v === 'object' && !Array.isArray(v)) return String((v as WsmanNode)['Value'] ?? '')
-  return Array.isArray(v) ? '' : String(v)
-}
 
 function child(node: WsmanNode | undefined, key: string): WsmanNode | undefined {
   const v = node?.[key]

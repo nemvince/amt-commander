@@ -10,6 +10,7 @@
  * because the wire format is positional binary, not CIM.
  */
 import { useEffect, useState } from 'preact/hooks'
+import { readShort } from '../lib/bytes'
 import type { WsmanValue } from '../lib/wsman'
 import { format, type AmtStack } from '../lib/amt-stack'
 import { getSidString } from '../lib/sid'
@@ -283,10 +284,6 @@ function auditState(bits: number): string {
   if (bits & 0x08) parts.push(S.full)
   if (bits & 0x10) parts.push(S.noKey)
   return parts.join(', ')
-}
-
-function readShort(v: string, p: number): number {
-  return (v.charCodeAt(p) << 8) + v.charCodeAt(p + 1)
 }
 
 /** `* 0x1000000` rather than `<< 24`: the shift would sign the result. */
