@@ -414,6 +414,35 @@ export function createKvmSession(canvas: HTMLCanvasElement, initial?: Partial<Kv
    *   128      flat RLE: colour then a 255-terminated run length
    *   129..255 palette RLE: a set high index bit marks a run
    */
+  /**
+   * Compressed RLE tiles, inflated in arrival order.
+   *
+   * `DecompressionStream('deflate-raw')` is the browser's own inflate -- legacy
+   * shelled out to zlib-inflate.js, and 'raw' is the right mode because the
+   * device emits headerless DEFLATE (legacy called `inflateInit(-15)`). Chained
+   * promises keep tiles painting in the order the device sent them, which a bare
+   * `inflate().then()` per tile would not.
+   */
+  let inflateChain: Promise<void> = Promise.resolve()
+
+  function queueInflate(data: Uint8Array, x: number, y: number, width: number, height: number, s: number): void {
+    inflateChain = inflateChain.then(async () => {
+      try {
+        const inflated = await inflateRawDeflate(data)
+        if (inflated.length === 0) return
+        decodeLRE(inflated, 0, x, y, width, height, s)
+      } catch {
+        // A malformed tile only costs us that tile; keep the session alive.
+      }
+    })
+  }
+
+  async function inflateRawDeflate(data: Uint8Array): Promise<Uint8Array> {
+    const stream = new Response(data as unknown as BodyInit)
+      .body!.pipeThrough(new DecompressionStream('deflate-raw'))
+    return new Uint8Array(await new Response(stream).arrayBuffer())
+  }
+
   function decodeLRE(data: Uint8Array, ptr: number, x: number, y: number, width: number, height: number, s: number): void {
     const sub = data[ptr++]
     const palette: number[] = []
@@ -776,11 +805,9 @@ export function createKvmSession(canvas: HTMLCanvasElement, initial?: Partial<Kv
             if (datalen > 5 && acc[16] === 0 && v.getUint16(17, true) === datalen - 5) {
               decodeLRE(acc.subarray(21, 16 + datalen), 0, x, y, width, height, s)
             } else {
-              // ponytail: deflate is only negotiated when the client turns zlib
-              // on, which needs the inband control channel the firmware tiers
-              // do not ship -- port zlib-inflate.js here if that comes back.
-              channel?.Stop(DISCONNECT.KVM_DISCONNECT)
-              return
+              // Compressed block. Inflate is async, so it cannot run inside this
+              // synchronous drain; queue it and paint in arrival order.
+              queueInflate(acc.slice(16, 16 + datalen), x, y, width, height, s)
             }
             cmdsize = 16 + datalen
           } else {
