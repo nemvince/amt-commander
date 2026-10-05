@@ -35,6 +35,12 @@ export interface PageDef {
   label: string
   icon: string
   group: string
+  /**
+   * Media pages (Remote Desktop, SOL) fill the viewport instead of flowing down
+   * the page: their own bars sit top and bottom with the media in between, and
+   * the shell never scrolls them.
+   */
+  fill?: boolean
   render: () => preact.JSX.Element | null
 }
 
@@ -45,8 +51,8 @@ export interface PageDef {
  */
 export const PAGES: (PageDef | null)[] = [
   { id: 'system', label: S.navSystem, icon: 'system', group: '', render: () => <SystemPage /> },
-  FEAT_Desktop ? { id: 'kvm', label: S.navKvm, icon: 'kvm', group: '', render: () => <KvmPage /> } : null,
-  FEAT_Terminal ? { id: 'sol', label: S.navSol, icon: 'sol', group: '', render: () => <SolPage /> } : null,
+  FEAT_Desktop ? { id: 'kvm', label: S.navKvm, icon: 'kvm', group: '', fill: true, render: () => <KvmPage /> } : null,
+  FEAT_Terminal ? { id: 'sol', label: S.navSol, icon: 'sol', group: '', fill: true, render: () => <SolPage /> } : null,
   FEAT_HardwareInfo
     ? { id: 'hardware', label: S.navHardware, icon: 'hardware', group: '', render: () => <HardwarePage /> }
     : null,
@@ -150,8 +156,8 @@ export function App() {
         ))}
       </nav>
 
-      <main class="main">
-        <div class="page">
+      <main class={'main' + (page?.fill === true ? ' main-fill' : '')}>
+        <div class={'page' + (page?.fill === true ? ' page-fill' : '')}>
           <VersionWarning />
           {page?.render()}
         </div>

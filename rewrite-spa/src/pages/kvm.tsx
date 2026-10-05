@@ -379,34 +379,9 @@ export function KvmPage() {
   const injectable = live && !viewOnly
 
   return (
-    <div class={'page' + (full ? ' kvm-fullscreen' : '')}>
-      <div class="page-header">
-        {FEAT_IDER ? <IderBar /> : null}
-      </div>
-
-      {message !== '' && (
-        <div class="banner error">
-          <span>{message}</span>
-          <button type="button" class="btn" onClick={() => setMessage('')}>
-            {S.close}
-          </button>
-        </div>
-      )}
-
-      {kvmMissing && (
-        <div class="banner error">
-          <span>{S.kvmRedirDisabled}</span>
-          <button type="button" class="btn" onClick={enableKvm}>
-            {S.kvmEnableTitle}
-          </button>
-        </div>
-      )}
-
-      {powerState.value > 0 && powerState.value !== 2 && <div class="banner error">{S.kvmNotPoweredOn}</div>}
-
-      <section class="table-panel">
-        <div class="table-titlebar">
-          <div class="table-actions">
+    <div class={'media-page' + (full ? ' kvm-fullscreen' : '')}>
+      {/* Actions and settings on top, like a desktop viewer's toolbar. */}
+      <div class="media-bar">
             <button type="button" class="btn" onClick={live ? () => channelRef.current?.Stop() : start}>
               {live ? S.kvmDisconnect : S.kvmConnect}
             </button>
@@ -457,12 +432,9 @@ export function KvmPage() {
                 {S.kvmSettings}
               </button>
             )}
-          </div>
-        </div>
-
         {FEAT_DesktopMulti && screens != null && screens.isActive.filter(Boolean).length > 1 && (
-          <div class="btn-row">
-            <span>{S.kvmDisplay}</span>
+          <>
+            <span class="header-spacer" />
             {screens.isActive.map((active, i) =>
               active ? (
                 <button
@@ -476,11 +448,34 @@ export function KvmPage() {
                 </button>
               ) : null,
             )}
-          </div>
+          </>
         )}
+      </div>
 
-        <div class="kvm-stage-wrap">
-          <div class="media-surface kvm-stage" ref={stageRef}>
+      {FEAT_IDER ? <IderBar /> : null}
+
+      {message !== '' && (
+        <div class="banner error">
+          <span>{message}</span>
+          <button type="button" class="btn" onClick={() => setMessage('')}>
+            {S.close}
+          </button>
+        </div>
+      )}
+
+      {kvmMissing && (
+        <div class="banner error">
+          <span>{S.kvmRedirDisabled}</span>
+          <button type="button" class="btn" onClick={enableKvm}>
+            {S.kvmEnableTitle}
+          </button>
+        </div>
+      )}
+
+      {powerState.value > 0 && powerState.value !== 2 && <div class="banner error">{S.kvmNotPoweredOn}</div>}
+
+      <div class="media-stage">
+        <div class="media-surface kvm-stage" ref={stageRef}>
             <canvas
               class="kvm-canvas"
               ref={canvasRef}
@@ -555,7 +550,6 @@ export function KvmPage() {
             </button>
           )}
         </div>
-      </section>
 
       {showSettings && (
         <Dialog

@@ -127,23 +127,13 @@ export function SolPage() {
   const fxKeys = [S.solFxIntel, S.solFxAlt, S.solFxVt100][terminal.fxEmulation]
 
   return (
-    <div class="page">
-      <div class="page-header">
-        {FEAT_IDER ? <IderBar /> : null}
-      </div>
-
-      <div class="statusbar">
+    <div class="media-page">
+      {/* Session and terminal settings on top; state stays at the bottom. */}
+      <div class="media-bar">
         <button type="button" class="btn btn-primary" onClick={toggleConnect}>
           {state === 0 ? S.solConnect : S.solDisconnect}
         </button>
-        <span>{STATES[state] ?? S.disconnected}</span>
-        <button
-          type="button"
-          class="btn"
-          style="margin-left:auto"
-          title={S.solCrTitle}
-          onClick={toggleLineFeed}
-        >
+        <button type="button" class="btn" title={S.solCrTitle} onClick={toggleLineFeed}>
           {terminal.lineFeed === '\r\n' ? S.solCrLf : S.solLf}
         </button>
         <button type="button" class="btn" title={S.solFxTitle} onClick={toggleFx}>
@@ -161,7 +151,10 @@ export function SolPage() {
         )}
       </div>
 
-      <div class="media-surface" onClick={() => inputRef.current?.focus()}>
+      {FEAT_IDER ? <IderBar /> : null}
+
+      <div class="media-stage">
+        <div class="media-surface sol-surface" onClick={() => inputRef.current?.focus()}>
         <pre
           class="terminal-output"
           ref={screenRef}
@@ -180,6 +173,11 @@ export function SolPage() {
           onKeyUp={onKeyUp}
           onPaste={onPaste}
         />
+        </div>
+      </div>
+
+      <div class="statusbar">
+        <span>{STATES[state] ?? S.disconnected}</span>
       </div>
     </div>
   )

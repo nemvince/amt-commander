@@ -248,6 +248,67 @@ body {
   margin-left: auto;
 }
 
+/* ---------- Media pages (Remote Desktop, SOL) ---------- */
+
+/*
+ * These behave like a desktop app rather than a document: the page is fixed to
+ * the viewport, actions sit in a bar at the top, the media fills everything in
+ * between, and state sits at the bottom. Nothing scrolls -- the media scales.
+ */
+.main-fill {
+  overflow: hidden;
+  padding: 10px;
+}
+
+.page-fill {
+  height: 100%;
+  max-width: none;
+  gap: 8px;
+}
+
+.media-page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.media-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Bars top and bottom, media stretched between them. */
+.media-page > .media-bar {
+  order: 1;
+}
+.media-page > .ider {
+  order: 2;
+}
+.media-page > .banner {
+  order: 3;
+}
+.media-page > .media-stage {
+  order: 4;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+}
+.media-page > .btn-row {
+  order: 5;
+}
+.media-page > .statusbar {
+  order: 6;
+}
+
 /* ---------- Banners ---------- */
 
 .banner {
@@ -539,11 +600,21 @@ label {
   outline: none;
 }
 
-.kvm-canvas {
-  display: block;
+/* SOL: the terminal fills the stage, so the status output scrolls in place
+   instead of the page growing with it. */
+.media-stage > .sol-surface {
   width: 100%;
-  background: #000;
-  image-rendering: pixelated;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sol-surface .terminal-output {
+  flex: 1;
+  min-height: 0;
+  height: auto;
 }
 
 .statusbar {

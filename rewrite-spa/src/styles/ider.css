@@ -77,6 +77,10 @@
 .ider-pick {
   position: relative;
   max-width: 210px;
+  /* Backstop: a filename may never spill outside the button. The span below is
+     capped too, because max-width on this shrink-to-fit flex container clamps
+     only its own box -- the inner flex line still resolves against max-content. */
+  overflow: hidden;
 }
 
 .ider-pick input {
@@ -98,6 +102,8 @@
 }
 
 .ider-pick-name {
+  min-width: 0;
+  max-width: 168px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -143,6 +149,7 @@
 }
 
 .ider-chip-name {
+  min-width: 0;
   max-width: 160px;
   overflow: hidden;
   white-space: nowrap;
