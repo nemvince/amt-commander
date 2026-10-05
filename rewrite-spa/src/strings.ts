@@ -627,6 +627,7 @@ export const S = {
   scriptFile: 'File',
   scriptLoaded: 'Script loaded',
   kvmShowFocusTool: 'Show focus tool',
+  kvmNoDisplay: 'Intel(R) AMT could not capture the display. The target may be powered off, still booting, or sitting at a disk-encryption prompt.',
 } as const
 
 /**

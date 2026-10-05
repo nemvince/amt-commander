@@ -35,6 +35,13 @@ export const DISCONNECT = {
   AMT_DISCONNECT: 50001,
   /** Display too large for the AMT KVM buffer. */
   BUFFER_OVERFLOW: 50002,
+  /**
+   * The redirection channel came up but no framebuffer ever did. AMT answers
+   * this way when the target has no display session -- powered off, asleep, or
+   * still booting -- so it is worth telling the user rather than showing a bare
+   * "Disconnected".
+   */
+  NO_DISPLAY: 50003,
 } as const
 
 /** Intel AMT's "Desktop Size" pseudo-encoding, -223 on the wire. */
@@ -227,6 +234,8 @@ export function createKvmSession(canvas: HTMLCanvasElement, initial?: Partial<Kv
   let acc: Uint8Array | null = null
   /** RFB protocol state, see the RFB_* constants. */
   let state = RFB_VERSION
+  /** True once the device has handed us a framebuffer; reset on every teardown. */
+  let everStreamed = false
   /** Bytes per pixel: 1 = RGB332, 2 = RGB565 (amt-desktop-0.0.2.js:23). */
   let bpp = 1
   let useRLE = true
@@ -611,6 +620,11 @@ export function createKvmSession(canvas: HTMLCanvasElement, initial?: Partial<Kv
     xxStateChange(newstate: number) {
       kvmLinkState.value = newstate
       if (newstate !== 0) return
+      // The transport dropped before any pixels moved: the target had no display
+      // session (powered off, still booting, or at a disk-encryption prompt),
+      // which is worth saying instead of showing a bare Disconnected.
+      if (!everStreamed && obj.disconnectCode === 0) obj.disconnectCode = DISCONNECT.NO_DISPLAY
+      everStreamed = false
       state = RFB_VERSION
       acc = null
       if (nagleTimer != null) {
@@ -685,6 +699,7 @@ export function createKvmSession(canvas: HTMLCanvasElement, initial?: Partial<Kv
           }
 
           state = RFB_STREAM
+          everStreamed = true
           obj.connectTime = Date.now()
           obj.disconnectCode = DISCONNECT.AMT_DISCONNECT
           sendRefresh()

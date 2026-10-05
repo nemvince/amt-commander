@@ -175,6 +175,8 @@ export function KvmPage() {
         setMessage(S.kvmLinkLost)
       } else if (code === DISCONNECT.BUFFER_OVERFLOW) {
         setMessage(S.kvmBufferOverflow)
+      } else if (code === DISCONNECT.NO_DISPLAY) {
+        setMessage(S.kvmNoDisplay)
       }
     }
 
