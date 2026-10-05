@@ -395,6 +395,8 @@ interface Options {
   link: string | null
   yes: boolean
   dryRun: boolean
+  /** Skip the pre-delete and PUT straight over an existing entry. */
+  overwrite: boolean
 }
 
 async function cmdCheck(o: Options) {
@@ -491,10 +493,14 @@ async function cmdUpload(o: Options) {
   }
 
   // Replacing is done as a delete-then-put so a re-run is idempotent; AMT's
-  // ?append=1 would otherwise concatenate onto the previous file.
-  if (existing) {
+  // ?append=1 would otherwise concatenate onto the previous file. --overwrite
+  // skips the delete, for when the device's DELETE is refusing but the entry
+  // still needs replacing.
+  if (existing && !o.overwrite) {
     step('removing previous entry…')
     await deleteEntry(creds, o.path)
+  } else if (existing) {
+    step('overwriting existing entry (no delete)…')
   }
 
   step(`uploading ${bytes(gzip.length)}…`)
@@ -629,6 +635,7 @@ Options
       --link <name>  value for the metadata <link> element
       --yes          do not ask for confirmation
       --dry-run      show what would happen, write nothing
+      --overwrite    PUT over an existing entry without deleting it first
 
 With no command and a TTY you get an interactive wizard.
 `
@@ -783,6 +790,7 @@ async function wizard(dryRun: boolean): Promise<number> {
       link: null,
       yes: true,
       dryRun,
+      overwrite: false,
     }
     return await cmdUpload(o)
   } catch (e) {
@@ -817,6 +825,7 @@ const o: Options = {
   link: args.link ? String(args.link) : null,
   yes: Boolean(args.yes ?? args.y),
   dryRun: Boolean(args['dry-run']),
+  overwrite: Boolean(args.overwrite),
 }
 
 let code = 0
