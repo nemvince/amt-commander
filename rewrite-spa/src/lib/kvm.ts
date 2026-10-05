@@ -64,8 +64,13 @@ export interface KvmSettings {
   rotation: number
 }
 
+/**
+ * Default to full 16-bit colour (bit 1 = RLE, bit 2 = 16bpp). Legacy shipped
+ * encflags 1, i.e. 8-bit RGB332, which band badly on photographic content; the
+ * extra bandwidth is worth it and the settings dialog can still drop back.
+ */
 export const DEFAULT_KVM_SETTINGS: KvmSettings = {
-  encflags: 1,
+  encflags: 3,
   showfocus: false,
   showmouse: true,
   showcad: true,
