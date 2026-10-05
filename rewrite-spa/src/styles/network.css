@@ -1,0 +1,6 @@
+/* Caveat line under the Network Settings header. */
+.page-note {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 12px;
+}

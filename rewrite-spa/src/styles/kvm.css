@@ -1,0 +1,66 @@
+/*
+ * Remote desktop viewer. Base tokens come from base.css; this only covers the
+ * canvas stage, the DesktopFocus overlay and the fullscreen takeover.
+ */
+
+.kvm-stage {
+  position: relative;
+  background: #000;
+  line-height: 0;
+}
+
+.kvm-stage .kvm-canvas {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  touch-action: none;
+}
+
+/* DesktopFocus: the box around the pointer when focus mode is on. */
+.kvm-focus {
+  position: absolute;
+  display: none;
+  border: 3px dotted rgba(255, 0, 0, 0.35);
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+.kvm-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #000;
+  overflow: auto;
+}
+
+.kvm-fullscreen .kvm-stage {
+  min-height: 100%;
+}
+
+.kvm-stage-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.kvm-dialog-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.kvm-dialog-field > span {
+  flex: 1;
+}
+
+.kvm-dialog-field select,
+.kvm-dialog-field input[type='text'] {
+  width: 220px;
+}
+
+.kvm-type-input {
+  width: 100%;
+  height: 160px;
+  resize: none;
+  font-family: var(--mono);
+}

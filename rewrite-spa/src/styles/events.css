@@ -1,0 +1,27 @@
+/* Description cell of the event table: a plain link, not a raised button. */
+.btn-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+/* One record inside the "view all" event dialog. */
+.event-record + .event-record {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.event-record-title {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+}

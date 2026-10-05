@@ -1,0 +1,58 @@
+/* IDER overlay — status bar, mount controls, per-device sector heat map. */
+
+.ider {
+  position: relative;
+}
+
+.ider-mount {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel-alt);
+}
+
+.ider-mount label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.ider-mount input[type="file"] {
+  max-width: 220px;
+  font-size: 12px;
+}
+
+.ider-mount select {
+  max-width: 160px;
+  font-size: 12px;
+}
+
+.ider-error {
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+.ider-heat {
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.ider-heat-title {
+  margin: 2px 0 4px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.ider-heat canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}

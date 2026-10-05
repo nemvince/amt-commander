@@ -1,0 +1,8 @@
+/* Footer note under a table panel, e.g. the boot-time caveat on Hardware. */
+.table-note {
+  margin: 0;
+  padding: 8px 10px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 12px;
+}

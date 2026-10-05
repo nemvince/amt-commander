@@ -1,0 +1,25 @@
+{
+  "name": "rewrite-spa",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "mock": "bun dev/mock/server.ts",
+    "probe": "bun dev/probe-real-amt.ts",
+    "build": "tsc -b && vite build",
+    "build:firmware": "bun scripts/build-firmware.ts",
+    "typecheck": "tsc -b",
+    "amt": "bun scripts/amt-loader.ts"
+  },
+  "dependencies": {
+    "@preact/signals": "^2.11.3",
+    "preact": "^11.0.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.2"
+  },
+  "sideEffects": false
+}
