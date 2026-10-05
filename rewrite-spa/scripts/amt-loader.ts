@@ -145,7 +145,9 @@ function sleep(ms: number): Promise<void> {
 }
 
 /** AMT intermittently drops the socket on :16992 while answering storage calls. */
-const MAX_TRANSPORT_RETRIES = 3
+// The device resets connections under sustained writes, so a couple of
+// retries are not enough to ride one out.
+const MAX_TRANSPORT_RETRIES = 4
 
 /** Build the Authorization header for a digest challenge. */
 function digestHeader(
@@ -205,7 +207,7 @@ async function amtFetch(creds: Creds, path: string, init: RequestInit = {}): Pro
       res = await fetch(url, init as RequestInit)
     } catch (e) {
       if (tryNo >= MAX_TRANSPORT_RETRIES) throw e
-      await sleep(250 * (tryNo + 1))
+      await sleep(500 * (tryNo + 1))
       continue
     }
 
@@ -219,7 +221,7 @@ async function amtFetch(creds: Creds, path: string, init: RequestInit = {}): Pro
       return await fetch(url, { ...init, headers })
     } catch (e) {
       if (tryNo >= MAX_TRANSPORT_RETRIES) throw e
-      await sleep(250 * (tryNo + 1))
+      await sleep(500 * (tryNo + 1))
     }
   }
 }
@@ -240,13 +242,18 @@ async function listStorage(creds: Creds): Promise<{ listing: StorageListing; ser
   const res = await amtFetch(creds, '/amt-storage/')
   const server = (res.headers.get('server') ?? '').replace('Intel(R) Active Management Technology ', 'AMT ')
   if (!res.ok) throw new Error(`GET /amt-storage/ -> ${res.status} ${res.statusText}`)
-  /**
+  /*
    * AMT renders each entry into a fixed-width buffer and never clears the tail,
-   * so the `link` field arrives padded with NULs -- or with whatever bytes happened
-   * to be in the buffer, which decode to U+FFFD. Either way the document is not
-   * valid JSON until that padding is removed.
+   * so the listing arrives padded with NULs -- or with whatever bytes happened to
+   * be in the buffer. It also puts raw control bytes *inside* string values: the
+   * `link` field carries a 0x01. Both are illegal in JSON (RFC 8259 requires
+   * U+0000..U+001F to be escaped), and the parser reports the result as a bare
+   * "Unterminated string".
+   *
+   * Stripping every C0 control character handles both. Whitespace between tokens
+   * is optional, and a raw control byte inside a string can only ever be padding.
    */
-  const txt = (await res.text()).replace(/[\0\uFFFD]/g, '')
+  const txt = (await res.text()).replace(/[\u0000-\u001f]/g, '')
   const listing = JSON.parse(txt) as StorageListing
   return { listing, server }
 }
@@ -340,9 +347,16 @@ async function writeEntry(
       await pushAll(creds, path, gzip, link, blockSize, onProgress)
       return
     } catch (e) {
-      // A 500 means the block was too big for this device; halve and retry.
-      if (!(e instanceof StorageError) || e.status !== 500 || blockSize <= 256) throw e
+      /*
+       * 400 and 500 both turn up when the device is unhappy -- with the block
+       * size, or with the rate it is being written at. Halving and retrying is
+       * what recovers it, so treat them the same rather than failing hard on the
+       * 400 the way this used to.
+       */
+      const status = e instanceof StorageError ? e.status : 0
+      if ((status !== 400 && status !== 500) || blockSize <= 256) throw e
       blockSize = Math.floor(blockSize / 2)
+      await sleep(400 * (attempt + 1))
     }
   }
 }
@@ -367,6 +381,12 @@ async function pushAll(
     if (!res.ok) throw new StorageError(`PUT ${path} -> ${res.status} ${res.statusText}`, res.status)
     offset += take
     onProgress?.(offset, gzip.length)
+    /*
+     * Space the blocks out. The device's HTTP server resets the connection if it
+     * is written to in a tight loop -- that is what a half-megabyte upload in
+     * twenty immediate PUTs looks like to it.
+     */
+    if (offset < gzip.length) await sleep(120)
   }
 }
 
