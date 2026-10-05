@@ -14,7 +14,7 @@ import { readShort } from '../lib/bytes'
 import type { WsmanValue } from '../lib/wsman'
 import { format, type AmtStack } from '../lib/amt-stack'
 import { getSidString } from '../lib/sid'
-import { auditLog, connState, getStack, PullAuditLog } from '../state/device'
+import { PullAuditLog, auditLog, connState, getStack, pending } from '../state/device'
 import { S, REALM_NAMES } from '../strings'
 import { Dialog } from '../ui/dialog'
 import { Table, type Column } from '../ui/table'
@@ -114,7 +114,7 @@ export function AuditPage() {
         </dl>
       </section>
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.auditEvents}
         columns={columns}
         rows={rows}

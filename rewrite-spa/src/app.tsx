@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { FEAT_AgentPresence, FEAT_Alarms, FEAT_AuditLog, FEAT_Desktop, FEAT_EventLog, FEAT_EventSubscriptions, FEAT_HardwareInfo, FEAT_NetworkSettings, FEAT_RemoteAccess, FEAT_Scripting, FEAT_Storage, FEAT_SystemDefense, FEAT_Terminal } from './features'
 import { S } from './strings'
-import { busy, connError, connState } from './state/device'
+import { connError, connState, pending } from './state/device'
 import { NavIcon } from './ui/icons'
 import { VersionWarning } from './ui/version-warning'
 
@@ -118,7 +118,6 @@ export function App() {
   }, [])
 
   const page = visible.find((p) => p.id === route) ?? visible[0]
-  const loading = busy.value < 100 && connState.value !== 'disconnected'
 
   return (
     <div class="shell">
@@ -131,10 +130,10 @@ export function App() {
         <h1 class="header-title">{page?.label}</h1>
         {connError.value !== '' && <span class="status-error">{connError.value}</span>}
         <span class="header-spacer" />
-        {loading && (
-          <div class="progress" role="progressbar" aria-valuenow={busy.value} aria-valuemin={0} aria-valuemax={100}>
-            <i style={{ width: busy.value + '%' }} />
-          </div>
+        {pending.value > 0 && (
+          <span class="loading-count" role="status" title={S.loading}>
+            {pending.value} {S.loading}
+          </span>
         )}
         <Chip />
       </header>

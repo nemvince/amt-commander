@@ -26,6 +26,11 @@ export interface TableProps<T> {
   /** Rendered under the table, used for paging / detail links. */
   footer?: ComponentChildren
   empty?: string
+  /**
+   * Still fetching. Distinguishes "nothing yet" from "nothing there", so an
+   * empty table does not read as a real answer while the request is in flight.
+   */
+  loading?: boolean
 }
 
 export function Table<T>(props: TableProps<T>) {
@@ -55,7 +60,9 @@ export function Table<T>(props: TableProps<T>) {
         </div>
       )}
       {props.rows.length === 0 ? (
-        <p class="table-empty">{props.empty ?? S.noData}</p>
+        <p class={'table-empty' + (props.loading === true ? ' table-loading' : '')}>
+          {props.loading === true ? S.loading : (props.empty ?? S.noData)}
+        </p>
       ) : (
         <div class="table-scroll">
           <table class="table">

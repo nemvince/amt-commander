@@ -9,7 +9,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { n, s, selectorValue, yes } from '../lib/wsm'
 import { signal } from '@preact/signals'
-import { PullSystemDefense, getStack, systemDefense } from '../state/device'
+import { PullSystemDefense, getStack, pending, systemDefense } from '../state/device'
 import { S } from '../strings'
 import { Dialog } from '../ui/dialog'
 import { Table, type Column } from '../ui/table'
@@ -226,7 +226,7 @@ export function DefensePage() {
         </dl>
       </section>
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.policiesHeading}
         columns={policyColumns}
         rows={policies}
@@ -235,7 +235,7 @@ export function DefensePage() {
         empty={S.noPolicies}
       />
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.filtersHeading}
         columns={filterColumns}
         rows={filters}

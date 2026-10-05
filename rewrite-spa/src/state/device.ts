@@ -51,16 +51,20 @@ export const systemDefense = signal<Record<string, WsmanNode[]>>({})
 export const remoteAccess = signal<Record<string, WsmanNode[]>>({})
 export const accounts = signal<WsmanNode[]>([])
 
-export const busy = signal(0)
+/**
+ * WSMAN requests still in flight. Drives the header counter and lets a page
+ * tell "still loading" apart from "genuinely empty".
+ */
+export const pending = signal(0)
 
 let amtstack: AmtStack | null = null
 let amtFirstPull = 0
 let powerPollTimer: number | null = null
 
-/** Subscribe to queue-depth changes; drives the progress bar and the idle pull pump. */
-export function onProgress(pending: number, max: number) {
-  busy.value = max > 0 ? Math.round((pending / max) * 100) : 100
-  if (pending !== 0) return
+/** Subscribe to queue-depth changes; drives the header counter and the idle pull pump. */
+export function onProgress(inFlight: number) {
+  pending.value = inFlight
+  if (inFlight !== 0) return
   // Queue is idle: pull whatever has not been pulled yet, one subsystem per tick.
   if (amtstack == null) return
   if (amtVersion.value > 0 && (amtFirstPull & FIRST_PULL.ExtraInfo) === 0) {
@@ -136,7 +140,7 @@ export function disconnect() {
     amtstack = null
   }
   connState.value = 'disconnected'
-  onProgress(0, 1)
+  onProgress(0)
 }
 
 export function processSystemVersion(body: WsmanNode) {

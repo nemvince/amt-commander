@@ -12,7 +12,7 @@ import { items, num, text } from '../lib/wsm'
 import { Details, type Field } from '../ui/details'
 import { useEffect } from 'preact/hooks'
 import type { WsmanNode } from '../lib/wsman'
-import { getStack } from '../state/device'
+import { getStack, pending } from '../state/device'
 import { S } from '../strings'
 import { RefreshIcon } from '../ui/icons'
 import { Table, type Column } from '../ui/table'
@@ -262,19 +262,19 @@ export function HardwarePage() {
         </button>
       </div>
 
-      <Details title={S.platform} fields={platform} />
-      <Details title={S.baseboard} fields={baseboard} />
-      <Details title={S.bios} fields={biosFields} />
+      <Details loading={pending.value > 0} title={S.platform} fields={platform} />
+      <Details loading={pending.value > 0} title={S.baseboard} fields={baseboard} />
+      <Details loading={pending.value > 0} title={S.bios} fields={biosFields} />
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.processor}
         columns={processorColumns}
         rows={processorRows}
         keyOf={(r) => r.label}
         empty={S.noData}
       />
-      <Table title={S.memory} columns={memoryColumns} rows={memoryRows} keyOf={(r) => r.label} empty={S.noData} />
-      <Table
+      <Table loading={pending.value > 0} title={S.memory} columns={memoryColumns} rows={memoryRows} keyOf={(r) => r.label} empty={S.noData} />
+      <Table loading={pending.value > 0}
         title={S.storageDevices}
         columns={storageColumns}
         rows={storageRows}
@@ -282,9 +282,9 @@ export function HardwarePage() {
         empty={S.noData}
       />
 
-      {batteryFields.length > 0 && <Details title={S.battery} fields={batteryFields} />}
+      {batteryFields.length > 0 && <Details loading={pending.value > 0} title={S.battery} fields={batteryFields} />}
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.allComponents}
         columns={partColumns}
         rows={partRows}

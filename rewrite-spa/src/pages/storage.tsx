@@ -14,7 +14,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { FEAT_FileSaver } from '../features'
 import { format, type AmtStack } from '../lib/amt-stack'
-import { connState, getStack } from '../state/device'
+import { connState, getStack, pending } from '../state/device'
 import { S } from '../strings'
 import { Table, type Column } from '../ui/table'
 import { TrashIcon } from '../ui/icons'
@@ -143,7 +143,7 @@ export function StoragePage() {
     <div class="page">
       {error !== '' && <div class="banner error">{error}</div>}
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.navStorage}
         columns={columns}
         rows={doc.items}

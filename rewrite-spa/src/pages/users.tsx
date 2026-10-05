@@ -14,7 +14,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { format } from '../lib/amt-stack'
 import { digestPassword } from '../lib/md5'
 import { getSidString, sidToBytes } from '../lib/sid'
-import { accounts, connState, generalSettings, getStack, PullAccounts } from '../state/device'
+import { PullAccounts, accounts, connState, generalSettings, getStack, pending } from '../state/device'
 import { S, REALM_NAMES } from '../strings'
 import { Dialog } from '../ui/dialog'
 import { Table, type Column } from '../ui/table'
@@ -231,7 +231,7 @@ export function UsersPage() {
 
   return (
     <div class="page">
-      <Table
+      <Table loading={pending.value > 0}
         title={S.navUsers}
         columns={columns}
         rows={rows}

@@ -9,7 +9,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { n, yes } from '../lib/wsm'
 import { signal } from '@preact/signals'
-import { PullAgentPresence, getStack, agentPresence } from '../state/device'
+import { PullAgentPresence, agentPresence, getStack, pending } from '../state/device'
 import type { WsmanNode } from '../lib/wsman'
 import { S } from '../strings'
 import { Dialog } from '../ui/dialog'
@@ -155,7 +155,7 @@ export function PresencePage() {
         </dl>
       </section>
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.watchdogsHeading}
         columns={watchdogColumns}
         rows={watchdogs}
@@ -164,7 +164,7 @@ export function PresencePage() {
         empty={S.noWatchdog}
       />
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.actionsHeading}
         columns={actionColumns}
         rows={actions}

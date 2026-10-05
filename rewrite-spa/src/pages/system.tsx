@@ -1,14 +1,15 @@
 import { useState } from 'preact/hooks'
 import {
-  getStack,
-  powerState,
+  RequestPowerStateChange,
   amtVersion,
   amtVersionString,
   generalSettings,
+  getStack,
   networkTime,
+  pending,
+  powerState,
   provisioningMode,
   uuid,
-  RequestPowerStateChange,
 } from '../state/device'
 import { S } from '../strings'
 import { Dialog } from '../ui/dialog'
@@ -152,7 +153,7 @@ export function SystemPage() {
 
       {showPower && (
         <Dialog title="Power Actions" onClose={() => setShowPower(false)} buttons={[{ label: S.close, value: 'cancel' }]}>
-          <Table
+          <Table loading={pending.value > 0}
             columns={powerColumns}
             rows={rows}
             keyOf={(r) => r.label}

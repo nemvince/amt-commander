@@ -11,7 +11,7 @@
 import { useSignal, type Signal } from '@preact/signals'
 import { useEffect, useState } from 'preact/hooks'
 import { format } from '../lib/amt-stack'
-import { eventLog, getStack, PullEventLog } from '../state/device'
+import { PullEventLog, eventLog, getStack, pending } from '../state/device'
 import { S } from '../strings'
 import { Dialog } from '../ui/dialog'
 import { LockIcon, UnlockIcon } from '../ui/icons'
@@ -415,7 +415,7 @@ export function EventsPage() {
         </section>
       )}
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.events}
         columns={columns}
         rows={rows}

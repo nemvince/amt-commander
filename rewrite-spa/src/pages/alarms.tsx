@@ -7,7 +7,7 @@
  */
 import { useEffect, useState } from 'preact/hooks'
 import { s } from '../lib/wsm'
-import { PullAlarms, getStack, alarms } from '../state/device'
+import { PullAlarms, alarms, getStack, pending } from '../state/device'
 import type { WsmanNode } from '../lib/wsman'
 import { S } from '../strings'
 import { Dialog } from '../ui/dialog'
@@ -100,7 +100,7 @@ export function AlarmsPage() {
 
   return (
     <div class="page">
-      <Table
+      <Table loading={pending.value > 0}
         title={S.alarmsHeading}
         columns={columns}
         rows={rows}

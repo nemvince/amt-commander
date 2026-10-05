@@ -13,7 +13,7 @@ import { useEffect } from 'preact/hooks'
 import { FEAT_Wireless } from '../features'
 import { format } from '../lib/amt-stack'
 import type { WsmanNode } from '../lib/wsman'
-import { getStack } from '../state/device'
+import { getStack, pending } from '../state/device'
 import { S } from '../strings'
 import { RefreshIcon } from '../ui/icons'
 import { Table, type Column } from '../ui/table'
@@ -294,12 +294,12 @@ export function NetworkPage() {
 
       <p class="page-note">{S.networkNote}</p>
 
-      <Details title={S.generalSettings} fields={general} />
+      <Details loading={pending.value > 0} title={S.generalSettings} fields={general} />
 
-      {interfacePanels.map((panel, index) => (panel == null ? null : <Details key={index} title={panel.title} fields={panel.fields} />))}
+      {interfacePanels.map((panel, index) => (panel == null ? null : <Details loading={pending.value > 0} key={index} title={panel.title} fields={panel.fields} />))}
 
       {FEAT_Wireless ? (
-        <Table
+        <Table loading={pending.value > 0}
           title={S.wirelessProfiles}
           columns={profileColumns}
           rows={profileRows}

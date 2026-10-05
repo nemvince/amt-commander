@@ -7,7 +7,7 @@
  */
 import { useEffect, useState } from 'preact/hooks'
 import { s, selectorValue } from '../lib/wsm'
-import { PullSubscriptions, getStack, subscriptions } from '../state/device'
+import { PullSubscriptions, getStack, pending, subscriptions } from '../state/device'
 import type { SelectorSet, WsmanEndpoint, WsmanNode } from '../lib/wsman'
 import { S } from '../strings'
 import { Dialog } from '../ui/dialog'
@@ -72,7 +72,7 @@ export function SubsPage() {
 
   return (
     <div class="page">
-      <Table
+      <Table loading={pending.value > 0}
         title={S.subscribersHeading}
         columns={columns}
         rows={rows}

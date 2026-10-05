@@ -9,7 +9,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { s, selectorValue } from '../lib/wsm'
 import { signal } from '@preact/signals'
-import { PullRemoteAccess, getStack, remoteAccess, amtVersion, amtVersionMinor } from '../state/device'
+import { PullRemoteAccess, amtVersion, amtVersionMinor, getStack, pending, remoteAccess } from '../state/device'
 import { format } from '../lib/amt-stack'
 import type { WsmanNode } from '../lib/wsman'
 import { S } from '../strings'
@@ -164,7 +164,7 @@ export function InternetPage() {
         </dl>
       </section>
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.serversHeading}
         columns={serverColumns}
         rows={servers.value}
@@ -172,7 +172,7 @@ export function InternetPage() {
         empty={S.noServers}
       />
 
-      <Table
+      <Table loading={pending.value > 0}
         title={S.policyRulesHeading}
         columns={ruleColumns}
         rows={rules.value}
