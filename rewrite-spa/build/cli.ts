@@ -17,8 +17,9 @@
  * measurement runs the compiler. The TUI always says which one it is showing.
  */
 
-import { existsSync } from 'node:fs'
-import { join, relative, resolve } from 'node:path'
+import { accessSync, constants, existsSync, statSync } from 'node:fs'
+import { createInterface } from 'node:readline/promises'
+import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
   DEFAULT_TIER,
@@ -148,7 +149,14 @@ options
   --yes                    do not ask for confirmation`
 
 function parseArgs(argv: string[]): Args {
-  const a: Args = { command: 'ui', tls: false, yes: false }
+  /*
+   * The picker is the default on a terminal, because it can ask about anything
+   * the arguments left out. Without a terminal there is nothing to ask and no
+   * keys to read, so a bare invocation builds instead -- otherwise `bun run
+   * build --features X` piped into a script would print a selection and exit
+   * without producing an artifact.
+   */
+  const a: Args = { command: process.stdin.isTTY === true ? 'ui' : 'build', tls: false, yes: false }
   const bare: string[] = []
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
@@ -212,12 +220,41 @@ interface Built {
 }
 
 /**
+ * Reject an output path before spawning anything.
+ *
+ * Without this a bad `--out` surfaced as a stack trace from inside the WASM
+ * compressor with its entire minified source dumped to the terminal, and the
+ * actual cause (a directory, a missing parent, no permission) was unreadable.
+ */
+function checkOutPath(raw: string): string | null {
+  const abs = resolve(process.cwd(), raw)
+  if (existsSync(abs) && statSync(abs).isDirectory()) {
+    return `${rel(abs)} is a directory; --out wants a file path`
+  }
+  const dir = dirname(abs)
+  if (!existsSync(dir)) return `directory ${rel(dir)} does not exist`
+  try {
+    accessSync(dir, constants.W_OK)
+  } catch {
+    return `cannot write into ${rel(dir)} (permission denied)`
+  }
+  return null
+}
+
+/**
  * One custom build: `FEATURES` is absolute, `TIER` only names the preset for
  * logging, `OUT` pins the artifact path. build-firmware reports the gzipped
  * size as a machine-readable `size: <bytes>` line.
  */
 async function firmwareBuild(a: Args, ids: string[], theme: string, name: string): Promise<Built | null> {
   const out = a.out != null && a.out.trim() !== '' ? resolve(process.cwd(), a.out.trim()) : null
+  if (out != null) {
+    const problem = checkOutPath(out)
+    if (problem != null) {
+      console.error(`${bold('build')}  ${problem}`)
+      return null
+    }
+  }
   const artifact = out ?? join(ROOT, 'dist', 'firmware', `${name}.htm.gz`)
   const env: Record<string, string> = {
     ...(process.env as Record<string, string>),
@@ -234,7 +271,10 @@ async function firmwareBuild(a: Args, ids: string[], theme: string, name: string
     cwd: ROOT,
     env,
     stdout: 'pipe',
-    stderr: 'inherit',
+    // Captured, not inherited: on a failure the child can print a stack trace
+    // through the WASM compressor, including one enormous line of its own
+    // source. Streaming that hides the actual error.
+    stderr: 'pipe',
   })
 
   let text = ''
@@ -253,12 +293,17 @@ async function firmwareBuild(a: Args, ids: string[], theme: string, name: string
   }
   if (line !== '') process.stdout.write('  ' + line + '\n')
   const code = await proc.exited
+  const err = await new Response(proc.stderr).text()
 
   let size: number | null = null
   for (const m of text.matchAll(/^size:\s*(\d+)\s*$/gm)) size = Number(m[1])
 
   if (code !== 0) {
     console.error(`build failed (exit ${code})`)
+    // The cause is at the end, and a stack frame can be thousands of columns
+    // wide, so trim each line before showing the last few.
+    const tail = err.split('\n').map((l) => (l.length > 160 ? l.slice(0, 160) + '…' : l)).filter((l) => l.trim() !== '')
+    for (const l of tail.slice(-6)) console.error(`  ${l}`)
     return null
   }
   if (size == null) {
@@ -345,6 +390,60 @@ async function cmdBuild(a: Args): Promise<number> {
   return 0
 }
 
+/**
+ * Sequential prompt for values the command line did not supply.
+ *
+ * Arguments are taken as given; anything missing is asked for on a terminal, and
+ * a scripted run never blocks on stdin (off a terminal the value falls through
+ * unchanged and the loader reports what it needs).
+ *
+ * Lines are queued rather than requested one at a time: `readline.question()`
+ * drops anything already buffered when the next question is issued, so typing
+ * three answers ahead -- or pasting them -- stalled after the second prompt.
+ */
+class Prompts {
+  private rl: ReturnType<typeof createInterface>
+  private waiting: ((line: string) => void) | null = null
+  private buffered: string[] = []
+
+  constructor() {
+    this.rl = createInterface({ input: process.stdin, output: process.stdout })
+    this.rl.on('line', (line) => {
+      const w = this.waiting
+      if (w != null) {
+        this.waiting = null
+        w(line)
+      } else {
+        this.buffered.push(line)
+      }
+    })
+  }
+
+  ask(label: string, given: string | undefined, def?: string): Promise<string | undefined> {
+    if (given != null && given.trim() !== '') return Promise.resolve(given)
+    if (process.stdin.isTTY !== true) return Promise.resolve(given)
+    const suffix = def != null ? ` (${def})` : ''
+    process.stdout.write(`  ${label}${suffix}: `)
+    const { promise, resolve } = Promise.withResolvers<string | undefined>()
+    const take = (line: string) => {
+      const v = line.trim()
+      resolve(v !== '' ? v : def)
+    }
+    const next = this.buffered.shift()
+    if (next != null) {
+      process.stdout.write(`${next}\n`)
+      take(next)
+    } else {
+      this.waiting = take
+    }
+    return promise
+  }
+
+  close(): void {
+    this.rl.close()
+  }
+}
+
 async function cmdInstall(a: Args): Promise<number> {
   let artifact: string
   if (a.out != null && a.out.trim() !== '' && existsSync(resolve(process.cwd(), a.out.trim()))) {
@@ -357,6 +456,25 @@ async function cmdInstall(a: Args): Promise<number> {
     if (built == null) return 1
     artifact = built.artifact
     console.log(`artifact ${rel(artifact)}  ${bytes(built.bytes)} (${kb(built.bytes)})`)
+  }
+
+  // Installing to "localhost" with an empty password can only fail, so ask
+  // rather than guess.
+  const needed = a.host == null || a.user == null || a.pass == null
+  if (needed && process.stdin.isTTY === true) console.log(bold('target AMT device'))
+  const prompts = needed && process.stdin.isTTY === true ? new Prompts() : null
+  try {
+    if (prompts != null) {
+      a.host = await prompts.ask('AMT address', a.host, 'localhost')
+      a.user = await prompts.ask('username', a.user, 'admin')
+      a.pass = await prompts.ask('password', a.pass)
+    }
+  } finally {
+    prompts?.close()
+  }
+  if (a.pass == null || a.pass === '') {
+    console.error(`${bold('install')}  a password is required; pass --pass or run on a terminal`)
+    return 1
   }
   return await amtUpload(a, artifact)
 }

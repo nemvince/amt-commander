@@ -4,16 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "build": "bun build/cli.ts",
     "dev": "vite",
     "mock": "bun dev/mock/server.ts",
-    "probe": "bun dev/probe-real-amt.ts",
-    "build": "tsc -b && vite build",
-    "build:firmware": "bun scripts/build-firmware.ts",
-    "build:custom": "bun build/cli.ts",
-    "build:ui": "bun build/cli.ts ui",
-    "measure": "bun build/cli.ts measure",
     "typecheck": "tsc -b",
-    "amt": "bun scripts/amt-loader.ts"
+    "capture": "bun dev/probe-real-amt.ts"
   },
   "dependencies": {
     "@preact/signals": "^2.11.3",

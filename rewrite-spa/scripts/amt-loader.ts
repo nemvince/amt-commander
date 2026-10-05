@@ -759,7 +759,7 @@ async function wizard(dryRun: boolean): Promise<number> {
     const built = builtVariants()
     let file: string
     if (built.length === 0) {
-      warn('no built consoles found under dist/firmware — run bun run build:firmware first')
+      warn('no built consoles found under dist/firmware — run `bun run build` to make one')
       file = await asker.ask('gzipped console to install', VARIANTS[0].file)
     } else {
       const pick = await asker.choose('console build', [
