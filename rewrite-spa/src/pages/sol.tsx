@@ -130,7 +130,6 @@ export function SolPage() {
     <div class="page">
       <div class="page-header">
         {FEAT_IDER ? <IderBar /> : null}
-        <h1 class="page-title">{S.solTitle}</h1>
       </div>
 
       <div class="statusbar">

@@ -228,10 +228,6 @@ export function DefensePage() {
 
   return (
     <div class="page">
-      <div class="page-header">
-        <h1 class="page-title">{S.navDefense}</h1>
-      </div>
-
       <section class="table-panel">
         <div class="table-titlebar">
           <h2 class="table-title">{S.general}</h2>

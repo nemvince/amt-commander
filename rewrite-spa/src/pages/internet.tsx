@@ -147,7 +147,6 @@ export function InternetPage() {
   return (
     <div class="page">
       <div class="page-header">
-        <h1 class="page-title">{S.navInternet}</h1>
         <button type="button" class="btn" onClick={pull}>
           {S.refresh}
         </button>

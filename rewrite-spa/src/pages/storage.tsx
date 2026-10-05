@@ -141,10 +141,6 @@ export function StoragePage() {
 
   return (
     <div class="page">
-      <div class="page-header">
-        <h1 class="page-title">{S.navStorage}</h1>
-      </div>
-
       {error !== '' && <div class="banner error">{error}</div>}
 
       <Table

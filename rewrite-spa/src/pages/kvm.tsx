@@ -382,7 +382,6 @@ export function KvmPage() {
     <div class={'page' + (full ? ' kvm-fullscreen' : '')}>
       <div class="page-header">
         {FEAT_IDER ? <IderBar /> : null}
-        <h1 class="page-title">{S.navKvm}</h1>
       </div>
 
       {message !== '' && (
@@ -407,7 +406,6 @@ export function KvmPage() {
 
       <section class="table-panel">
         <div class="table-titlebar">
-          <h2 class="table-title">{S.navKvm}</h2>
           <div class="table-actions">
             <button type="button" class="btn" onClick={live ? () => channelRef.current?.Stop() : start}>
               {live ? S.kvmDisconnect : S.kvmConnect}

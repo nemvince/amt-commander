@@ -94,10 +94,6 @@ export function SubsPage() {
 
   return (
     <div class="page">
-      <div class="page-header">
-        <h1 class="page-title">{S.navSubs}</h1>
-      </div>
-
       <Table
         title={S.subscribersHeading}
         columns={columns}

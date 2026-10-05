@@ -372,7 +372,6 @@ export function EventsPage() {
   return (
     <div class="page">
       <div class="page-header">
-        <h1 class="page-title">{S.navEvents}</h1>
         <div class="table-actions">
           <button type="button" class="btn" onClick={refresh}>
             {S.refresh}

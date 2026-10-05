@@ -97,10 +97,6 @@ export function AuditPage() {
 
   return (
     <div class="page">
-      <div class="page-header">
-        <h1 class="page-title">{S.navAudit}</h1>
-      </div>
-
       <section class="table-panel">
         <div class="table-titlebar">
           <h2 class="table-title">{S.auditSettings}</h2>

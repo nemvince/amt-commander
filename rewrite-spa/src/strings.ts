@@ -490,6 +490,7 @@ export const S = {
   iderTitle: 'IDE Redirection',
   iderSession: 'IDE-R Session',
   iderIdle: 'No IDE-R session',
+  iderDropHint: 'Drop an image, or choose:',
   iderStart: 'Start IDE-R Session',
   iderStop: 'Stop IDE-R Session',
   iderDiskMap: 'Disk Map',

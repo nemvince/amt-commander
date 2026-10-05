@@ -1,35 +1,167 @@
-/* IDER overlay — status bar, mount controls, per-device sector heat map. */
+/*
+ * IDER toolbar: session state on the left, controls on the right, plus the
+ * per-device sector heat map that expands underneath.
+ */
 
 .ider {
   position: relative;
+  min-width: 0;
 }
 
-.ider-mount {
+.ider-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
-  padding: 8px 10px;
+  gap: 8px;
+  padding: 5px 8px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--panel-alt);
+  font-size: 12px;
 }
 
-.ider-mount label {
-  display: flex;
+/* Drag-and-drop is a hidden affordance, so make the drop target obvious. */
+.ider-dragging .ider-toolbar {
+  border-color: var(--accent);
+  outline: 1px dashed var(--accent);
+  outline-offset: -3px;
+}
+
+.ider-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 600;
+}
+
+.ider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--text-dim);
+}
+
+.ider-state-connecting .ider-dot {
+  background: var(--warn);
+}
+
+.ider-state-live .ider-dot {
+  background: var(--ok);
+}
+
+.ider-pill {
+  padding: 1px 7px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.ider-pill-connecting {
+  color: var(--warn);
+  border-color: var(--warn);
+}
+
+.ider-pill-live {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.ider-counters,
+.ider-hint {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+/* Mount slot: a label styled as a button over a hidden native file input. */
+.ider-pick {
+  position: relative;
+  max-width: 210px;
+}
+
+.ider-pick input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ider-pick:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.ider-pick.is-set {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ider-pick-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Eject / clear. The glyph comes from CSS so the markup stays empty. */
+.ider-x {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ider-x::before {
+  content: '×';
+}
+
+.ider-x:hover {
+  background: var(--panel);
+  color: var(--error);
+}
+
+.ider-chip {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  padding: 1px 3px 1px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--panel);
 }
 
-.ider-mount input[type="file"] {
-  max-width: 220px;
-  font-size: 12px;
+.ider-chip-kind {
+  color: var(--text-dim);
+  font-size: 11px;
 }
 
-.ider-mount select {
+.ider-chip-name {
   max-width: 160px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ider-toolbar .btn {
+  padding: 3px 9px;
   font-size: 12px;
+}
+
+.ider-mode {
+  padding: 3px 4px;
+  font-size: 12px;
+}
+
+.ider-toolbar .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .ider-error {

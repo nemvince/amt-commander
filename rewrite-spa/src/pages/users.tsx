@@ -231,10 +231,6 @@ export function UsersPage() {
 
   return (
     <div class="page">
-      <div class="page-header">
-        <h1 class="page-title">{S.navUsers}</h1>
-      </div>
-
       <Table
         title={S.navUsers}
         columns={columns}

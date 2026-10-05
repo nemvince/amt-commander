@@ -293,7 +293,6 @@ export function HardwarePage() {
   return (
     <div class="page">
       <div class="page-header">
-        <h1 class="page-title">{S.navHardware}</h1>
         <button type="button" class="btn" onClick={refresh}>
           <RefreshIcon />
           {S.refresh}

@@ -111,7 +111,11 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+/* The shell header carries the page name, so pages do not repeat it. This is
+   the page's only h1 -- reset the user-agent heading defaults to match. */
 .header-title {
+  margin: 0;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -227,16 +231,21 @@ body {
   max-width: 1200px;
 }
 
+/* Pages keep this row for a toolbar or refresh action. The page name is in the
+   shell header now, so there is no title here to push them across. */
 .page-header {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.page-title {
-  margin: 0;
-  font-size: 17px;
-  font-weight: 600;
+.page-header > .ider {
+  flex: 1;
+}
+
+.page-header > .btn,
+.page-header > .table-actions {
+  margin-left: auto;
 }
 
 /* ---------- Banners ---------- */

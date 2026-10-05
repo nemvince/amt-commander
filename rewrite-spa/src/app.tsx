@@ -122,7 +122,7 @@ export function App() {
       </div>
 
       <header class="header">
-        <span class="header-title">{page?.label}</span>
+        <h1 class="header-title">{page?.label}</h1>
         {connError.value !== '' && <span class="status-error">{connError.value}</span>}
         <span class="header-spacer" />
         {loading && (

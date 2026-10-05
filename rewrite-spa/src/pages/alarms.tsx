@@ -105,10 +105,6 @@ export function AlarmsPage() {
 
   return (
     <div class="page">
-      <div class="page-header">
-        <h1 class="page-title">{S.navAlarms}</h1>
-      </div>
-
       <Table
         title={S.alarmsHeading}
         columns={columns}

@@ -1,5 +1,5 @@
 /**
- * IDER overlay: status bar, mount controls and the per-device sector disk map.
+ * IDER overlay: session toolbar, mount controls and the per-device sector map.
  *
  * Replaces the legacy `#id_iderstatus` bar (index.html:820-838), the start dialog
  * (index.html:9634) and `iderSectorStats`'s canvas drawing (index.html:9737-9769).
@@ -8,6 +8,10 @@
  * signal and reports user intent through callbacks, so a page can drop it in
  * without importing the IDER client. That keeps the engine and its CSS out of
  * pages that never render the bar.
+ *
+ * Layout is one toolbar row: state on the left, controls on the right. Idle and
+ * running are the same row -- mounting uses file buttons that show the chosen
+ * filename, and a running session shows ejectable chips instead.
  */
 import type { Signal } from '@preact/signals'
 import { useEffect, useRef, useState } from 'preact/hooks'
@@ -86,6 +90,7 @@ export function IderOverlay(props: IderOverlayProps) {
   const [cdrom, setCdrom] = useState<File | null>(null)
   const [mode, setMode] = useState<IderStartMode>(1)
   const [mapOpen, setMapOpen] = useState(false)
+  const [dragging, setDragging] = useState(false)
   const [error, setError] = useState('')
 
   // Mirrors the dialog checks in index.html:9646-9647.
@@ -113,6 +118,7 @@ export function IderOverlay(props: IderOverlayProps) {
 
   const onDrop = (e: DragEvent) => {
     e.preventDefault()
+    setDragging(false)
     let floppyFile: File | null = null
     let cdromFile: File | null = null
     for (const file of Array.from(e.dataTransfer?.files ?? [])) {
@@ -134,85 +140,138 @@ export function IderOverlay(props: IderOverlayProps) {
     props.onStart(floppyFile, cdromFile, 1)
   }
 
-  const summary = !running
-    ? S.iderIdle
-    : `${S.iderSession}, ${view.status === 'live' ? S.connected : S.connecting}, ${view.bytesFromAmt} ${S.iderIn}, ${view.bytesToAmt} ${S.iderOut}.`
+  /** One mount slot: a button-shaped label over a hidden native file input. */
+  const picker = (file: File | null, set: (f: File | null) => void, label: string, accept: string) => (
+    <>
+      <label class={'btn ider-pick' + (file == null ? '' : ' is-set')} title={label}>
+        <input
+          type="file"
+          accept={accept}
+          onChange={(e) => {
+            set(e.currentTarget.files?.[0] ?? null)
+            setError('')
+          }}
+        />
+        <span class="ider-pick-name">{file == null ? label : file.name}</span>
+      </label>
+      {file == null ? null : (
+        <button
+          type="button"
+          class="ider-x"
+          title={S.clear}
+          aria-label={S.clear}
+          onClick={() => set(null)}
+        />
+      )}
+    </>
+  )
 
   return (
-    <div class="ider">
-      <div
-        class="statusbar"
-        onDrop={onDrop}
-        onDragOver={(e) => {
-          e.preventDefault()
-        }}
-      >
-        <span>{summary}</span>
+    <div
+      class={'ider' + (dragging ? ' ider-dragging' : '')}
+      onDrop={onDrop}
+      onDragOver={(e) => {
+        e.preventDefault()
+        if (!dragging) {
+          setDragging(true)
+        }
+      }}
+      onDragLeave={(e) => {
+        const to = e.relatedTarget as Node | null
+        if (to != null && e.currentTarget.contains(to)) {
+          return
+        }
+        setDragging(false)
+      }}
+    >
+      <div class="ider-toolbar">
+        <span class={'ider-state ider-state-' + view.status}>
+          <span class="ider-dot" aria-hidden="true" />
+          {running ? S.iderSession : S.iderIdle}
+        </span>
+
+        {running ? (
+          <>
+            <span class={'ider-pill ider-pill-' + view.status}>
+              {view.status === 'live' ? S.connected : S.connecting}
+            </span>
+            <span class="ider-counters mono">
+              {view.bytesFromAmt} {S.iderIn} · {view.bytesToAmt} {S.iderOut}
+            </span>
+          </>
+        ) : null}
+
         <span class="header-spacer" />
-        <div class="btn-row">
-          {FEAT_IDERStats && running ? (
-            <button type="button" class="btn" onClick={() => setMapOpen(!mapOpen)}>
-              {S.iderDiskMap}
-            </button>
-          ) : null}
-          {running && view.floppy ? (
-            <button type="button" class="btn" onClick={() => props.onEject('floppy')}>
-              {S.iderEject} {S.iderFloppyLabel}
-            </button>
-          ) : null}
-          {running && view.cdrom ? (
-            <button type="button" class="btn" onClick={() => props.onEject('cdrom')}>
-              {S.iderEject} {S.iderCdromLabel}
-            </button>
-          ) : null}
-          {running ? (
+
+        {running ? (
+          <>
+            {view.floppy == null ? null : (
+              <span class="ider-chip">
+                <span class="ider-chip-kind">{S.iderFloppyLabel}</span>
+                <span class="ider-chip-name mono">{view.floppy.name}</span>
+                <button
+                  type="button"
+                  class="ider-x"
+                  title={S.iderEject}
+                  aria-label={S.iderEject}
+                  onClick={() => props.onEject('floppy')}
+                />
+              </span>
+            )}
+            {view.cdrom == null ? null : (
+              <span class="ider-chip">
+                <span class="ider-chip-kind">{S.iderCdromLabel}</span>
+                <span class="ider-chip-name mono">{view.cdrom.name}</span>
+                <button
+                  type="button"
+                  class="ider-x"
+                  title={S.iderEject}
+                  aria-label={S.iderEject}
+                  onClick={() => props.onEject('cdrom')}
+                />
+              </span>
+            )}
+            {FEAT_IDERStats ? (
+              <button
+                type="button"
+                class={'btn' + (mapOpen ? ' btn-primary' : '')}
+                aria-pressed={mapOpen}
+                onClick={() => setMapOpen(!mapOpen)}
+              >
+                {S.iderDiskMap}
+              </button>
+            ) : null}
             <button type="button" class="btn" onClick={props.onStop}>
               {S.iderStop}
             </button>
-          ) : null}
-        </div>
-      </div>
-
-      {running ? null : (
-        <div class="ider-mount">
-          <label>
-            <span>{S.iderFloppy}</span>
-            <input
-              type="file"
-              accept=".img"
-              onChange={(e) => {
-                setFloppy(e.currentTarget.files?.[0] ?? null)
-                setError('')
-              }}
-            />
-          </label>
-          <label>
-            <span>{S.iderCdrom}</span>
-            <input
-              type="file"
-              accept=".iso"
-              onChange={(e) => {
-                setCdrom(e.currentTarget.files?.[0] ?? null)
-                setError('')
-              }}
-            />
-          </label>
-          <label>
-            <span>{S.iderStartMode}</span>
+          </>
+        ) : (
+          <>
+            <span class="ider-hint">{S.iderDropHint}</span>
+            {picker(floppy, setFloppy, S.iderFloppy, '.img')}
+            {picker(cdrom, setCdrom, S.iderCdrom, '.iso')}
             <select
+              class="ider-mode"
               value={mode}
+              title={S.iderStartMode}
+              aria-label={S.iderStartMode}
               onChange={(e) => setMode(Number(e.currentTarget.value) as IderStartMode)}
             >
               <option value={0}>{S.iderOnReboot}</option>
               <option value={1}>{S.iderGraceful}</option>
               <option value={2}>{S.iderNow}</option>
             </select>
-          </label>
-          <button type="button" class="btn btn-primary" onClick={start}>
-            {S.iderStart}
-          </button>
-        </div>
-      )}
+            <button
+              type="button"
+              class="btn btn-primary"
+              disabled={floppy == null && cdrom == null}
+              onClick={start}
+            >
+              {S.iderStart}
+            </button>
+          </>
+        )}
+      </div>
 
       {error === '' ? null : <p class="ider-error status-error">{error}</p>}
 

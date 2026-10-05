@@ -188,7 +188,6 @@ export function ScriptsPage() {
       )}
 
       <div class="page-header">
-        <h1 class="page-title">{S.navScripts}</h1>
         <span class="script-status-text">{status}</span>
       </div>
 

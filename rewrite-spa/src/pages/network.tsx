@@ -322,7 +322,6 @@ export function NetworkPage() {
   return (
     <div class="page">
       <div class="page-header">
-        <h1 class="page-title">{S.navNetwork}</h1>
         <button type="button" class="btn" onClick={refresh}>
           <RefreshIcon />
           {S.refresh}
