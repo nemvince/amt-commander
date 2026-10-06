@@ -291,3 +291,12 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# Bun workspace sources (the legacy NuGet rule above only expects packages/build)
+!packages/
+!packages/**
+# ...but not their installs or build output
+apps/*/node_modules/
+apps/*/dist/
+packages/*/node_modules/
+packages/*/dist/

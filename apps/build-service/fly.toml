@@ -1,0 +1,30 @@
+# Fly.io configuration for the build service.
+#
+# The image is built from `apps/build-service/Dockerfile` with the repository
+# root as its build context -- the Dockerfile copies the workspace so that
+# `bun install` can link `apps/console` and `packages/build-system`.
+#
+#   fly apps create meshcommander-build-service      # once, with your own name
+#   fly deploy . --config apps/build-service/fly.toml
+#
+# The app name must match the one you created; rename it here if you pick
+# another. `.github/workflows/service.yml` deploys this on every push that
+# touches the service.
+
+app = "meshcommander-build-service"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8787
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[env]
+  # Public by design: the service only compiles. Set ALLOWED_ORIGIN to the site's
+  # origin to restrict who can spend CPU on it.
+  ALLOWED_ORIGIN = "*"

@@ -1,0 +1,688 @@
+/*
+ * MeshCommander firmware edition — base styles.
+ * Modernized dense admin look: CSS custom properties, light + dark via
+ * prefers-color-scheme, 13px data tables.
+ */
+
+:root {
+  /* Structural tokens. Colours live in a theme file under styles/themes/ and
+     are pulled in through `virtual:theme.css`. */
+  --radius: 4px;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Without this, a bare `<a>` falls back to the UA default #0000EE, which is
+   close to unreadable on the dark background. */
+a {
+  color: var(--link);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#app {
+  height: 100%;
+}
+
+/* ---------- Shell ---------- */
+
+.shell {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "brand header" "nav main";
+  height: 100vh;
+}
+
+.brand {
+  grid-area: brand;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  height: 48px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius);
+  background: var(--accent-text);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  height: 48px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+/* The shell header carries the page name, so pages do not repeat it. This is
+   the page's only h1 -- reset the user-agent heading defaults to match. */
+.header-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel-alt);
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.chip.connecting {
+  color: var(--warn);
+  border-color: var(--warn);
+}
+.chip.connected {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+.chip.error,
+.chip.disconnected {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+/* Count of in-flight WSMAN requests. Replaces the old progress bar: a bar
+   implied a known total, which the queue depth never actually gave us. */
+.loading-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* ---------- Nav ---------- */
+
+.nav {
+  grid-area: nav;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 12px;
+  border: 0;
+  border-left: 3px solid transparent;
+  background: none;
+  color: var(--text-dim);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: var(--row-hover);
+  color: var(--text);
+}
+
+.nav-item.active {
+  border-left-color: var(--accent);
+  background: var(--row-hover);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.nav-group {
+  padding: 12px 12px 4px;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ---------- Main ---------- */
+
+.main {
+  grid-area: main;
+  overflow: auto;
+  padding: 14px;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1200px;
+}
+
+/* Pages keep this row for a toolbar or refresh action. The page name is in the
+   shell header now, so there is no title here to push them across. */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-header > .ider {
+  flex: 1;
+}
+
+.page-header > .btn,
+.page-header > .table-actions {
+  margin-left: auto;
+}
+
+/* ---------- Media pages (Remote Desktop, SOL) ---------- */
+
+/*
+ * These behave like a desktop app rather than a document: the page is fixed to
+ * the viewport, actions sit in a bar at the top, the media fills everything in
+ * between, and state sits at the bottom. Nothing scrolls -- the media scales.
+ */
+.main-fill {
+  overflow: hidden;
+  padding: 10px;
+}
+
+.page-fill {
+  height: 100%;
+  max-width: none;
+  gap: 8px;
+}
+
+.media-page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.media-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Bars top and bottom, media stretched between them. */
+.media-page > .media-bar {
+  order: 1;
+}
+.media-page > .ider {
+  order: 2;
+}
+.media-page > .banner {
+  order: 3;
+}
+.media-page > .media-stage {
+  order: 4;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+}
+.media-page > .statusbar {
+  order: 6;
+}
+
+/* ---------- Icon menus ---------- */
+
+.menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu-trigger.is-open {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.menu-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 30;
+  min-width: 190px;
+  padding: 4px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.menu-panel.menu-right {
+  left: auto;
+  right: 0;
+}
+
+.menu-heading {
+  padding: 5px 8px 2px;
+  color: var(--text-dim);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.menu-sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--border);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: var(--row-hover);
+}
+
+.menu-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu-item:disabled:hover {
+  background: none;
+}
+
+.menu-tick {
+  flex: none;
+  width: 11px;
+  color: var(--accent);
+}
+
+/* ---------- Banners ---------- */
+
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: var(--radius);
+  border: 1px solid var(--warn);
+  background: var(--warn-bg);
+  color: var(--text);
+}
+
+.banner.error {
+  border-color: var(--error);
+  background: var(--error-bg);
+}
+
+.banner a {
+  color: inherit;
+}
+
+/* ---------- Panels + tables ---------- */
+
+.table-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.table-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: var(--panel-alt);
+  border-bottom: 1px solid var(--border);
+}
+
+.table-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.table-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--panel-alt);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr:hover {
+  background: var(--row-hover);
+}
+
+.table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.table-empty {
+  margin: 0;
+  padding: 14px 10px;
+  color: var(--text-dim);
+}
+
+/* "Still fetching" reads differently from "nothing here" on purpose. */
+.table-loading {
+  font-style: italic;
+  opacity: 0.75;
+}
+
+/* Definition grid for label/value pages */
+.kv {
+  display: grid;
+  grid-template-columns: minmax(140px, max-content) 1fr;
+  gap: 0;
+}
+
+.kv dt {
+  padding: 5px 10px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+
+.kv dd {
+  margin: 0;
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--border);
+  word-break: break-word;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+/* ---------- Buttons + inputs ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--row-hover);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.btn-icon {
+  padding: 4px 6px;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select {
+  padding: 4px 7px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+
+label {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.field-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+}
+
+.status-ok {
+  color: var(--ok);
+}
+.status-warn {
+  color: var(--warn);
+}
+.status-error {
+  color: var(--error);
+}
+
+/* ---------- Dialog ---------- */
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.4);
+  z-index: 100;
+}
+
+.dialog {
+  width: min(560px, 92vw);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.28);
+}
+
+.dialog-title {
+  display: flex;
+  align-items: center;
+  padding: 9px 12px;
+  font-weight: 600;
+  background: var(--panel-alt);
+  border-bottom: 1px solid var(--border);
+  border-radius: 6px 6px 0 0;
+}
+
+.dialog-close {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dialog-body {
+  padding: 12px;
+  overflow: auto;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Terminal / KVM ---------- */
+
+.media-surface {
+  background: #000;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.terminal-output {
+  margin: 0;
+  padding: 8px;
+  height: 62vh;
+  overflow: auto;
+  background: #000;
+  color: #d8d8d8;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.25;
+  white-space: pre;
+}
+
+.terminal-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-top: 1px solid #333;
+  background: #111;
+  color: #eee;
+  font-family: var(--mono);
+  font-size: 13px;
+  outline: none;
+}
+
+/* SOL: the terminal fills the stage, so the status output scrolls in place
+   instead of the page growing with it. */
+.media-stage > .sol-surface {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sol-surface .terminal-output {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+}
+
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 12px;
+  color: var(--text-dim);
+}

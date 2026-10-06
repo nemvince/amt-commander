@@ -1,0 +1,576 @@
+/*
+ * The promo page's own styles. It borrows the console's design tokens -- the
+ * same four themes are loaded here -- so the site and the product look like one
+ * thing, and switching the theme selector on the page repaints the site too.
+ */
+@import '../../console/src/styles/themes/mesh.css';
+@import '../../console/src/styles/themes/midnight.css';
+@import '../../console/src/styles/themes/paper.css';
+@import '../../console/src/styles/themes/amber.css';
+
+:root {
+  --page-width: 1080px;
+  --radius: 4px;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/*
+ * The hero's "Build yours" / "Try the demo" jump to sections a screen or two
+ * down; gliding there reads better than teleporting. The reduced-motion block
+ * further down opts anyone who asked for less motion back out.
+ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--link);
+}
+
+main,
+.hero,
+footer {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-top: 72px;
+  padding-bottom: 40px;
+  text-align: center;
+}
+
+.hero-mark {
+  flex: none;
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  margin: 0 auto 20px;
+  font-size: 17px;
+  color: var(--text-dim);
+  max-width: 62ch;
+}
+
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ---------- Sections ---------- */
+
+section {
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+h3 {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.section-note {
+  margin: 0 0 20px;
+  color: var(--text-dim);
+  max-width: 80ch;
+}
+
+/* ---------- Buttons and fields ---------- */
+
+.btn {
+  display: inline-block;
+  padding: 7px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--row-hover);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: var(--accent);
+  filter: brightness(1.08);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+select,
+input[type="text"],
+input[type="url"] {
+  padding: 6px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+}
+
+.mono {
+  font-family: var(--mono);
+}
+
+/*
+ * A command line is read left to right: wrapping a 30-id `--features` list turns
+ * it into a column of fragments, so let it scroll sideways instead.
+ */
+.cli {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel-alt);
+  color: var(--text-dim);
+  font-size: 12px;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.status {
+  color: var(--text-dim);
+}
+
+.status-error {
+  color: var(--error);
+}
+
+/* ---------- Screenshots (carousel) ---------- */
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.carousel-stage {
+  position: relative;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel-alt);
+  overflow: hidden;
+}
+
+.carousel-image {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.carousel-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: shot-in 260ms ease-out;
+}
+
+@keyframes shot-in {
+  from {
+    opacity: 0;
+    transform: scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .carousel-image img {
+    animation: none;
+  }
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 64px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--panel) 84%, transparent);
+  color: var(--text);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.25;
+  transition: opacity 120ms ease;
+}
+
+.carousel-stage:hover .carousel-arrow,
+.carousel-arrow:focus-visible {
+  opacity: 1;
+}
+
+.carousel-arrow.prev {
+  left: 10px;
+}
+
+.carousel-arrow.next {
+  right: 10px;
+}
+
+.carousel-count {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.carousel-bar {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.carousel-caption {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex: none;
+}
+
+.segment {
+  padding: 5px 12px;
+  border: 0;
+  background: var(--panel);
+  color: var(--text-dim);
+  font: inherit;
+  cursor: pointer;
+}
+
+.segment + .segment {
+  border-left: 1px solid var(--border-strong);
+}
+
+.segment.active {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.carousel-rail {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.carousel-thumb {
+  flex: none;
+  width: 132px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel-alt);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.55;
+  transition:
+    opacity 120ms ease,
+    border-color 120ms ease;
+}
+
+.carousel-thumb:hover {
+  opacity: 0.85;
+}
+
+.carousel-thumb.active {
+  opacity: 1;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.carousel-thumb img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1440 / 900;
+  object-fit: cover;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px;
+  background: color-mix(in srgb, var(--bg) 92%, black);
+  cursor: zoom-out;
+}
+
+.lightbox img {
+  max-width: min(1600px, 100%);
+  max-height: 78vh;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.lightbox-caption {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+figcaption {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ---------- Picker ---------- */
+
+.picker {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .picker {
+    grid-template-columns: 1fr;
+  }
+}
+
+.picker-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.picker-group {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px 12px;
+  margin: 0 0 12px;
+  background: var(--panel);
+}
+
+.picker-group legend {
+  padding: 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.toggle {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.toggle input {
+  margin-top: 3px;
+}
+
+.toggle-note {
+  display: block;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.tag {
+  margin-left: 8px;
+  font-size: 11px;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+
+.picker-summary {
+  position: sticky;
+  top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.size-value {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.size-note {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+/* ---------- Themes ---------- */
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 20px;
+}
+
+.theme {
+  margin: 0;
+}
+
+.theme figcaption strong {
+  display: block;
+}
+
+.theme iframe {
+  width: 100%;
+  height: 300px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+/* ---------- Demo ---------- */
+
+.demo-frame {
+  width: 100%;
+  height: 620px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+
+/* ---------- Build ---------- */
+
+.build-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+/* The summary sits at the left, the support link at the right. */
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 32px 20px 64px;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  max-width: var(--page-width);
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Icon and label are one control, so they align on the same baseline. */
+.coffee {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}

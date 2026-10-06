@@ -1,0 +1,17 @@
+{
+  "name": "@meshcommander/build-system",
+  "type": "module",
+  "exports": {
+    ".": "./src/features.ts",
+    "./themes": "./src/themes.ts",
+    "./estimate": "./src/estimate.ts"
+  },
+  "scripts": {
+    "cli": "bun src/cli.ts",
+    "typecheck": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "typescript": "~7.0.2"
+  }
+}

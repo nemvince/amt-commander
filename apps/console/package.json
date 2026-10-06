@@ -1,0 +1,26 @@
+{
+  "name": "@meshcommander/console",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "bun ../../packages/build-system/src/cli.ts build",
+    "dev": "vite",
+    "typecheck": "tsc -b",
+    "capture": "bun dev/probe-real-amt.ts"
+  },
+  "dependencies": {
+    "@meshcommander/build-system": "workspace:*",
+    "@preact/signals": "^2.11.3",
+    "preact": "^11.0.0"
+  },
+  "devDependencies": {
+    "@gfx/zopfli": "^1.0.15",
+    "@preact/preset-vite": "^2.10.6",
+    "@types/bun": "^1.4.2",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.2",
+    "vite-bundle-analyzer": "^1.3.9"
+  },
+  "sideEffects": false
+}

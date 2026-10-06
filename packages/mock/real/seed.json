@@ -1,0 +1,161 @@
+{
+  "CIM_SoftwareIdentity": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_SoftwareIdentity",
+    "items": [
+      "<h:CIM_SoftwareIdentity><h:InstanceID>Flash</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>11.8.50</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>Netstack</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>11.8.50</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>AMTApps</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>11.8.50</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>AMT</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>11.8.50</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>Sku</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>16392</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>VendorID</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>8086</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>Build Number</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>3425</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>Recovery Version</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>11.8.50</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>Recovery Build Num</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>3425</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>Legacy Mode</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>False</h:VersionString></h:CIM_SoftwareIdentity>",
+      "<h:CIM_SoftwareIdentity><h:InstanceID>AMT FW Core Version</h:InstanceID><h:IsEntity>true</h:IsEntity><h:VersionString>11.8.50</h:VersionString></h:CIM_SoftwareIdentity>"
+    ]
+  },
+  "AMT_SetupAndConfigurationService": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService",
+    "items": [
+      "<h:AMT_SetupAndConfigurationService><h:CreationClassName>AMT_SetupAndConfigurationService</h:CreationClassName><h:ElementName>Intel(r) AMT Setup and Configuration Service</h:ElementName><h:EnabledState>5</h:EnabledState><h:Name>Intel(r) AMT Setup and Configuration Service</h:Name><h:PasswordModel>1</h:PasswordModel><h:ProvisioningMode>1</h:ProvisioningMode><h:ProvisioningServerOTP>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</h:ProvisioningServerOTP><h:ProvisioningState>2</h:ProvisioningState><h:RequestedState>12</h:RequestedState><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName><h:SystemName>Intel(r) AMT</h:SystemName><h:ZeroTouchConfigurationEnabled>true</h:ZeroTouchConfigurationEnabled></h:AMT_SetupAndConfigurationService>"
+    ]
+  },
+  "CIM_ComputerSystemPackage": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ComputerSystemPackage",
+    "items": [
+      "<h:CIM_ComputerSystemPackage><h:Antecedent><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters><c:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Chassis</c:ResourceURI><c:SelectorSet><c:Selector Name=\"CreationClassName\">CIM_Chassis</c:Selector><c:Selector Name=\"Tag\">CIM_Chassis</c:Selector></c:SelectorSet></b:ReferenceParameters></h:Antecedent><h:Dependent><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters><c:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ComputerSystem</c:ResourceURI><c:SelectorSet><c:Selector Name=\"CreationClassName\">CIM_ComputerSystem</c:Selector><c:Selector Name=\"Name\">ManagedSystem</c:Selector></c:SelectorSet></b:ReferenceParameters></h:Dependent><h:PlatformGUID>4C93F0849703E7119C43BC0000520000</h:PlatformGUID></h:CIM_ComputerSystemPackage>"
+    ]
+  },
+  "CIM_Chassis": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Chassis",
+    "items": [
+      "<h:CIM_Chassis><h:ChassisPackageType>15</h:ChassisPackageType><h:CreationClassName>CIM_Chassis</h:CreationClassName><h:ElementName>Managed System Chassis</h:ElementName><h:Manufacturer>HP</h:Manufacturer><h:Model>HP EliteDesk 800 G2 DM 65W</h:Model><h:OperationalStatus>0</h:OperationalStatus><h:PackageType>3</h:PackageType><h:SerialNumber>CZC7107NF4</h:SerialNumber><h:Tag>CIM_Chassis</h:Tag><h:Version> </h:Version></h:CIM_Chassis>"
+    ]
+  },
+  "CIM_Card": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Card",
+    "items": [
+      "<h:CIM_Card><h:CanBeFRUed>false</h:CanBeFRUed><h:CreationClassName>CIM_Card</h:CreationClassName><h:ElementName>Managed System Base Board</h:ElementName><h:Manufacturer>HP</h:Manufacturer><h:Model>8056</h:Model><h:OperationalStatus>0</h:OperationalStatus><h:PackageType>9</h:PackageType><h:SerialNumber>PEWKU0L5K567F2</h:SerialNumber><h:Tag>CIM_Card</h:Tag><h:Version>KBC Version 05.39</h:Version></h:CIM_Card>"
+    ]
+  },
+  "CIM_BIOSElement": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_BIOSElement",
+    "items": [
+      "<h:CIM_BIOSElement><h:ElementName>Primary BIOS</h:ElementName><h:Manufacturer>HP</h:Manufacturer><h:Name>Primary BIOS</h:Name><h:OperationalStatus>0</h:OperationalStatus><h:PrimaryBIOS>true</h:PrimaryBIOS><h:ReleaseDate><i:Datetime>2024-03-14T00:00:00Z</i:Datetime></h:ReleaseDate><h:SoftwareElementID>N21 Ver. 02.63</h:SoftwareElementID><h:SoftwareElementState>2</h:SoftwareElementState><h:TargetOperatingSystem>66</h:TargetOperatingSystem><h:Version>N21 Ver. 02.63</h:Version></h:CIM_BIOSElement>"
+    ]
+  },
+  "CIM_Processor": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Processor",
+    "items": [
+      "<h:CIM_Processor><h:CPUStatus>1</h:CPUStatus><h:CreationClassName>CIM_Processor</h:CreationClassName><h:CurrentClockSpeed>3200</h:CurrentClockSpeed><h:DeviceID>CPU 0</h:DeviceID><h:ElementName>Managed System CPU</h:ElementName><h:EnabledState>2</h:EnabledState><h:ExternalBusClockSpeed>100</h:ExternalBusClockSpeed><h:Family>205</h:Family><h:HealthState>0</h:HealthState><h:MaxClockSpeed>3600</h:MaxClockSpeed><h:OperationalStatus>0</h:OperationalStatus><h:OtherFamilyDescription></h:OtherFamilyDescription><h:RequestedState>12</h:RequestedState><h:Role>Central</h:Role><h:Stepping>3</h:Stepping><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName><h:SystemName>ManagedSystem</h:SystemName><h:UpgradeMethod>1</h:UpgradeMethod></h:CIM_Processor>"
+    ]
+  },
+  "CIM_PhysicalMemory": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PhysicalMemory",
+    "items": [
+      "<h:CIM_PhysicalMemory><h:BankLabel>ChannelB</h:BankLabel><h:Capacity>8589934592</h:Capacity><h:CreationClassName>CIM_PhysicalMemory</h:CreationClassName><h:ElementName>Managed System Memory Chip</h:ElementName><h:FormFactor>13</h:FormFactor><h:Manufacturer>Micron</h:Manufacturer><h:MemoryType>26</h:MemoryType><h:PartNumber>8ATF1G64HZ-3G2J1    </h:PartNumber><h:SerialNumber>26B0AFF6</h:SerialNumber><h:Speed>0</h:Speed><h:Tag>CIM_PhysicalMemory Tag</h:Tag></h:CIM_PhysicalMemory>",
+      "<h:CIM_PhysicalMemory><h:BankLabel>ChannelA</h:BankLabel><h:Capacity>8589934592</h:Capacity><h:CreationClassName>CIM_PhysicalMemory</h:CreationClassName><h:ElementName>Managed System Memory Chip</h:ElementName><h:FormFactor>13</h:FormFactor><h:Manufacturer>Kingston</h:Manufacturer><h:MemoryType>26</h:MemoryType><h:PartNumber>9905700-026.A00G    </h:PartNumber><h:SerialNumber>7F925D90</h:SerialNumber><h:Speed>0</h:Speed><h:Tag>  (#1)</h:Tag></h:CIM_PhysicalMemory>"
+    ]
+  },
+  "CIM_MediaAccessDevice": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_MediaAccessDevice",
+    "items": [
+      "<h:CIM_MediaAccessDevice><h:Capabilities>4</h:Capabilities><h:Capabilities>10</h:Capabilities><h:CreationClassName>CIM_MediaAccessDevice</h:CreationClassName><h:DeviceID>MEDIA DEV 0</h:DeviceID><h:ElementName>Managed System Media Access Device</h:ElementName><h:EnabledDefault>2</h:EnabledDefault><h:EnabledState>0</h:EnabledState><h:MaxMediaSize>1024209543</h:MaxMediaSize><h:OperationalStatus>0</h:OperationalStatus><h:RequestedState>12</h:RequestedState><h:Security>2</h:Security><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName><h:SystemName>ManagedSystem</h:SystemName></h:CIM_MediaAccessDevice>"
+    ]
+  },
+  "CIM_PhysicalPackage": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PhysicalPackage",
+    "items": [
+      "<h:CIM_Card><h:CanBeFRUed>false</h:CanBeFRUed><h:CreationClassName>CIM_Card</h:CreationClassName><h:ElementName>Managed System Base Board</h:ElementName><h:Manufacturer>HP</h:Manufacturer><h:Model>8056</h:Model><h:OperationalStatus>0</h:OperationalStatus><h:PackageType>9</h:PackageType><h:SerialNumber>PEWKU0L5K567F2</h:SerialNumber><h:Tag>CIM_Card</h:Tag><h:Version>KBC Version 05.39</h:Version></h:CIM_Card>",
+      "<h:CIM_PhysicalPackage><h:CreationClassName>CIM_PhysicalPackage</h:CreationClassName><h:ElementName>Managed System Storage Media Package</h:ElementName><h:Model>Samsung SSD 850 PRO 1TB                 </h:Model><h:OperationalStatus>0</h:OperationalStatus><h:PackageType>15</h:PackageType><h:SerialNumber>S2BBNWAHC23233D     </h:SerialNumber><h:Tag>Storage Media Package 0</h:Tag></h:CIM_PhysicalPackage>",
+      "<h:CIM_Chassis><h:ChassisPackageType>15</h:ChassisPackageType><h:CreationClassName>CIM_Chassis</h:CreationClassName><h:ElementName>Managed System Chassis</h:ElementName><h:Manufacturer>HP</h:Manufacturer><h:Model>HP EliteDesk 800 G2 DM 65W</h:Model><h:OperationalStatus>0</h:OperationalStatus><h:PackageType>3</h:PackageType><h:SerialNumber>CZC7107NF4</h:SerialNumber><h:Tag>CIM_Chassis</h:Tag><h:Version> </h:Version></h:CIM_Chassis>"
+    ]
+  },
+  "CIM_Battery": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Battery",
+    "items": []
+  },
+  "CIM_Chip": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Chip",
+    "items": [
+      "<h:CIM_Chip><h:CanBeFRUed>true</h:CanBeFRUed><h:CreationClassName>CIM_Chip</h:CreationClassName><h:ElementName>Managed System Processor Chip</h:ElementName><h:Manufacturer>Intel(R) Corporation</h:Manufacturer><h:OperationalStatus>0</h:OperationalStatus><h:Tag>CPU 0</h:Tag><h:Version>Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz</h:Version></h:CIM_Chip>",
+      "<h:CIM_PhysicalMemory><h:BankLabel>ChannelB</h:BankLabel><h:Capacity>8589934592</h:Capacity><h:CreationClassName>CIM_PhysicalMemory</h:CreationClassName><h:ElementName>Managed System Memory Chip</h:ElementName><h:FormFactor>13</h:FormFactor><h:Manufacturer>Micron</h:Manufacturer><h:MemoryType>26</h:MemoryType><h:PartNumber>8ATF1G64HZ-3G2J1    </h:PartNumber><h:SerialNumber>26B0AFF6</h:SerialNumber><h:Speed>0</h:Speed><h:Tag>CIM_PhysicalMemory Tag</h:Tag></h:CIM_PhysicalMemory>",
+      "<h:CIM_PhysicalMemory><h:BankLabel>ChannelA</h:BankLabel><h:Capacity>8589934592</h:Capacity><h:CreationClassName>CIM_PhysicalMemory</h:CreationClassName><h:ElementName>Managed System Memory Chip</h:ElementName><h:FormFactor>13</h:FormFactor><h:Manufacturer>Kingston</h:Manufacturer><h:MemoryType>26</h:MemoryType><h:PartNumber>9905700-026.A00G    </h:PartNumber><h:SerialNumber>7F925D90</h:SerialNumber><h:Speed>0</h:Speed><h:Tag>  (#1)</h:Tag></h:CIM_PhysicalMemory>"
+    ]
+  },
+  "CIM_SystemPackaging": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_SystemPackaging",
+    "items": [
+      "<h:CIM_ComputerSystemPackage><h:Antecedent><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters><c:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_Chassis</c:ResourceURI><c:SelectorSet><c:Selector Name=\"CreationClassName\">CIM_Chassis</c:Selector><c:Selector Name=\"Tag\">CIM_Chassis</c:Selector></c:SelectorSet></b:ReferenceParameters></h:Antecedent><h:Dependent><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters><c:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ComputerSystem</c:ResourceURI><c:SelectorSet><c:Selector Name=\"CreationClassName\">CIM_ComputerSystem</c:Selector><c:Selector Name=\"Name\">ManagedSystem</c:Selector></c:SelectorSet></b:ReferenceParameters></h:Dependent><h:PlatformGUID>4C93F0849703E7119C43BC0000520000</h:PlatformGUID></h:CIM_ComputerSystemPackage>"
+    ]
+  },
+  "AMT_MessageLog": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_MessageLog",
+    "items": [
+      "<h:AMT_MessageLog><h:Capabilities>5</h:Capabilities><h:Capabilities>6</h:Capabilities><h:Capabilities>8</h:Capabilities><h:Capabilities>7</h:Capabilities><h:CharacterSet>10</h:CharacterSet><h:CreationClassName>AMT_MessageLog</h:CreationClassName><h:CurrentNumberOfRecords>63</h:CurrentNumberOfRecords><h:ElementName>Intel(r) AMT:MessageLog 1</h:ElementName><h:EnabledDefault>2</h:EnabledDefault><h:EnabledState>2</h:EnabledState><h:HealthState>5</h:HealthState><h:IsFrozen>false</h:IsFrozen><h:LastChange>0</h:LastChange><h:LogState>4</h:LogState><h:MaxLogSize>0</h:MaxLogSize><h:MaxNumberOfRecords>390</h:MaxNumberOfRecords><h:MaxRecordSize>21</h:MaxRecordSize><h:Name>Intel(r) AMT:MessageLog 1</h:Name><h:OperationalStatus>2</h:OperationalStatus><h:OverwritePolicy>2</h:OverwritePolicy><h:PercentageNearFull>16</h:PercentageNearFull><h:RequestedState>12</h:RequestedState><h:SizeOfHeader>0</h:SizeOfHeader><h:SizeOfRecordHeader>0</h:SizeOfRecordHeader><h:Status>OK</h:Status></h:AMT_MessageLog>"
+    ]
+  },
+  "AMT_AuditLog": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuditLog",
+    "items": [
+      "<h:AMT_AuditLog><h:AuditState>16</h:AuditState><h:CurrentNumberOfRecords>115</h:CurrentNumberOfRecords><h:ElementName>Intel(r) AMT Audit Log</h:ElementName><h:EnabledState>2</h:EnabledState><h:MaxAllowedAuditors>1</h:MaxAllowedAuditors><h:MaxNumberOfRecords>0</h:MaxNumberOfRecords><h:Name>Intel(r) AMT:Audit Log</h:Name><h:OverwritePolicy>2</h:OverwritePolicy><h:PercentageFree>92</h:PercentageFree><h:RequestedState>2</h:RequestedState><h:StoragePolicy>1</h:StoragePolicy><h:TimeOfLastRecord><i:Datetime>2026-10-04T15:37:49Z</i:Datetime></h:TimeOfLastRecord></h:AMT_AuditLog>"
+    ]
+  },
+  "AMT_AuthorizationService": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AuthorizationService",
+    "items": [
+      "<h:AMT_AuthorizationService><h:CreationClassName>AMT_AuthorizationService</h:CreationClassName><h:ElementName>Intel(r) AMT Authorization Service</h:ElementName><h:EnabledState>5</h:EnabledState><h:Name>Intel(r) AMT Authorization Service</h:Name><h:RequestedState>12</h:RequestedState><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName><h:SystemName>Intel(r) AMT</h:SystemName></h:AMT_AuthorizationService>"
+    ]
+  },
+  "AMT_WiFiPortConfigurationService": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_WiFiPortConfigurationService",
+    "items": []
+  },
+  "AMT_SystemDefensePolicy": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SystemDefensePolicy",
+    "items": []
+  },
+  "AMT_RemoteAccessService": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RemoteAccessService",
+    "items": [
+      "<h:AMT_RemoteAccessService><h:CreationClassName>AMT_RemoteAccessService</h:CreationClassName><h:ElementName>Intel(r) AMT Remote Access Service</h:ElementName><h:Name>Intel(r) AMT Remote Access Service</h:Name><h:SystemCreationClassName>CIM_ComputerSystem</h:SystemCreationClassName><h:SystemName>Intel(r) AMT</h:SystemName></h:AMT_RemoteAccessService>"
+    ]
+  },
+  "AMT_EnvironmentDetectionSettingData": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_EnvironmentDetectionSettingData",
+    "items": [
+      "<h:AMT_EnvironmentDetectionSettingData><h:DetectionAlgorithm>0</h:DetectionAlgorithm><h:ElementName>Intel(r) AMT Environment Detection Settings</h:ElementName><h:InstanceID>Intel(r) AMT Environment Detection Settings</h:InstanceID></h:AMT_EnvironmentDetectionSettingData>"
+    ]
+  },
+  "AMT_AgentPresenceWatchdog": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AgentPresenceWatchdog",
+    "items": []
+  },
+  "AMT_AgentPresenceWatchdogAction": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_AgentPresenceWatchdogAction",
+    "items": []
+  },
+  "IPS_AlarmClockOccurrence": {
+    "resuri": "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_AlarmClockOccurrence",
+    "items": []
+  },
+  "AMT_GeneralSettings": {
+    "resuri": "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings",
+    "items": [
+      "<h:AMT_GeneralSettings><h:AMTNetworkEnabled>1</h:AMTNetworkEnabled><h:DDNSPeriodicUpdateInterval>1440</h:DDNSPeriodicUpdateInterval><h:DDNSTTL>900</h:DDNSTTL><h:DDNSUpdateByDHCPServerEnabled>true</h:DDNSUpdateByDHCPServerEnabled><h:DDNSUpdateEnabled>false</h:DDNSUpdateEnabled><h:DHCPv6ConfigurationTimeout>0</h:DHCPv6ConfigurationTimeout><h:DigestRealm>Digest:CDC70000000000000000000000000000</h:DigestRealm><h:DomainName></h:DomainName><h:ElementName>Intel(r) AMT: General Settings</h:ElementName><h:HostName></h:HostName><h:HostOSFQDN></h:HostOSFQDN><h:IdleWakeTimeout>65535</h:IdleWakeTimeout><h:InstanceID>Intel(r) AMT: General Settings</h:InstanceID><h:NetworkInterfaceEnabled>true</h:NetworkInterfaceEnabled><h:PingResponseEnabled>true</h:PingResponseEnabled><h:PowerSource>0</h:PowerSource><h:PreferredAddressFamily>0</h:PreferredAddressFamily><h:PresenceNotificationInterval>0</h:PresenceNotificationInterval><h:PrivacyLevel>0</h:PrivacyLevel><h:RmcpPingResponseEnabled>true</h:RmcpPingResponseEnabled><h:SharedFQDN>true</h:SharedFQDN><h:WsmanOnlyMode>false</h:WsmanOnlyMode></h:AMT_GeneralSettings>"
+    ]
+  },
+  "CIM_ServiceAvailableToElement": {
+    "resuri": "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ServiceAvailableToElement",
+    "items": [
+      "<h:CIM_AssociatedPowerManagementService><h:AvailableRequestedPowerStates>10</h:AvailableRequestedPowerStates><h:AvailableRequestedPowerStates>8</h:AvailableRequestedPowerStates><h:AvailableRequestedPowerStates>5</h:AvailableRequestedPowerStates><h:AvailableRequestedPowerStates>11</h:AvailableRequestedPowerStates><h:PowerState>2</h:PowerState><h:ServiceProvided><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters><c:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService</c:ResourceURI><c:SelectorSet><c:Selector Name=\"CreationClassName\">CIM_PowerManagementService</c:Selector><c:Selector Name=\"Name\">Intel(r) AMT Power Management Service</c:Selector><c:Selector Name=\"SystemCreationClassName\">CIM_ComputerSystem</c:Selector><c:Selector Name=\"SystemName\">Intel(r) AMT</c:Selector></c:SelectorSet></b:ReferenceParameters></h:ServiceProvided><h:UserOfService><b:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous</b:Address><b:ReferenceParameters><c:ResourceURI>http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ComputerSystem</c:ResourceURI><c:SelectorSet><c:Selector Name=\"CreationClassName\">CIM_ComputerSystem</c:Selector><c:Selector Name=\"Name\">ManagedSystem</c:Selector></c:SelectorSet></b:ReferenceParameters></h:UserOfService></h:CIM_AssociatedPowerManagementService>"
+    ]
+  },
+  "__invokes": {
+    "GetUuid": "<g:GetUuid_OUTPUT><g:UUID>TJPwhJcD5xGcQ7wAAFIAAA==</g:UUID><g:ReturnValue>0</g:ReturnValue></g:GetUuid_OUTPUT>",
+    "GetLowAccuracyTimeSynch": "<g:GetLowAccuracyTimeSynch_OUTPUT><g:Ta0>1791196155</g:Ta0><g:ReturnValue>0</g:ReturnValue></g:GetLowAccuracyTimeSynch_OUTPUT>",
+    "GetAdminAclEntry": "<g:GetAdminAclEntry_OUTPUT><g:Username>admin</g:Username><g:ReturnValue>0</g:ReturnValue></g:GetAdminAclEntry_OUTPUT>",
+    "GetUserAclEntryEx": "<g:GetUserAclEntryEx_OUTPUT><g:ReturnValue>2053</g:ReturnValue></g:GetUserAclEntryEx_OUTPUT>"
+  }
+}

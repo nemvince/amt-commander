@@ -1,30 +1,18 @@
 {
-  "name": "MeshCommander",
-  "version": "0.9.6",
-  "description": "Intel(R) Active Management Technology console tool",
-  "main": "index-nw.html",
-  "author": "Intel Corporation",
-  "keywords": [
-    "Intel",
-    "Intel AMT",
-    "Active Management Technology",
-    "Remote Management",
-    "Hardware Management",
-    "Manageability Commander"
+  "name": "meshcommander",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
   ],
-  "single-instance": false,
-  "window": {
-    "icon": "favicon.png",
-    "toolbar": false,
-    "frame": true,
-    "width": 970,
-    "min_width": 970,
-    "height": 760,
-    "min_height": 640
-  },
-  "dependencies": {
-    "html-minifier": "^4.0.0",
-    "jsdom": "^16.4.0",
-    "minify-js": "0.0.4"
+  "scripts": {
+    "build": "bun run --filter '*' build",
+    "typecheck": "bun run --filter '*' typecheck",
+    "console": "bun run --cwd apps/console dev",
+    "mock": "bun run --cwd packages/mock dev",
+    "site": "bun run --cwd apps/site dev",
+    "service": "bun run --cwd apps/build-service dev",
+    "cli": "bun run --cwd packages/build-system cli"
   }
 }

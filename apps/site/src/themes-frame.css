@@ -1,0 +1,18 @@
+/* Only what the preview needs beyond the console's own `base.css`: the nav
+   icons are inline SVG in the console, so the preview stands in a dot. */
+.nav-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  display: inline-block;
+}
+
+.nav-item.active .nav-dot {
+  background: var(--accent);
+}
+
+/* The frame is an iframe: a scrollbar would clip the shell it is previewing. */
+body {
+  overflow: hidden;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@meshcommander/mock",
+  "type": "module",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "bun server.ts",
+    "export": "bun export-static.ts",
+    "typecheck": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "typescript": "~7.0.2"
+  }
+}
