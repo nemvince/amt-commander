@@ -292,7 +292,7 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-# Bun workspace sources (the legacy NuGet rule above only expects packages/build)
+# Bun workspace sources (the NuGet rule above excludes **/packages/*)
 !packages/
 !packages/**
 # ...but not their installs or build output
