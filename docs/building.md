@@ -12,8 +12,8 @@ through this same pipeline, and it is all driven by the CLI described here.
 Bun 1.4 or newer and a checkout:
 
 ```sh
-git clone https://github.com/Ylianst/MeshCommander
-cd MeshCommander
+git clone https://github.com/nemvince/meshcommander-rewrite
+cd meshcommander-rewrite
 bun install
 ```
 

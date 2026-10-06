@@ -21,7 +21,8 @@ import { DEFAULT_THEME, THEMES } from '@meshcommander/build-system/themes'
 import { estimateSize, formatBytes, type SizeTable } from './size'
 import './site.css'
 
-const REPO = 'https://github.com/Ylianst/MeshCommander'
+/** The project's own repository; the upstream MeshCommander is a different one. */
+const REPO = 'https://github.com/nemvince/meshcommander-rewrite'
 /**
  * Where the "build locally" button points: the CLI guide in this repository.
  * The branch is named because a blob link has to be, and the rewrite lives here
@@ -493,7 +494,7 @@ export function App() {
       <footer>
         <p>
           {FEATURES.length} feature flags, {THEMES.length} themes, one file.{' '}
-          <a href={REPO}>github.com/Ylianst/MeshCommander</a>
+          <a href={REPO}>github.com/nemvince/meshcommander-rewrite</a>
         </p>
         <a class="btn coffee" href={COFFEE}>
           {/* Inline so the icon inherits the button's colour and costs no request. */}
