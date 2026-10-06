@@ -1,6 +1,10 @@
 /**
  * The promo page: what the console is, what it looks like, and a picker that
- * builds one to your selection.
+ * hands you the command that builds one to your selection.
+ *
+ * The page never builds anything: feature gating happens in the bundler, so an
+ * arbitrary selection needs a real toolchain, and that toolchain is the CLI.
+ * What a visitor gets here is the exact command to paste into a checkout.
  *
  * Everything the page states is measured elsewhere -- the sizes come from real
  * builds through `scripts/prepare.ts`, the screenshots from the console running
@@ -13,6 +17,7 @@ import {
   FEATURES,
   MANDATORY,
   TIERS,
+  USER_FLASH_LIMIT,
   featuresByGroup,
   resolveFeatures,
 } from '@meshcommander/build-system'
@@ -25,28 +30,25 @@ import './site.css'
 const REPO = 'https://github.com/nemvince/meshcommander-rewrite'
 /**
  * Where the "build locally" button points: the CLI guide in this repository.
- * The branch is named because a blob link has to be, and the rewrite lives here
- * until it lands on the default branch.
+ * A branch-qualified blob link would rot, so this is the file on the default
+ * branch -- the page's own section signs the reader up for the same command.
  */
-const GUIDE = `${REPO}/blob/rewrite-spa/docs/building.md`
+const GUIDE = `${REPO}/blob/main/docs/building.md`
 /** Where the "buy me a coffee" link in the footer points. */
 const COFFEE = 'https://buymeacoffee.com/nemvince'
 /**
- * Where the build service lives.
- *
- * `VITE_BUILD_SERVICE` is baked in at build time (the deploy workflow passes the
- * repository variable), and an empty value means "not configured here" -- hence
- * `||` rather than `??` -- so the local default still applies.
+ * The two lines a visitor pastes: get the sources, then let the CLI do the
+ * rest. Kept next to the generated command so the page shows them together.
  */
-const SERVICE = import.meta.env.VITE_BUILD_SERVICE || 'http://localhost:8787'
+const CLONE = `git clone ${REPO}.git\ncd meshcommander-rewrite\nbun install`
 
 /** The demo build's selection, so the picker opens on something familiar. */
-const DEFAULT_SELECTION = TIERS.large ?? MANDATORY
+const DEFAULT_SELECTION = TIERS.medium ?? MANDATORY
 
 /** Console pages shot against the mock device, in both colour schemes. */
 const SHOTS: readonly (readonly [string, string])[] = [
   ['system', 'System Status — firmware version, provisioning, power state'],
-  ['kvm', 'Remote Desktop — the KVM viewer over AMT redirection'],
+  ['kvm', 'Remote Desktop — the KVM viewer, with display, rotation and encoder settings'],
   ['sol', 'Serial-over-LAN — the SOL terminal'],
   ['hardware', 'Hardware Information — SMBIOS inventory'],
   ['events', 'Event Log — the firmware message log'],
@@ -110,9 +112,27 @@ function Screenshots() {
   const step = (delta: number) => setIndex((i) => (i + delta + SHOTS.length) % SHOTS.length)
   const shot = SHOTS[index] ?? SHOTS[0]
 
-  // Keep the active thumbnail visible once the rail is wider than its box.
+  /*
+   * Keep the active thumbnail visible once the rail is wider than its box.
+   *
+   * This scrolls the rail itself rather than calling `scrollIntoView` on the
+   * thumbnail: that also scrolls every scrollable ancestor, and since the rail
+   * sits below the full-width stage the browser scrolled the whole page down to
+   * the screenshots the moment the reader arrived -- straight past the hero.
+   */
   useEffect(() => {
-    rail.current?.querySelector('.carousel-thumb.active')?.scrollIntoView({ block: 'nearest', inline: 'center' })
+    const el = rail.current
+    const thumb = el?.children[index]
+    if (el == null || !(thumb instanceof HTMLElement)) {
+      return
+    }
+    // Rects rather than `offsetLeft`: the rail is not a positioned ancestor, so
+    // offsets would be measured against whatever element happens to be.
+    const box = el.getBoundingClientRect()
+    const at = thumb.getBoundingClientRect()
+    const left = el.scrollLeft + at.left - box.left - (el.clientWidth - at.width) / 2
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    el.scrollTo({ left: Math.max(0, left), behavior: still ? 'auto' : 'smooth' })
   }, [index])
 
   // Escape closes the zoomed view; arrows page it like the stage.
@@ -219,43 +239,71 @@ interface PickerProps {
   sizeError: string
 }
 
+/**
+ * Copy `text`, falling back to a selection when the Clipboard API is not
+ * available -- it needs a secure context, and the dev server is the only place
+ * this page is ever served over plain HTTP.
+ */
+const copyText = async (text: string): Promise<boolean> => {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    const area = document.createElement('textarea')
+    area.value = text
+    area.setAttribute('readonly', '')
+    area.style.position = 'fixed'
+    area.style.opacity = '0'
+    document.body.append(area)
+    area.select()
+    const ok = document.execCommand('copy')
+    area.remove()
+    return ok
+  }
+}
+
+/** One pasteable block: the command and a button that puts it on the clipboard. */
+function Command({ label, text }: { label: string; text: string }) {
+  const [copied, setCopied] = useState(false)
+  return (
+    <div class="command">
+      <div class="command-head">
+        <span class="command-label">{label}</span>
+        <button
+          type="button"
+          class="btn btn-small"
+          onClick={() => {
+            void copyText(text).then((ok) => {
+              setCopied(ok)
+              if (ok) setTimeout(() => setCopied(false), 1500)
+            })
+          }}
+        >
+          {copied ? 'copied' : 'copy'}
+        </button>
+      </div>
+      <p class="mono cli">{text}</p>
+    </div>
+  )
+}
+
 function Picker({ selected, onToggle, onPreset, theme, onTheme, tables, sizeError }: PickerProps) {
   const resolved = useMemo(() => [...resolveFeatures([...selected].join(','))], [selected])
   const table = tables?.[theme] ?? tables?.mesh ?? null
   const estimate = estimateSize(resolved, table)
-  const [status, setStatus] = useState('')
-  const [artifact, setArtifact] = useState<string | null>(null)
-  const [busy, setBusy] = useState(false)
+  const [host, setHost] = useState('10.0.0.1')
+  /** Over the device budget: a warning, not a block -- only the user knows the need. */
+  const overLimit = estimate.bytes >= USER_FLASH_LIMIT
 
-  /** Ask the build service for exactly this selection and theme. */
-  const build = async () => {
-    setBusy(true)
-    setStatus('building…')
-    setArtifact(null)
-    try {
-      const res = await fetch(`${SERVICE}/build`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ features: resolved, theme }),
-      })
-      if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null
-        setStatus(`build failed: ${body?.error ?? res.statusText}`)
-        return
-      }
-      const blob = await res.blob()
-      const name = res.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1]
-      setArtifact(URL.createObjectURL(blob))
-      setStatus(`${formatBytes(blob.size)} — ${name ?? 'artifact ready'}`)
-    } catch (e) {
-      setStatus(
-        `cannot reach the build service at ${SERVICE} (${(e as Error).message}). ` +
-          'Run `bun run service` to host one locally.',
-      )
-    } finally {
-      setBusy(false)
-    }
-  }
+  /**
+   * The whole point of the page: one line that builds this exact selection and
+   * flashes it. `install` is that line -- it builds unless `--name`/`--out`
+   * point at an artifact that already exists, and on a terminal it prompts for
+   * the AMT username and password, so no credential is ever printed here.
+   */
+  const flash = ['bun run cli install', `--features ${resolved.join(',')}`, `--theme ${theme}`]
+  if (host.trim() !== '') flash.push(`--host ${host.trim()}`)
+  const flashCommand = flash.join(' ')
 
   /**
    * A selection is closed over `requires`, so a feature an enabled feature needs
@@ -278,9 +326,9 @@ function Picker({ selected, onToggle, onPreset, theme, onTheme, tables, sizeErro
       <p class="section-note">
         Every toggle is a compile-time flag: the code, its styles and its dependencies leave the
         artifact entirely, which is why the size moves as you click. Sizes are gzipped bytes from
-        real builds, measured per theme. The build service then runs the same compiler this page was
-        measured with, and answers with the artifact — ready to flash through the console&rsquo;s own
-        installer or <span class="mono">amt-loader</span>.
+        real builds, measured per theme. Nothing is built here — pick a selection and the page hands
+        you the one command that builds it and flashes it from your own machine. That command is the
+        whole toolchain: it compiles, compresses and uploads over WSMAN.
       </p>
 
       <div class="picker">
@@ -346,18 +394,43 @@ function Picker({ selected, onToggle, onPreset, theme, onTheme, tables, sizeErro
               ))}
             </select>
           </div>
-          <button type="button" class="btn btn-primary" disabled={busy} onClick={() => void build()}>
-            {busy ? 'building…' : `Build ${resolved.length} features`}
-          </button>
-          {artifact != null && (
-            <a class="btn" href={artifact} download={`meshcommander-${theme}.htm.gz`}>
-              Download artifact
-            </a>
+          <div class="field">
+            <label for="host">AMT address</label>
+            <input
+              id="host"
+              type="text"
+              value={host}
+              placeholder="10.0.0.1 (blank to be asked)"
+              onInput={(event) => setHost(event.currentTarget.value)}
+            />
+          </div>
+          {overLimit && (
+            <p class="status-error">
+              {formatBytes(estimate.bytes)} is over the {formatBytes(USER_FLASH_LIMIT)} AMT gives a
+              console; drop features until it fits.
+            </p>
           )}
-          {status !== '' && <p class="mono status">{status}</p>}
-          <p class="mono cli">
-            bun run cli build --features {resolved.join(',')} --theme {theme}
+          <Command label={`build and flash ${resolved.length} features`} text={flashCommand} />
+          <p class="section-note">
+            Run it inside the checkout from the step below. It asks for the AMT username and
+            password — nothing secret is put on this page — and says where the artifact landed if
+            you would rather flash it later.
           </p>
+          <details class="more">
+            <summary>Build only, flash later</summary>
+            <Command
+              label="build"
+              text={`bun run cli build --features ${resolved.join(',')} --theme ${theme}`}
+            />
+            <p class="section-note">
+              Writes <span class="mono">apps/console/dist/firmware/&lt;name&gt;.htm.gz</span>, then
+              flash it with <span class="mono">bun run cli install --host … --name &lt;name&gt;</span>.
+            </p>
+          </details>
+          <details class="more">
+            <summary>Get the sources</summary>
+            <Command label="checkout" text={CLONE} />
+          </details>
         </aside>
       </div>
     </section>
@@ -429,9 +502,9 @@ function Demo() {
     <section id="demo">
       <h2>Live demo</h2>
       <p class="section-note">
-        The console itself, running against a recorded conversation with a real AMT 11.8.50 device.
-        The page calls are replayed by a Service Worker, so nothing here can touch a machine. The
-        KVM and SOL streams are raw WebSockets, which a Service Worker cannot replay — those two
+        The console itself, running against a recorded conversation captured from a real AMT 11.8.50
+        host. The page calls are replayed by a Service Worker, so nothing here can touch a machine.
+        The KVM and SOL streams are raw WebSockets, which a Service Worker cannot replay — those two
         pages need a real device.
       </p>
       {error !== '' && <p class="status-error">demo unavailable: {error}</p>}

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { FEAT_IDER, FEAT_TerminalEnumationAll, FEAT_TerminalSize } from '../features'
+import { createIder } from '../lib/ider'
 import { createRedirect, type RedirectChannel, type RedirectModule } from '../lib/redirect'
 import { createTerminal, type Terminal, type TerminalEmulation } from '../lib/terminal'
 import { S } from '../strings'
-import { IderBar } from '../ui/ider-bar'
+import { IderSessionButton, iderSummary } from '../ui/ider-session'
 import { NavIcon } from '../ui/icons'
 import { IconMenu, type MenuEntry } from '../ui/menu'
 
@@ -30,9 +31,10 @@ function storedSize(): { w: number; h: number } {
  * Serial-over-LAN, the rewrite of legacy view 13. The redirect channel carries
  * the session; the terminal model owns everything else.
  *
- * IDER rides the same view in legacy (index.html:947-952) and hooks in here at
- * `session` below: it only needs the module identity of the live channel, so a
- * mounted IDER overlay can attach its own protocol-3 channel to this page.
+ * IDER rides the same view in legacy (index.html:947-952). It is the same
+ * control the Remote Desktop page offers -- a toolbar button opening a dialog --
+ * because the engine is a separate protocol-3 channel in both cases and closing
+ * the dialog must not eject the mounted medium.
  */
 export function SolPage() {
   const screenRef = useRef<HTMLPreElement>(null)
@@ -42,6 +44,14 @@ export function SolPage() {
   const [tick, setTick] = useState(0)
   const [state, setState] = useState(0)
   const [size, setSize] = useState(storedSize)
+
+  /*
+   * The IDE-R engine belongs to the page, not to its dialog: closing the popup
+   * must not eject the mounted medium or drop a live session.
+   */
+  const ider = useMemo(() => (FEAT_IDER ? createIder() : null), [])
+  useEffect(() => () => ider?.stop(), [ider])
+  const { live: iderLive, connected: iderConnected, label: iderLabel } = iderSummary(ider?.view.value ?? null)
 
   if (model.current == null) {
     const terminal = createTerminal({
@@ -173,15 +183,20 @@ export function SolPage() {
 
   return (
     <div class="media-page">
-      {/* Session and terminal settings on top; state stays at the bottom. */}
+      {/*
+        Same left-to-right grouping as the Remote Desktop bar, so the two windows
+        read alike: the session button, a separator, then the view's own settings
+        menu and IDE-R. Nothing is pushed to the far edge -- the shared controls
+        sit at the same offsets in both windows.
+      */}
       <div class="media-bar">
         <button type="button" class="btn btn-primary" onClick={toggleConnect}>
           {state === 0 ? S.solConnect : S.solDisconnect}
         </button>
+        <span class="bar-sep" aria-hidden="true" />
         <IconMenu label={S.solSettings} icon={<NavIcon name="sol" size={14} />} entries={terminalMenu} />
+        {FEAT_IDER && <IderSessionButton engine={ider} />}
       </div>
-
-      {FEAT_IDER ? <IderBar /> : null}
 
       <div class="media-stage">
         <div class="media-surface sol-surface" onClick={() => inputRef.current?.focus()}>
@@ -208,7 +223,14 @@ export function SolPage() {
 
       <div class="statusbar">
         <span>{STATES[state] ?? S.disconnected}</span>
+        <span class="header-spacer" />
+        {iderLive && (
+          <span class={'kvm-mode' + (iderConnected ? ' kvm-mode-live' : '')}>{iderLabel}</span>
+        )}
       </div>
+
+      {/* Same control as the Remote Desktop window: the engine above keeps the
+          session alive whether this dialog is open or not. */}
     </div>
   )
 }

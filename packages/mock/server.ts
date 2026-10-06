@@ -61,7 +61,7 @@ if (existsSync(join(REAL_DIR, 'seed.json'))) {
   }
   console.log(`[mock] loaded ${classes.size} classes from real device corpus`)
 } else {
-  console.warn('[mock] no real corpus found; run: bun dev/probe-real-amt.ts <host> <user> <pass>')
+  console.warn('[mock] no real corpus found in packages/mock/real; see packages/mock/export-static.ts')
 }
 
 // ------------------------------------------------------------- mutable state

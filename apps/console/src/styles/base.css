@@ -9,6 +9,8 @@
      are pulled in through `virtual:theme.css`. */
   --radius: 4px;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  /* How far a toast floats above the bottom edge of the window. */
+  --toast-bottom: 16px;
 }
 
 * {
@@ -199,11 +201,28 @@ a:hover {
   padding: 14px;
 }
 
+/*
+ * The cap keeps tables readable and stops a definition row stretching the width
+ * of a 27" monitor. Once the content hits it the page has to be centred in
+ * `.main`: left-aligned it just left the whole surplus on the right, so the
+ * tables sat off-centre with a gutter twice the size of the nav's.
+ *
+ * `margin-inline: auto` rather than `align-items: center` on `.main`, which
+ * would also centre each page vertically.
+ *
+ * `width: 100%` is what makes the auto margins safe: each page component also
+ * renders its own `.page` inside the shell's, and an auto inline margin shrinks
+ * a flex child to its content -- the nested page would then measure its own
+ * tables instead of filling the cap. Media pages opt out through
+ * `.page-fill`'s `max-width: none`, which leaves the auto margins zero.
+ */
 .page {
   display: flex;
   flex-direction: column;
   gap: 12px;
   max-width: 1200px;
+  width: 100%;
+  margin-inline: auto;
 }
 
 /* Pages keep this row for a toolbar or refresh action. The page name is in the
@@ -214,10 +233,6 @@ a:hover {
   gap: 10px;
 }
 
-.page-header > .ider {
-  flex: 1;
-}
-
 .page-header > .btn,
 .page-header > .table-actions {
   margin-left: auto;
@@ -226,19 +241,25 @@ a:hover {
 /* ---------- Media pages (Remote Desktop, SOL) ---------- */
 
 /*
- * These behave like a desktop app rather than a document: the page is fixed to
- * the viewport, actions sit in a bar at the top, the media fills everything in
+ * These behave like a desktop app rather than a document: the window is the
+ * viewport, actions sit in a bar at the top, the media fills everything in
  * between, and state sits at the bottom. Nothing scrolls -- the media scales.
+ * The chrome is flush with the shell, so the page itself carries no padding and
+ * the bars touch the nav, the header and the bottom edge.
  */
 .main-fill {
   overflow: hidden;
-  padding: 10px;
+  padding: 0;
 }
 
 .page-fill {
   height: 100%;
   max-width: none;
-  gap: 8px;
+  gap: 0;
+  /* The media status bar is flush with the bottom edge, so a toast has to clear
+     it. The host is a sibling of `.media-page`, so the variable has to be set
+     on their common ancestor. */
+  --toast-bottom: 30px;
 }
 
 .media-page {
@@ -246,29 +267,60 @@ a:hover {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   overflow: hidden;
 }
 
+/* One row, always: the bar is window chrome, not a wrapping form. */
 .media-bar {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 6px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel-alt);
+  /* If the window is truly cramped the bar scrolls, because a clipped control
+     is one nobody can reach. */
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
-/* Bars top and bottom, media stretched between them. */
+.media-bar .btn,
+.media-bar .menu-trigger {
+  flex: none;
+  padding: 3px 8px;
+  font-size: 12px;
+}
+
+/*
+ * Toolbar group separator. One bar holds every control, so the seams between
+ * session, view, mode and keyboard controls have to be visible at a glance.
+ * Shared chrome, so it lives here rather than in either window's own stylesheet.
+ */
+.bar-sep {
+  flex: none;
+  width: 1px;
+  align-self: stretch;
+  margin: 2px 4px;
+  background: var(--border-strong);
+}
+
+/*
+ * Bars top and bottom, media stretched between them, banners edge to edge in
+ * between: the same stacking order for every media window.
+ */
 .media-page > .media-bar {
   order: 1;
 }
-.media-page > .ider {
-  order: 2;
-}
 .media-page > .banner {
-  order: 3;
+  order: 2;
+  margin: 0;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
 }
 .media-page > .media-stage {
-  order: 4;
+  order: 3;
   flex: 1;
   min-height: 0;
   display: flex;
@@ -278,7 +330,12 @@ a:hover {
   background: #000;
 }
 .media-page > .statusbar {
-  order: 6;
+  order: 4;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  padding: 2px 8px;
+  gap: 10px;
 }
 
 /* ---------- Icon menus ---------- */
@@ -293,10 +350,17 @@ a:hover {
   color: var(--accent);
 }
 
+/*
+ * `position: fixed`, placed from the trigger's rect by the component so the
+ * panel is not a descendant of the toolbar's scroll container and cannot be
+ * clipped by it. `visibility: hidden` until that placement runs, so the panel
+ * is never painted at the viewport's top-left corner.
+ */
 .menu-panel {
-  position: absolute;
-  top: calc(100% + 4px);
+  position: fixed;
+  top: 0;
   left: 0;
+  visibility: hidden;
   z-index: 30;
   min-width: 190px;
   padding: 4px;
@@ -306,11 +370,6 @@ a:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
 }
 
-.menu-panel.menu-right {
-  left: auto;
-  right: 0;
-}
-
 .menu-heading {
   padding: 5px 8px 2px;
   color: var(--text-dim);
@@ -318,6 +377,28 @@ a:hover {
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+/*
+ * A setting with a value rather than an on/off: a label and a select that do not
+ * close the menu, because picking a pixel format is not committing to an action.
+ */
+.menu-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.menu-field > span {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.menu-field select {
+  max-width: 118px;
 }
 
 .menu-sep {
@@ -380,6 +461,48 @@ a:hover {
 }
 
 .banner a {
+  color: inherit;
+}
+
+/*
+ * Toast: a page-level notice that floats over the shell instead of taking a row
+ * away from the content. Bottom centre, so it is out of the way of the media
+ * windows and still where the eye lands after a page settles. Media windows
+ * raise `--toast-bottom` past their status bar (see `.media-page`).
+ */
+.toast-host {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--toast-bottom) + 8px);
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  max-width: min(720px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.32);
+  color: var(--text);
+  pointer-events: auto;
+}
+
+.toast-warn {
+  border-color: var(--warn);
+  background: var(--warn-bg);
+}
+
+.toast a {
   color: inherit;
 }
 
@@ -628,9 +751,16 @@ label {
 
 .media-surface {
   background: #000;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
   overflow: hidden;
+}
+
+/* The window is the viewport, so the media fills the stage edge to edge: no
+   frame, no rounded corners, no gap. */
+.media-stage > .media-surface {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
 }
 
 .terminal-output {
@@ -661,10 +791,6 @@ label {
 /* SOL: the terminal fills the stage, so the status output scrolls in place
    instead of the page growing with it. */
 .media-stage > .sol-surface {
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
   display: flex;
   flex-direction: column;
 }

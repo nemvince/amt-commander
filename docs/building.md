@@ -1,11 +1,11 @@
-Building MeshCommander
-======================
+# Building MeshCommander
 
 The console is one self-contained `.htm.gz`: a Preact application compiled with
 exactly the features and the theme you choose, inlined into a single file,
-minified and zopfli-compressed. Everything in this repository that offers to
-build one -- the promo site's picker, the build service, the CI workflow -- goes
-through this same pipeline, and it is all driven by the CLI described here.
+minified and zopfli-compressed. A console you are going to flash is built by the
+CLI described here, on your own machine -- nothing in this repository builds one
+for you over the network. The promo site only puts the command together, and its
+own demo page is generated at build time from this same pipeline.
 
 ## What you need
 
@@ -17,7 +17,9 @@ cd meshcommander-rewrite
 bun install
 ```
 
-That is the whole setup: one Bun workspace, one install, no native toolchain.
+That is the whole setup for the console itself: one Bun workspace, one install,
+no native toolchain. Only the screenshot script wants more, and only once --
+Playwright's Chromium, see [Develop](#develop).
 
 ## Build one
 
@@ -44,22 +46,35 @@ Every size this project prints is gzipped bytes from a real build of that exact
 selection, never a guess from module sizes. Intel AMT gives the console 65,536
 bytes of user flash and refuses a page larger than that, so:
 
-- the `small` preset is the one that always fits;
-- `bun run build` (which builds all three tiers) fails outright if the small
-  tier does not fit, and `bun run cli build` warns when a custom selection is
-  over the limit -- only you know which features a custom build needs;
-- `--features` is how you trade a page away for headroom, and the picker shows
-  what each feature costs before you commit to it.
+- the `small` preset is the preset that fits -- it is the one to fall back to;
+- nothing blocks an over-limit build: `bun run cli build` reports the artifact
+  size and says so when a custom selection is past 65,536 B, because only you
+  know which features a custom build needs;
+- `--features` is how you trade a page away for headroom, and the picker prices
+  every feature before you commit to it.
+
+No build in this repository gates on the number any more. The three-tier
+pipeline that used to fail the build when `small` did not fit went away with the
+build service. The promo site's picker sums measured marginals, which is close
+but not a build -- it says `measured` only for a selection that was itself built
+-- so if the budget matters to you, build the selection and read the `size:`
+line.
 
 `bun run cli measure` rebuilds that size table from scratch -- one real build per
-feature, so it takes minutes -- and writes
+feature, for every theme -- and writes
 `apps/console/build/.size-cache.json`, which is also what the promo site's
 picker reads. Run it after changing the console's code or markup, or the numbers
-the site shows will describe the old build.
+the site shows will describe the old build. Narrow it with `--theme` when you
+only care about one palette.
 
 ## Put it on a device
 
-Two ways, depending on what you have access to.
+The promo site's picker is the shortest route here: choose features and a theme,
+paste the AMT address, and it prints exactly the `install` line below with your
+selection baked in, ready to paste into the checkout. The picker itself compiles
+nothing -- the command it hands you is the same one you would type.
+
+Two ways to flash, depending on what you have access to.
 
 **From the device's own page.** Build a console that includes the installer:
 
@@ -98,13 +113,26 @@ If the device's web server is already serving a console, replace it by writing t
 bun run mock       # mock AMT device on :8765, replaying captured responses
 bun run console    # console dev server, proxies /wsman to the mock
 bun run site       # the promo site (builds the demo console first)
-bun run service    # the on-demand build service on :8787
 bun run typecheck  # tsc -b across every workspace
 ```
 
 The mock speaks enough of AMT to walk the pages -- including the redirection
 WebSocket, so the KVM viewer shows a real framebuffer and the SOL terminal a real
 banner -- without hardware.
+
+The promo site's screenshots are committed assets, captured the same way:
+
+```sh
+bun run --cwd apps/site shots          # rewrites apps/site/public/shots/{light,dark}/
+```
+
+It starts its own mock and console dev server (on `SHOTS_PORT`, default 5173),
+drives the pages with Playwright and shoots every page in both colour schemes,
+so re-run it whenever the console's chrome changes -- a stale screenshot is a
+product claim the build no longer makes. It needs Playwright's Chromium once:
+`bunx playwright install chromium`. Only the five pages listed in
+`apps/site/scripts/shots.ts` are shot; add a page there and it appears in the
+carousel.
 
 ## Troubleshooting
 
@@ -113,6 +141,9 @@ banner -- without hardware.
   all.
 - The small preset no longer fits -- turn features off; the picker prices each
   one, and `bun run cli measure` refreshes those prices after a code change.
+- The promo site shows far fewer bytes for a theme than the CLI builds -- its
+  table has no measurement for that theme, so it fell back to another one's
+  numbers. Re-run `bun run cli measure` (no `--theme`) and rebuild the site.
 - `401` from a device -- wrong credentials, or the account is not enabled for
   remote access on that device.
 - The upload stops with `400` or `500` -- the device refused the block size or

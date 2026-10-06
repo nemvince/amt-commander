@@ -7,7 +7,13 @@ name: Site
 # the demo console build, the recorded device conversation and the size table --
 # so the workflow is one build command and one upload. The measurement cache
 # (`apps/console/build/.size-cache.json`) is committed on purpose: without it the
-# picker would have no numbers to show, and re-measuring it is 25 real builds.
+# picker would have no numbers to show, and re-measuring it is 31 real builds for
+# each of the four themes.
+#
+# The screenshots under `apps/site/public/shots/` are committed too. They are not
+# rebuilt here -- capturing them needs a browser -- so a push that changes the
+# console's chrome should be accompanied by `bun run --cwd apps/site shots` and
+# the refreshed PNGs.
 #
 # Publishing is opt-in through the repository variable `CI_DEPLOY`: Pages is not
 # available on a private repository without a paid plan, and `configure-pages`
@@ -15,9 +21,6 @@ name: Site
 #   CI_DEPLOY=true            (repo variable)
 # once Pages is enabled and the build job's artifact will be deployed; leave it
 # unset and the push still verifies that the site builds.
-#
-# `BUILD_SERVICE_URL` (repo variable) is baked into the site so the build form
-# knows where the service lives.
 
 on:
   push:
@@ -48,10 +51,7 @@ jobs:
         with:
           bun-version: latest
       - run: bun install --frozen-lockfile
-      - name: Build the site
-        env:
-          VITE_BUILD_SERVICE: ${{ vars.BUILD_SERVICE_URL }}
-        run: bun run --cwd apps/site build
+      - run: bun run --cwd apps/site build
       - if: vars.CI_DEPLOY == 'true'
         uses: actions/configure-pages@v5
       - if: vars.CI_DEPLOY == 'true'

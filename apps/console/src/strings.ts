@@ -491,7 +491,6 @@ export const S = {
   kvmRotate: 'Rotation',
   kvmFocusSmall: 'Focus small',
   kvmFocusLarge: 'Focus large',
-  kvmSettings: 'Settings...',
   kvmViewerSettings: 'Remote Desktop Settings',
   kvmPixelFormat: 'Pixel format',
   kvmShowLocalCursor: 'Show local mouse cursor',

@@ -3,7 +3,8 @@ import { defineConfig } from 'vite'
 
 /**
  * Promo site for the console: hero, screenshots, the feature picker, the theme
- * gallery, the replayed demo and the build form.
+ * gallery, the replayed demo, and the command that builds and flashes what the
+ * picker selected.
  *
  * `base: './'` is deliberate. GitHub Pages serves a project repository under
  * `/<repo>/`, so every asset, the demo iframe and the Service Worker scope are

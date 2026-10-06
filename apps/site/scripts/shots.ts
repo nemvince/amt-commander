@@ -67,8 +67,12 @@ const vite = Bun.spawn(['bunx', 'vite', '--port', String(PORT), '--strictPort'],
   cwd: CONSOLE_DIR,
   env: {
     ...process.env,
-    // Every page the shots need, and nothing else: the flags decide what exists.
-    FEATURES: 'Desktop,Terminal,IDER,HardwareInfo,EventLog',
+    /*
+     * The same selection the promo site's demo build uses, so a screenshot
+     * shows the toolbar the product actually ships -- including the Display
+     * menu's viewer settings, which live behind the desktop feature flags.
+     */
+    FEATURES: 'Desktop,Desktop-Multi,DesktopRotation,Desktop-Settings,DesktopType,DesktopFocus,Terminal,IDER,HardwareInfo,EventLog',
   },
   stdout: 'ignore',
   stderr: 'inherit',

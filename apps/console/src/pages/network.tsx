@@ -286,13 +286,13 @@ export function NetworkPage() {
   return (
     <div class="page">
       <div class="page-header">
+        <p class="page-note">{S.networkNote}</p>
         <button type="button" class="btn" onClick={refresh}>
           <RefreshIcon />
           {S.refresh}
         </button>
       </div>
 
-      <p class="page-note">{S.networkNote}</p>
 
       <Details loading={pending.value > 0} title={S.generalSettings} fields={general} />
 

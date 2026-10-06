@@ -641,7 +641,21 @@ export function createKvmSession(canvas: HTMLCanvasElement, initial?: Partial<Kv
     setSettings(s: Partial<KvmSettings>) {
       settings = { ...settings, ...s }
       if (s.rotation != null) rotation = ((s.rotation % 4) + 4) % 4
-      if (s.showfocus === false) focusMode = 0
+      /*
+       * Focus mode is a live window size, not a start-time constant: turning the
+       * tool on has to open the box now, and turning it off has to close it. It
+       * used to arrive only in the settings dialog's one batch, which is why the
+       * old code only ever had to clear it; it is a per-toggle menu item now.
+       */
+      if (s.showfocus != null) focusMode = s.showfocus ? 64 : 0
+      /*
+       * These two used to be read only in `Start()`, which was fine while every
+       * change arrived in one batch behind a dialog's OK. They are per-toggle
+       * menu items now, and re-opening the video for "limit frame rate" would
+       * be absurd, so they are applied where they are set.
+       */
+      if (s.limitFrameRate != null) frameRateDelay = s.limitFrameRate ? 200 : 0
+      if (s.reverseMouseWheel != null) obj.reverseMouseWheel = s.reverseMouseWheel
     },
 
     /** Reset the decoder; called by the page right before the channel starts. */

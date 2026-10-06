@@ -20,8 +20,27 @@ const CONSOLE_DIR = new URL('../../console/', import.meta.url).pathname
 const MOCK_DIR = new URL('../../../packages/mock/', import.meta.url).pathname
 const PUBLIC_DIR = new URL('../public/', import.meta.url).pathname
 
-/** What the demo runs: the pages a visitor can walk without a real device. */
-const DEMO_FEATURES = ['Desktop', 'Terminal', 'IDER', 'HardwareInfo', 'EventLog']
+/**
+ * What the demo runs: the pages a visitor can walk without a real device.
+ *
+ * The Remote Desktop viewer's own features are in here as well as the page
+ * itself. They cost 688 B gzipped together and they are what a visitor is
+ * looking at: without `Desktop-Settings` the Display menu has no viewer
+ * settings, without `DesktopRotation` no rotation, and the demo's window would
+ * show a toolbar the shipped console does not have.
+ */
+const DEMO_FEATURES = [
+  'Desktop',
+  'Desktop-Multi',
+  'DesktopRotation',
+  'Desktop-Settings',
+  'DesktopType',
+  'DesktopFocus',
+  'Terminal',
+  'IDER',
+  'HardwareInfo',
+  'EventLog',
+]
 const DEMO_THEME = 'mesh'
 
 /**

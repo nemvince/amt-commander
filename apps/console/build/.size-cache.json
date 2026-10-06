@@ -8,19 +8,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 51276,
-      "measuredAt": "2026-10-06T08:02:09.674Z"
-    },
-    "d099de5969aa8f6b": {
-      "theme": "mesh",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "VersionWarning"
-      ],
-      "bytes": 54385,
-      "measuredAt": "2026-10-06T08:02:30.116Z"
+      "bytes": 50613,
+      "measuredAt": "2026-10-06T13:06:50.009Z"
     },
     "2d6436e1985af5a4": {
       "theme": "mesh",
@@ -30,8 +19,19 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 51276,
-      "measuredAt": "2026-10-06T08:02:12.316Z"
+      "bytes": 50613,
+      "measuredAt": "2026-10-06T13:06:53.709Z"
+    },
+    "41b20cc9d499339f": {
+      "theme": "mesh",
+      "features": [
+        "Desktop",
+        "InstallFromWeb",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51848,
+      "measuredAt": "2026-10-06T13:06:58.076Z"
     },
     "0a105c61d347b9bd": {
       "theme": "mesh",
@@ -41,8 +41,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 51583,
-      "measuredAt": "2026-10-06T08:02:17.661Z"
+      "bytes": 50889,
+      "measuredAt": "2026-10-06T13:07:01.361Z"
     },
     "fe08fbd762ad59ce": {
       "theme": "mesh",
@@ -52,8 +52,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 51436,
-      "measuredAt": "2026-10-06T08:02:19.802Z"
+      "bytes": 50633,
+      "measuredAt": "2026-10-06T13:07:05.296Z"
     },
     "edd5e4ed8746656f": {
       "theme": "mesh",
@@ -63,8 +63,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 51419,
-      "measuredAt": "2026-10-06T08:02:22.984Z"
+      "bytes": 50787,
+      "measuredAt": "2026-10-06T13:07:08.569Z"
     },
     "67d24316e50f8b00": {
       "theme": "mesh",
@@ -74,8 +74,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 51262,
-      "measuredAt": "2026-10-06T08:02:24.755Z"
+      "bytes": 50621,
+      "measuredAt": "2026-10-06T13:07:11.544Z"
     },
     "f03664ec4c121b5b": {
       "theme": "mesh",
@@ -85,8 +85,19 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 51391,
-      "measuredAt": "2026-10-06T08:02:27.856Z"
+      "bytes": 50678,
+      "measuredAt": "2026-10-06T13:07:14.222Z"
+    },
+    "d099de5969aa8f6b": {
+      "theme": "mesh",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "VersionWarning"
+      ],
+      "bytes": 53640,
+      "measuredAt": "2026-10-06T13:07:17.231Z"
     },
     "80fcd01c53d14bbd": {
       "theme": "mesh",
@@ -97,8 +108,8 @@
         "TerminalSize",
         "VersionWarning"
       ],
-      "bytes": 54458,
-      "measuredAt": "2026-10-06T08:02:32.090Z"
+      "bytes": 53784,
+      "measuredAt": "2026-10-06T13:07:20.181Z"
     },
     "0744d6dce0f192f4": {
       "theme": "mesh",
@@ -109,8 +120,8 @@
         "Terminal-Enumation-All",
         "VersionWarning"
       ],
-      "bytes": 54523,
-      "measuredAt": "2026-10-06T08:02:34.193Z"
+      "bytes": 53726,
+      "measuredAt": "2026-10-06T13:07:23.459Z"
     },
     "69c7a4b9e12c0f10": {
       "theme": "mesh",
@@ -121,8 +132,8 @@
         "Terminal-FxEnumation-All",
         "VersionWarning"
       ],
-      "bytes": 54507,
-      "measuredAt": "2026-10-06T08:02:36.392Z"
+      "bytes": 53791,
+      "measuredAt": "2026-10-06T13:07:26.773Z"
     },
     "7a8d75e10284cf06": {
       "theme": "mesh",
@@ -132,8 +143,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 53599,
-      "measuredAt": "2026-10-06T08:02:38.457Z"
+      "bytes": 53745,
+      "measuredAt": "2026-10-06T13:07:29.873Z"
     },
     "5bff626778f0d660": {
       "theme": "mesh",
@@ -144,8 +155,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 54044,
-      "measuredAt": "2026-10-06T08:02:40.585Z"
+      "bytes": 54103,
+      "measuredAt": "2026-10-06T13:07:33.608Z"
     },
     "1c6e97e45fd719bf": {
       "theme": "mesh",
@@ -155,8 +166,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 53206,
-      "measuredAt": "2026-10-06T08:02:43.138Z"
+      "bytes": 52491,
+      "measuredAt": "2026-10-06T13:07:36.544Z"
     },
     "b8fd97ecf27c116a": {
       "theme": "mesh",
@@ -166,8 +177,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 53675,
-      "measuredAt": "2026-10-06T08:02:45.917Z"
+      "bytes": 52989,
+      "measuredAt": "2026-10-06T13:07:39.811Z"
     },
     "f903f87e606f97f6": {
       "theme": "mesh",
@@ -177,8 +188,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 54054,
-      "measuredAt": "2026-10-06T08:02:48.793Z"
+      "bytes": 53224,
+      "measuredAt": "2026-10-06T13:07:43.945Z"
     },
     "9857d7d35ab6c900": {
       "theme": "mesh",
@@ -188,8 +199,8 @@
         "Storage",
         "VersionWarning"
       ],
-      "bytes": 52358,
-      "measuredAt": "2026-10-06T08:02:51.081Z"
+      "bytes": 51622,
+      "measuredAt": "2026-10-06T13:07:46.679Z"
     },
     "0847aa2e1b62b6cb": {
       "theme": "mesh",
@@ -199,8 +210,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 52722,
-      "measuredAt": "2026-10-06T08:02:54.712Z"
+      "bytes": 52103,
+      "measuredAt": "2026-10-06T13:07:49.891Z"
     },
     "87ab030e058686e8": {
       "theme": "mesh",
@@ -211,8 +222,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 53037,
-      "measuredAt": "2026-10-06T08:02:57.350Z"
+      "bytes": 52370,
+      "measuredAt": "2026-10-06T13:07:52.979Z"
     },
     "0278fbef65c2ff1a": {
       "theme": "mesh",
@@ -222,20 +233,8 @@
         "PowerControl-Advanced",
         "VersionWarning"
       ],
-      "bytes": 51276,
-      "measuredAt": "2026-10-06T08:03:00.173Z"
-    },
-    "3651e1b63ba6b31d": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "IDER",
-        "PowerControl",
-        "Terminal",
-        "VersionWarning"
-      ],
-      "bytes": 55862,
-      "measuredAt": "2026-10-05T21:08:17.280Z"
+      "bytes": 50613,
+      "measuredAt": "2026-10-06T13:07:55.859Z"
     },
     "ec6db54141f524fb": {
       "theme": "mesh",
@@ -245,8 +244,8 @@
         "SystemDefense",
         "VersionWarning"
       ],
-      "bytes": 53407,
-      "measuredAt": "2026-10-06T08:03:02.718Z"
+      "bytes": 52699,
+      "measuredAt": "2026-10-06T13:07:59.756Z"
     },
     "22c7e70b5587a150": {
       "theme": "mesh",
@@ -256,8 +255,8 @@
         "RemoteAccess",
         "VersionWarning"
       ],
-      "bytes": 53278,
-      "measuredAt": "2026-10-06T08:03:05.626Z"
+      "bytes": 52574,
+      "measuredAt": "2026-10-06T13:08:03.356Z"
     },
     "6a6cbffaab579eaa": {
       "theme": "mesh",
@@ -267,8 +266,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 52522,
-      "measuredAt": "2026-10-06T08:03:08.232Z"
+      "bytes": 51788,
+      "measuredAt": "2026-10-06T13:08:06.161Z"
     },
     "d2bf10cf92a5ac00": {
       "theme": "mesh",
@@ -278,8 +277,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 52632,
-      "measuredAt": "2026-10-06T08:03:10.669Z"
+      "bytes": 51860,
+      "measuredAt": "2026-10-06T13:08:09.207Z"
     },
     "9e425965d88023fa": {
       "theme": "mesh",
@@ -289,8 +288,8 @@
         "PowerControl",
         "VersionWarning"
       ],
-      "bytes": 51888,
-      "measuredAt": "2026-10-06T08:03:12.908Z"
+      "bytes": 51117,
+      "measuredAt": "2026-10-06T13:08:12.138Z"
     },
     "9d875bcb75edc387": {
       "theme": "mesh",
@@ -300,8 +299,8 @@
         "Scripting",
         "VersionWarning"
       ],
-      "bytes": 55957,
-      "measuredAt": "2026-10-06T08:03:14.939Z"
+      "bytes": 55254,
+      "measuredAt": "2026-10-06T13:08:15.496Z"
     },
     "fd6340be29b69c32": {
       "theme": "mesh",
@@ -312,987 +311,8 @@
         "Scripting-Editor",
         "VersionWarning"
       ],
-      "bytes": 56418,
-      "measuredAt": "2026-10-06T08:03:17.633Z"
-    },
-    "b2736ca7535b89b1": {
-      "theme": "mesh",
-      "features": [
-        "AuditLog",
-        "ContextMenus",
-        "Desktop",
-        "Desktop-Multi",
-        "Desktop-Settings",
-        "EventLog",
-        "FileSaver",
-        "HardwareInfo",
-        "IDER",
-        "IDERStats",
-        "Look-Commander",
-        "Mode-Firmware",
-        "NetworkSettings",
-        "PowerControl",
-        "PowerControl-Advanced",
-        "Storage",
-        "Terminal",
-        "Terminal-Enumation-All",
-        "Terminal-FxEnumation-All",
-        "TerminalSize",
-        "VersionWarning",
-        "Wireless"
-      ],
-      "bytes": 66583,
-      "measuredAt": "2026-10-05T21:24:25.434Z"
-    },
-    "9684f9f342a15ecb": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51238,
-      "measuredAt": "2026-10-06T08:04:53.840Z"
-    },
-    "a4fc9d943843bf44": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "FileSaver",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51238,
-      "measuredAt": "2026-10-06T08:04:57.492Z"
-    },
-    "ea1b0e5196257e59": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "Desktop-Multi",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51587,
-      "measuredAt": "2026-10-06T08:05:03.564Z"
-    },
-    "7541d6bee203335e": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "DesktopRotation",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51350,
-      "measuredAt": "2026-10-06T08:05:06.882Z"
-    },
-    "5c9849742d7137ca": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "Desktop-Settings",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51413,
-      "measuredAt": "2026-10-06T08:05:10.597Z"
-    },
-    "2b98e685dcdbf98b": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "DesktopType",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51274,
-      "measuredAt": "2026-10-06T08:05:14.366Z"
-    },
-    "1de348d81d542ba9": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "DesktopFocus",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51403,
-      "measuredAt": "2026-10-06T08:05:17.341Z"
-    },
-    "b8eee8a423f03679": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "VersionWarning"
-      ],
-      "bytes": 54451,
-      "measuredAt": "2026-10-06T08:05:19.339Z"
-    },
-    "0f66fe6e6c3a5190": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "TerminalSize",
-        "VersionWarning"
-      ],
-      "bytes": 54480,
-      "measuredAt": "2026-10-06T08:05:21.661Z"
-    },
-    "e4ce60bcea898d02": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "Terminal-Enumation-All",
-        "VersionWarning"
-      ],
-      "bytes": 54524,
-      "measuredAt": "2026-10-06T08:05:24.204Z"
-    },
-    "5394c3b92bbf37ac": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "Terminal-FxEnumation-All",
-        "VersionWarning"
-      ],
-      "bytes": 54529,
-      "measuredAt": "2026-10-06T08:05:26.417Z"
-    },
-    "b88835753bb18af0": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "IDER",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53554,
-      "measuredAt": "2026-10-06T08:05:28.428Z"
-    },
-    "eda7334c8fd1f74d": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "IDER",
-        "IDERStats",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53993,
-      "measuredAt": "2026-10-06T08:05:30.756Z"
-    },
-    "1489e2ef7be59991": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "HardwareInfo",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53205,
-      "measuredAt": "2026-10-06T08:05:33.443Z"
-    },
-    "5c6fe3bf87e35de0": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "EventLog",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53666,
-      "measuredAt": "2026-10-06T08:05:36.766Z"
-    },
-    "fca830c767899441": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51221,
-      "measuredAt": "2026-10-06T08:06:20.223Z"
-    },
-    "0355692c70cf0c86": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "FileSaver",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51221,
-      "measuredAt": "2026-10-06T08:06:24.034Z"
-    },
-    "d2b13ed972f16245": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "InstallFromWeb",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52535,
-      "measuredAt": "2026-10-06T08:06:27.513Z"
-    },
-    "13be0703d81d4e52": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "Desktop-Multi",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51545,
-      "measuredAt": "2026-10-06T08:06:29.400Z"
-    },
-    "943889b81543dd83": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "DesktopRotation",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51387,
-      "measuredAt": "2026-10-06T08:06:32.466Z"
-    },
-    "eb389179c0d5585d": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "Desktop-Settings",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51417,
-      "measuredAt": "2026-10-06T08:06:35.806Z"
-    },
-    "709f1d0ab5f99026": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "DesktopType",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51268,
-      "measuredAt": "2026-10-06T08:06:39.602Z"
-    },
-    "5df1dcacf95eaa73": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "DesktopFocus",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51435,
-      "measuredAt": "2026-10-06T08:06:42.585Z"
-    },
-    "b97e3e775b9190c3": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "VersionWarning"
-      ],
-      "bytes": 54384,
-      "measuredAt": "2026-10-06T08:06:44.713Z"
-    },
-    "693d92431ee0cafc": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "TerminalSize",
-        "VersionWarning"
-      ],
-      "bytes": 54460,
-      "measuredAt": "2026-10-06T08:06:46.814Z"
-    },
-    "e69509f8440fed20": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "Terminal-Enumation-All",
-        "VersionWarning"
-      ],
-      "bytes": 54511,
-      "measuredAt": "2026-10-06T08:06:49.179Z"
-    },
-    "11954696b9951228": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "Terminal-FxEnumation-All",
-        "VersionWarning"
-      ],
-      "bytes": 54530,
-      "measuredAt": "2026-10-06T08:06:51.546Z"
-    },
-    "3eaffe0044d4a835": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "IDER",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53536,
-      "measuredAt": "2026-10-06T08:06:53.562Z"
-    },
-    "3c476f63547385d5": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "IDER",
-        "IDERStats",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53977,
-      "measuredAt": "2026-10-06T08:06:55.870Z"
-    },
-    "7fd60db091be1e7b": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "HardwareInfo",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53203,
-      "measuredAt": "2026-10-06T08:06:58.548Z"
-    },
-    "1e7c5968271c3830": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "EventLog",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53712,
-      "measuredAt": "2026-10-06T08:07:01.063Z"
-    },
-    "3b4e2673fad51bba": {
-      "theme": "amber",
-      "features": [
-        "AuditLog",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 54097,
-      "measuredAt": "2026-10-06T08:07:03.706Z"
-    },
-    "7c95677a789ed236": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Storage",
-        "VersionWarning"
-      ],
-      "bytes": 52350,
-      "measuredAt": "2026-10-06T08:07:06.101Z"
-    },
-    "f81ce9a3257fec8c": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "NetworkSettings",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52735,
-      "measuredAt": "2026-10-06T08:07:09.378Z"
-    },
-    "33281130db2d38a0": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "NetworkSettings",
-        "PowerControl",
-        "VersionWarning",
-        "Wireless"
-      ],
-      "bytes": 53010,
-      "measuredAt": "2026-10-06T08:07:12.738Z"
-    },
-    "982f6c91db2eff1d": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "PowerControl-Advanced",
-        "VersionWarning"
-      ],
-      "bytes": 51221,
-      "measuredAt": "2026-10-06T08:07:16.514Z"
-    },
-    "a487727ec2b0767a": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "SystemDefense",
-        "VersionWarning"
-      ],
-      "bytes": 53401,
-      "measuredAt": "2026-10-06T08:07:19.570Z"
-    },
-    "5da7d8ccdcfb0888": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "RemoteAccess",
-        "VersionWarning"
-      ],
-      "bytes": 53280,
-      "measuredAt": "2026-10-06T08:07:23.585Z"
-    },
-    "1a4a8e3a928c4ede": {
-      "theme": "amber",
-      "features": [
-        "AgentPresence",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52517,
-      "measuredAt": "2026-10-06T08:07:26.250Z"
-    },
-    "7bb15b0d2b8e9ed5": {
-      "theme": "amber",
-      "features": [
-        "Alarms",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52610,
-      "measuredAt": "2026-10-06T08:07:28.856Z"
-    },
-    "73a87a2d175d1117": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "EventSubscriptions",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51772,
-      "measuredAt": "2026-10-06T08:07:31.894Z"
-    },
-    "b1db9ccdc587b164": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Scripting",
-        "VersionWarning"
-      ],
-      "bytes": 55955,
-      "measuredAt": "2026-10-06T08:07:33.995Z"
-    },
-    "aad2647b07c350bf": {
-      "theme": "amber",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Scripting",
-        "Scripting-Editor",
-        "VersionWarning"
-      ],
-      "bytes": 56440,
-      "measuredAt": "2026-10-06T08:07:36.233Z"
-    },
-    "80617de325509596": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51226,
-      "measuredAt": "2026-10-06T08:03:29.558Z"
-    },
-    "417bc85ecd8350ae": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "FileSaver",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51226,
-      "measuredAt": "2026-10-06T08:03:33.055Z"
-    },
-    "7f235ba475a72751": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "InstallFromWeb",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52527,
-      "measuredAt": "2026-10-06T08:03:35.739Z"
-    },
-    "885eb7fae4a27473": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "Desktop-Multi",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51633,
-      "measuredAt": "2026-10-06T08:03:37.742Z"
-    },
-    "98da75432fb3b5e8": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "DesktopRotation",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51385,
-      "measuredAt": "2026-10-06T08:03:41.099Z"
-    },
-    "7a1ce5e915e2da1b": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "Desktop-Settings",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51442,
-      "measuredAt": "2026-10-06T08:03:43.827Z"
-    },
-    "3261b16037547cf7": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "DesktopType",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51270,
-      "measuredAt": "2026-10-06T08:03:47.442Z"
-    },
-    "6ea0361a55e66a2a": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "DesktopFocus",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51359,
-      "measuredAt": "2026-10-06T08:03:51.125Z"
-    },
-    "6a33d71f6fc9a84a": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "VersionWarning"
-      ],
-      "bytes": 54375,
-      "measuredAt": "2026-10-06T08:03:53.144Z"
-    },
-    "111e436e8061a2cb": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "TerminalSize",
-        "VersionWarning"
-      ],
-      "bytes": 54458,
-      "measuredAt": "2026-10-06T08:03:55.206Z"
-    },
-    "4cabb5a66a3ef86d": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "Terminal-Enumation-All",
-        "VersionWarning"
-      ],
-      "bytes": 54498,
-      "measuredAt": "2026-10-06T08:03:57.220Z"
-    },
-    "3c0d6ceafe4bef07": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Terminal",
-        "Terminal-FxEnumation-All",
-        "VersionWarning"
-      ],
-      "bytes": 54524,
-      "measuredAt": "2026-10-06T08:03:59.361Z"
-    },
-    "5227aaec1f8ac989": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "IDER",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53603,
-      "measuredAt": "2026-10-06T08:04:01.259Z"
-    },
-    "59c600bea152983d": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "IDER",
-        "IDERStats",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53989,
-      "measuredAt": "2026-10-06T08:04:03.240Z"
-    },
-    "944918770e967eb4": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "HardwareInfo",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53201,
-      "measuredAt": "2026-10-06T08:04:05.920Z"
-    },
-    "eaac7bad908670e9": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "EventLog",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 53709,
-      "measuredAt": "2026-10-06T08:04:09.153Z"
-    },
-    "829e2bdab38092b2": {
-      "theme": "midnight",
-      "features": [
-        "AuditLog",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 54106,
-      "measuredAt": "2026-10-06T08:04:11.900Z"
-    },
-    "639f6f70232c7606": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Storage",
-        "VersionWarning"
-      ],
-      "bytes": 52276,
-      "measuredAt": "2026-10-06T08:04:14.581Z"
-    },
-    "3198d32251a440ca": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "NetworkSettings",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52708,
-      "measuredAt": "2026-10-06T08:04:18.245Z"
-    },
-    "633e1dbe1dade945": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "NetworkSettings",
-        "PowerControl",
-        "VersionWarning",
-        "Wireless"
-      ],
-      "bytes": 53025,
-      "measuredAt": "2026-10-06T08:04:21.235Z"
-    },
-    "8f399b9becd86171": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "PowerControl-Advanced",
-        "VersionWarning"
-      ],
-      "bytes": 51226,
-      "measuredAt": "2026-10-06T08:04:24.783Z"
-    },
-    "209c72b7a15dfbf4": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "SystemDefense",
-        "VersionWarning"
-      ],
-      "bytes": 53391,
-      "measuredAt": "2026-10-06T08:04:27.149Z"
-    },
-    "97a5607e11e0df6a": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "RemoteAccess",
-        "VersionWarning"
-      ],
-      "bytes": 53290,
-      "measuredAt": "2026-10-06T08:04:29.688Z"
-    },
-    "537ee56c57c71ddf": {
-      "theme": "midnight",
-      "features": [
-        "AgentPresence",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52515,
-      "measuredAt": "2026-10-06T08:04:32.297Z"
-    },
-    "002f88043acb1825": {
-      "theme": "midnight",
-      "features": [
-        "Alarms",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52612,
-      "measuredAt": "2026-10-06T08:04:34.789Z"
-    },
-    "f909bc66010e2909": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "EventSubscriptions",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51859,
-      "measuredAt": "2026-10-06T08:04:37.274Z"
-    },
-    "57c38202e93ed547": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Scripting",
-        "VersionWarning"
-      ],
-      "bytes": 55923,
-      "measuredAt": "2026-10-06T08:04:39.648Z"
-    },
-    "b65d12bcbc1f997f": {
-      "theme": "midnight",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Scripting",
-        "Scripting-Editor",
-        "VersionWarning"
-      ],
-      "bytes": 56445,
-      "measuredAt": "2026-10-06T08:04:41.871Z"
-    },
-    "3929235050373c2c": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "InstallFromWeb",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52540,
-      "measuredAt": "2026-10-06T08:05:01.028Z"
-    },
-    "c2db6cfb0880e5ad": {
-      "theme": "paper",
-      "features": [
-        "AuditLog",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 54112,
-      "measuredAt": "2026-10-06T08:05:39.190Z"
-    },
-    "32d1e574d7432cac": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Storage",
-        "VersionWarning"
-      ],
-      "bytes": 52361,
-      "measuredAt": "2026-10-06T08:05:41.628Z"
-    },
-    "3d94dfff78c9978d": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "NetworkSettings",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52704,
-      "measuredAt": "2026-10-06T08:05:43.700Z"
-    },
-    "3cbe02a0d4f15236": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "NetworkSettings",
-        "PowerControl",
-        "VersionWarning",
-        "Wireless"
-      ],
-      "bytes": 53046,
-      "measuredAt": "2026-10-06T08:05:46.534Z"
-    },
-    "a19ff2c3f91227ab": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "PowerControl-Advanced",
-        "VersionWarning"
-      ],
-      "bytes": 51238,
-      "measuredAt": "2026-10-06T08:05:50.368Z"
-    },
-    "bc4157b7caeb25a7": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "SystemDefense",
-        "VersionWarning"
-      ],
-      "bytes": 53409,
-      "measuredAt": "2026-10-06T08:05:52.896Z"
-    },
-    "e25f8b2815954e9c": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "RemoteAccess",
-        "VersionWarning"
-      ],
-      "bytes": 53330,
-      "measuredAt": "2026-10-06T08:05:55.903Z"
-    },
-    "9241029bebfdfc57": {
-      "theme": "paper",
-      "features": [
-        "AgentPresence",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52527,
-      "measuredAt": "2026-10-06T08:05:58.562Z"
-    },
-    "1a1e4fea3d0aba50": {
-      "theme": "paper",
-      "features": [
-        "Alarms",
-        "Desktop",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52615,
-      "measuredAt": "2026-10-06T08:06:01.297Z"
-    },
-    "1b829f7fd46a1c3c": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "EventSubscriptions",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 51856,
-      "measuredAt": "2026-10-06T08:06:04.128Z"
-    },
-    "c04eb22e185ff8db": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Scripting",
-        "VersionWarning"
-      ],
-      "bytes": 55985,
-      "measuredAt": "2026-10-06T08:06:06.188Z"
-    },
-    "8ba0505f57ce6c00": {
-      "theme": "paper",
-      "features": [
-        "Desktop",
-        "PowerControl",
-        "Scripting",
-        "Scripting-Editor",
-        "VersionWarning"
-      ],
-      "bytes": 56462,
-      "measuredAt": "2026-10-06T08:06:08.129Z"
-    },
-    "41b20cc9d499339f": {
-      "theme": "mesh",
-      "features": [
-        "Desktop",
-        "InstallFromWeb",
-        "PowerControl",
-        "VersionWarning"
-      ],
-      "bytes": 52535,
-      "measuredAt": "2026-10-06T08:02:15.132Z"
+      "bytes": 55794,
+      "measuredAt": "2026-10-06T13:08:18.365Z"
     },
     "6a61d75c39e405c2": {
       "theme": "mesh",
@@ -1313,8 +333,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 58556,
-      "measuredAt": "2026-10-06T08:03:20.214Z"
+      "bytes": 57953,
+      "measuredAt": "2026-10-06T13:08:21.421Z"
     },
     "0189731f2f892c34": {
       "theme": "mesh",
@@ -1344,8 +364,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 70896,
-      "measuredAt": "2026-10-06T08:03:23.276Z"
+      "bytes": 71171,
+      "measuredAt": "2026-10-06T13:08:25.308Z"
     },
     "55d9e51ad1cdec1c": {
       "theme": "mesh",
@@ -1383,8 +403,321 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 78959,
-      "measuredAt": "2026-10-06T08:03:25.973Z"
+      "bytes": 79197,
+      "measuredAt": "2026-10-06T13:08:28.907Z"
+    },
+    "80617de325509596": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50598,
+      "measuredAt": "2026-10-06T13:08:32.199Z"
+    },
+    "417bc85ecd8350ae": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "FileSaver",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50598,
+      "measuredAt": "2026-10-06T13:08:35.428Z"
+    },
+    "7f235ba475a72751": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "InstallFromWeb",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51872,
+      "measuredAt": "2026-10-06T13:08:39.155Z"
+    },
+    "885eb7fae4a27473": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "Desktop-Multi",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50936,
+      "measuredAt": "2026-10-06T13:08:41.964Z"
+    },
+    "98da75432fb3b5e8": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "DesktopRotation",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50594,
+      "measuredAt": "2026-10-06T13:08:45.846Z"
+    },
+    "7a1ce5e915e2da1b": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "Desktop-Settings",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50787,
+      "measuredAt": "2026-10-06T13:08:49.552Z"
+    },
+    "3261b16037547cf7": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "DesktopType",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50629,
+      "measuredAt": "2026-10-06T13:08:52.543Z"
+    },
+    "6ea0361a55e66a2a": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "DesktopFocus",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50688,
+      "measuredAt": "2026-10-06T13:08:55.255Z"
+    },
+    "6a33d71f6fc9a84a": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "VersionWarning"
+      ],
+      "bytes": 53632,
+      "measuredAt": "2026-10-06T13:08:58.292Z"
+    },
+    "111e436e8061a2cb": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "TerminalSize",
+        "VersionWarning"
+      ],
+      "bytes": 53720,
+      "measuredAt": "2026-10-06T13:09:01.171Z"
+    },
+    "4cabb5a66a3ef86d": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "Terminal-Enumation-All",
+        "VersionWarning"
+      ],
+      "bytes": 53734,
+      "measuredAt": "2026-10-06T13:09:04.176Z"
+    },
+    "3c0d6ceafe4bef07": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "Terminal-FxEnumation-All",
+        "VersionWarning"
+      ],
+      "bytes": 53780,
+      "measuredAt": "2026-10-06T13:09:07.381Z"
+    },
+    "5227aaec1f8ac989": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "IDER",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 53745,
+      "measuredAt": "2026-10-06T13:09:10.502Z"
+    },
+    "59c600bea152983d": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "IDER",
+        "IDERStats",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 54117,
+      "measuredAt": "2026-10-06T13:09:14.411Z"
+    },
+    "944918770e967eb4": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "HardwareInfo",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52480,
+      "measuredAt": "2026-10-06T13:09:17.211Z"
+    },
+    "eaac7bad908670e9": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "EventLog",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52928,
+      "measuredAt": "2026-10-06T13:09:20.099Z"
+    },
+    "829e2bdab38092b2": {
+      "theme": "midnight",
+      "features": [
+        "AuditLog",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 53236,
+      "measuredAt": "2026-10-06T13:09:24.470Z"
+    },
+    "639f6f70232c7606": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Storage",
+        "VersionWarning"
+      ],
+      "bytes": 51631,
+      "measuredAt": "2026-10-06T13:09:27.096Z"
+    },
+    "3198d32251a440ca": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "NetworkSettings",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52085,
+      "measuredAt": "2026-10-06T13:09:30.042Z"
+    },
+    "633e1dbe1dade945": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "NetworkSettings",
+        "PowerControl",
+        "VersionWarning",
+        "Wireless"
+      ],
+      "bytes": 52326,
+      "measuredAt": "2026-10-06T13:09:33.379Z"
+    },
+    "8f399b9becd86171": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "PowerControl-Advanced",
+        "VersionWarning"
+      ],
+      "bytes": 50598,
+      "measuredAt": "2026-10-06T13:09:36.650Z"
+    },
+    "209c72b7a15dfbf4": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "SystemDefense",
+        "VersionWarning"
+      ],
+      "bytes": 52691,
+      "measuredAt": "2026-10-06T13:09:39.757Z"
+    },
+    "97a5607e11e0df6a": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "RemoteAccess",
+        "VersionWarning"
+      ],
+      "bytes": 52556,
+      "measuredAt": "2026-10-06T13:09:42.599Z"
+    },
+    "537ee56c57c71ddf": {
+      "theme": "midnight",
+      "features": [
+        "AgentPresence",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51734,
+      "measuredAt": "2026-10-06T13:09:45.694Z"
+    },
+    "002f88043acb1825": {
+      "theme": "midnight",
+      "features": [
+        "Alarms",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51885,
+      "measuredAt": "2026-10-06T13:09:48.647Z"
+    },
+    "f909bc66010e2909": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "EventSubscriptions",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51131,
+      "measuredAt": "2026-10-06T13:09:51.815Z"
+    },
+    "57c38202e93ed547": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Scripting",
+        "VersionWarning"
+      ],
+      "bytes": 55306,
+      "measuredAt": "2026-10-06T13:09:54.987Z"
+    },
+    "b65d12bcbc1f997f": {
+      "theme": "midnight",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Scripting",
+        "Scripting-Editor",
+        "VersionWarning"
+      ],
+      "bytes": 55777,
+      "measuredAt": "2026-10-06T13:09:58.149Z"
     },
     "ebc55845555aedce": {
       "theme": "midnight",
@@ -1405,8 +738,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 58553,
-      "measuredAt": "2026-10-06T08:04:44.581Z"
+      "bytes": 57956,
+      "measuredAt": "2026-10-06T13:10:01.201Z"
     },
     "e55d96ee35a7025c": {
       "theme": "midnight",
@@ -1436,8 +769,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 70910,
-      "measuredAt": "2026-10-06T08:04:47.352Z"
+      "bytes": 71179,
+      "measuredAt": "2026-10-06T13:10:05.055Z"
     },
     "62fef484ac82d8ff": {
       "theme": "midnight",
@@ -1475,8 +808,321 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 78956,
-      "measuredAt": "2026-10-06T08:04:50.107Z"
+      "bytes": 79190,
+      "measuredAt": "2026-10-06T13:10:08.659Z"
+    },
+    "9684f9f342a15ecb": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50615,
+      "measuredAt": "2026-10-06T13:10:11.480Z"
+    },
+    "a4fc9d943843bf44": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "FileSaver",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50615,
+      "measuredAt": "2026-10-06T13:10:14.337Z"
+    },
+    "3929235050373c2c": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "InstallFromWeb",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51832,
+      "measuredAt": "2026-10-06T13:10:18.975Z"
+    },
+    "ea1b0e5196257e59": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "Desktop-Multi",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50821,
+      "measuredAt": "2026-10-06T13:10:22.128Z"
+    },
+    "7541d6bee203335e": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "DesktopRotation",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50662,
+      "measuredAt": "2026-10-06T13:10:26.041Z"
+    },
+    "5c9849742d7137ca": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "Desktop-Settings",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50789,
+      "measuredAt": "2026-10-06T13:10:29.352Z"
+    },
+    "2b98e685dcdbf98b": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "DesktopType",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50660,
+      "measuredAt": "2026-10-06T13:10:32.152Z"
+    },
+    "1de348d81d542ba9": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "DesktopFocus",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50692,
+      "measuredAt": "2026-10-06T13:10:35.411Z"
+    },
+    "b8eee8a423f03679": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "VersionWarning"
+      ],
+      "bytes": 53664,
+      "measuredAt": "2026-10-06T13:10:38.559Z"
+    },
+    "0f66fe6e6c3a5190": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "TerminalSize",
+        "VersionWarning"
+      ],
+      "bytes": 53732,
+      "measuredAt": "2026-10-06T13:10:41.677Z"
+    },
+    "e4ce60bcea898d02": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "Terminal-Enumation-All",
+        "VersionWarning"
+      ],
+      "bytes": 53743,
+      "measuredAt": "2026-10-06T13:10:44.855Z"
+    },
+    "5394c3b92bbf37ac": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "Terminal-FxEnumation-All",
+        "VersionWarning"
+      ],
+      "bytes": 53794,
+      "measuredAt": "2026-10-06T13:10:48.193Z"
+    },
+    "b88835753bb18af0": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "IDER",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 53692,
+      "measuredAt": "2026-10-06T13:10:51.496Z"
+    },
+    "eda7334c8fd1f74d": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "IDER",
+        "IDERStats",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 54105,
+      "measuredAt": "2026-10-06T13:10:55.136Z"
+    },
+    "1489e2ef7be59991": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "HardwareInfo",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52507,
+      "measuredAt": "2026-10-06T13:10:57.888Z"
+    },
+    "5c6fe3bf87e35de0": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "EventLog",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52970,
+      "measuredAt": "2026-10-06T13:11:01.315Z"
+    },
+    "c2db6cfb0880e5ad": {
+      "theme": "paper",
+      "features": [
+        "AuditLog",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 53347,
+      "measuredAt": "2026-10-06T13:11:04.829Z"
+    },
+    "32d1e574d7432cac": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Storage",
+        "VersionWarning"
+      ],
+      "bytes": 51654,
+      "measuredAt": "2026-10-06T13:11:07.750Z"
+    },
+    "3d94dfff78c9978d": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "NetworkSettings",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52073,
+      "measuredAt": "2026-10-06T13:11:11.143Z"
+    },
+    "3cbe02a0d4f15236": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "NetworkSettings",
+        "PowerControl",
+        "VersionWarning",
+        "Wireless"
+      ],
+      "bytes": 52313,
+      "measuredAt": "2026-10-06T13:11:14.617Z"
+    },
+    "a19ff2c3f91227ab": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "PowerControl-Advanced",
+        "VersionWarning"
+      ],
+      "bytes": 50615,
+      "measuredAt": "2026-10-06T13:11:17.550Z"
+    },
+    "bc4157b7caeb25a7": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "SystemDefense",
+        "VersionWarning"
+      ],
+      "bytes": 52708,
+      "measuredAt": "2026-10-06T13:11:20.658Z"
+    },
+    "e25f8b2815954e9c": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "RemoteAccess",
+        "VersionWarning"
+      ],
+      "bytes": 52538,
+      "measuredAt": "2026-10-06T13:11:24.276Z"
+    },
+    "9241029bebfdfc57": {
+      "theme": "paper",
+      "features": [
+        "AgentPresence",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51780,
+      "measuredAt": "2026-10-06T13:11:27.667Z"
+    },
+    "1a1e4fea3d0aba50": {
+      "theme": "paper",
+      "features": [
+        "Alarms",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51930,
+      "measuredAt": "2026-10-06T13:11:30.444Z"
+    },
+    "1b829f7fd46a1c3c": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "EventSubscriptions",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51116,
+      "measuredAt": "2026-10-06T13:11:33.365Z"
+    },
+    "c04eb22e185ff8db": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Scripting",
+        "VersionWarning"
+      ],
+      "bytes": 55245,
+      "measuredAt": "2026-10-06T13:11:36.953Z"
+    },
+    "8ba0505f57ce6c00": {
+      "theme": "paper",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Scripting",
+        "Scripting-Editor",
+        "VersionWarning"
+      ],
+      "bytes": 55799,
+      "measuredAt": "2026-10-06T13:11:40.108Z"
     },
     "9be76d51106ff83b": {
       "theme": "paper",
@@ -1497,8 +1143,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 58560,
-      "measuredAt": "2026-10-06T08:06:10.706Z"
+      "bytes": 57919,
+      "measuredAt": "2026-10-06T13:11:43.277Z"
     },
     "4472b3aac1b4901e": {
       "theme": "paper",
@@ -1528,8 +1174,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 70908,
-      "measuredAt": "2026-10-06T08:06:13.479Z"
+      "bytes": 71175,
+      "measuredAt": "2026-10-06T13:11:47.186Z"
     },
     "a99cdda9110d67f7": {
       "theme": "paper",
@@ -1567,8 +1213,321 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 78930,
-      "measuredAt": "2026-10-06T08:06:16.326Z"
+      "bytes": 79171,
+      "measuredAt": "2026-10-06T13:11:51.374Z"
+    },
+    "fca830c767899441": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50535,
+      "measuredAt": "2026-10-06T13:11:55.061Z"
+    },
+    "0355692c70cf0c86": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "FileSaver",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50535,
+      "measuredAt": "2026-10-06T13:11:58.794Z"
+    },
+    "d2b13ed972f16245": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "InstallFromWeb",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51836,
+      "measuredAt": "2026-10-06T13:12:02.512Z"
+    },
+    "13be0703d81d4e52": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "Desktop-Multi",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50809,
+      "measuredAt": "2026-10-06T13:12:06.637Z"
+    },
+    "943889b81543dd83": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "DesktopRotation",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50656,
+      "measuredAt": "2026-10-06T13:12:09.546Z"
+    },
+    "eb389179c0d5585d": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "Desktop-Settings",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50868,
+      "measuredAt": "2026-10-06T13:12:12.561Z"
+    },
+    "709f1d0ab5f99026": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "DesktopType",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50563,
+      "measuredAt": "2026-10-06T13:12:15.414Z"
+    },
+    "5df1dcacf95eaa73": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "DesktopFocus",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 50621,
+      "measuredAt": "2026-10-06T13:12:18.256Z"
+    },
+    "b97e3e775b9190c3": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "VersionWarning"
+      ],
+      "bytes": 53648,
+      "measuredAt": "2026-10-06T13:12:21.338Z"
+    },
+    "693d92431ee0cafc": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "TerminalSize",
+        "VersionWarning"
+      ],
+      "bytes": 53731,
+      "measuredAt": "2026-10-06T13:12:24.314Z"
+    },
+    "e69509f8440fed20": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "Terminal-Enumation-All",
+        "VersionWarning"
+      ],
+      "bytes": 53723,
+      "measuredAt": "2026-10-06T13:12:27.386Z"
+    },
+    "11954696b9951228": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Terminal",
+        "Terminal-FxEnumation-All",
+        "VersionWarning"
+      ],
+      "bytes": 53845,
+      "measuredAt": "2026-10-06T13:12:30.619Z"
+    },
+    "3eaffe0044d4a835": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "IDER",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 53682,
+      "measuredAt": "2026-10-06T13:12:33.908Z"
+    },
+    "3c476f63547385d5": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "IDER",
+        "IDERStats",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 54104,
+      "measuredAt": "2026-10-06T13:12:37.620Z"
+    },
+    "7fd60db091be1e7b": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "HardwareInfo",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52464,
+      "measuredAt": "2026-10-06T13:12:40.625Z"
+    },
+    "1e7c5968271c3830": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "EventLog",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52932,
+      "measuredAt": "2026-10-06T13:12:44.303Z"
+    },
+    "3b4e2673fad51bba": {
+      "theme": "amber",
+      "features": [
+        "AuditLog",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 53278,
+      "measuredAt": "2026-10-06T13:12:47.421Z"
+    },
+    "7c95677a789ed236": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Storage",
+        "VersionWarning"
+      ],
+      "bytes": 51618,
+      "measuredAt": "2026-10-06T13:12:50.398Z"
+    },
+    "f81ce9a3257fec8c": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "NetworkSettings",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 52024,
+      "measuredAt": "2026-10-06T13:12:54.266Z"
+    },
+    "33281130db2d38a0": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "NetworkSettings",
+        "PowerControl",
+        "VersionWarning",
+        "Wireless"
+      ],
+      "bytes": 52298,
+      "measuredAt": "2026-10-06T13:12:57.608Z"
+    },
+    "982f6c91db2eff1d": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "PowerControl-Advanced",
+        "VersionWarning"
+      ],
+      "bytes": 50535,
+      "measuredAt": "2026-10-06T13:13:01.337Z"
+    },
+    "a487727ec2b0767a": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "SystemDefense",
+        "VersionWarning"
+      ],
+      "bytes": 52687,
+      "measuredAt": "2026-10-06T13:13:05.261Z"
+    },
+    "5da7d8ccdcfb0888": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "RemoteAccess",
+        "VersionWarning"
+      ],
+      "bytes": 52551,
+      "measuredAt": "2026-10-06T13:13:08.810Z"
+    },
+    "1a4a8e3a928c4ede": {
+      "theme": "amber",
+      "features": [
+        "AgentPresence",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51779,
+      "measuredAt": "2026-10-06T13:13:11.452Z"
+    },
+    "7bb15b0d2b8e9ed5": {
+      "theme": "amber",
+      "features": [
+        "Alarms",
+        "Desktop",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51922,
+      "measuredAt": "2026-10-06T13:13:14.264Z"
+    },
+    "73a87a2d175d1117": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "EventSubscriptions",
+        "PowerControl",
+        "VersionWarning"
+      ],
+      "bytes": 51095,
+      "measuredAt": "2026-10-06T13:13:17.672Z"
+    },
+    "b1db9ccdc587b164": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Scripting",
+        "VersionWarning"
+      ],
+      "bytes": 55238,
+      "measuredAt": "2026-10-06T13:13:21.033Z"
+    },
+    "aad2647b07c350bf": {
+      "theme": "amber",
+      "features": [
+        "Desktop",
+        "PowerControl",
+        "Scripting",
+        "Scripting-Editor",
+        "VersionWarning"
+      ],
+      "bytes": 55788,
+      "measuredAt": "2026-10-06T13:13:24.244Z"
     },
     "5d87328593f937b9": {
       "theme": "amber",
@@ -1589,8 +1548,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 58554,
-      "measuredAt": "2026-10-06T08:07:38.910Z"
+      "bytes": 57903,
+      "measuredAt": "2026-10-06T13:13:27.234Z"
     },
     "f8adf27474f12074": {
       "theme": "amber",
@@ -1620,8 +1579,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 70909,
-      "measuredAt": "2026-10-06T08:07:41.981Z"
+      "bytes": 71163,
+      "measuredAt": "2026-10-06T13:13:31.372Z"
     },
     "4ec88c89dcbdf858": {
       "theme": "amber",
@@ -1659,8 +1618,8 @@
         "VersionWarning",
         "Wireless"
       ],
-      "bytes": 78932,
-      "measuredAt": "2026-10-06T08:07:44.662Z"
+      "bytes": 79231,
+      "measuredAt": "2026-10-06T13:13:35.207Z"
     }
   }
 }

@@ -190,12 +190,54 @@ input[type="url"] {
   overflow-x: auto;
 }
 
-.status {
-  color: var(--text-dim);
-}
+/* ---------- Generated commands ---------- */
 
 .status-error {
   color: var(--error);
+}
+
+.command {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.command-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.command-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.btn-small {
+  padding: 3px 9px;
+  font-size: 12px;
+}
+
+/*
+ * Secondary recipes -- build-without-flash, get-the-sources -- are one click
+ * away rather than always on screen: the flash command is the answer to the
+ * question the picker asks, and everything else is a footnote to it.
+ */
+.more > summary {
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.more[open] > summary {
+  margin-bottom: 8px;
+}
+
+.more .section-note {
+  margin: 8px 0 0;
 }
 
 /* ---------- Screenshots (carousel) ---------- */
@@ -539,16 +581,6 @@ figcaption {
   height: 620px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
-}
-
-/* ---------- Build ---------- */
-
-.build-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: flex-end;
-  margin-bottom: 14px;
 }
 
 /* The summary sits at the left, the support link at the right. */

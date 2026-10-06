@@ -15,10 +15,10 @@ import {
   type KvmSettings,
 } from '../lib/kvm'
 import { Dialog } from '../ui/dialog'
-import { ExpandIcon, NavIcon, SettingsIcon } from '../ui/icons'
+import { ExpandIcon, NavIcon } from '../ui/icons'
 import { IconMenu, type MenuEntry } from '../ui/menu'
 import { createIder } from '../lib/ider'
-import { IderOverlay } from '../ui/ider-overlay'
+import { IderSessionButton, iderSummary } from '../ui/ider-session'
 import type { WsmanNode } from '../lib/wsman'
 
 /**
@@ -114,7 +114,6 @@ export function KvmPage() {
   const channelRef = useRef<RedirectChannel | null>(null)
 
   const [settings, setSettings] = useState<KvmSettings>(loadKvmSettings)
-  const [draft, setDraft] = useState<KvmSettings>(settings)
   const [message, setMessage] = useState('')
   const [kvmMissing, setKvmMissing] = useState(false)
   const [graySupported, setGraySupported] = useState(false)
@@ -128,10 +127,8 @@ export function KvmPage() {
    */
   const [blankSupported, setBlankSupported] = useState<boolean | null>(null)
   const [full, setFull] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
   const [showType, setShowType] = useState(false)
   const [typeText, setTypeText] = useState('')
-  const [showIder, setShowIder] = useState(false)
   const [focusLevel, setFocusLevel] = useState(0)
   const [screens, setScreens] = useState<ScreenInfo | null>(null)
   /** Blocks injection while a modal is up, like the legacy `xxdialogMode`. */
@@ -147,15 +144,7 @@ export function KvmPage() {
    */
   const ider = useMemo(() => (FEAT_IDER ? createIder() : null), [])
   useEffect(() => () => ider?.stop(), [ider])
-  const iderView = ider?.view.value ?? null
-  /*
-   * A mounted image is not a redirected one: the engine keeps the file chosen
-   * after a stop so it can be restarted, so both the button and the status chip
-   * follow `status` and would otherwise claim a session that is not there.
-   */
-  const iderLive = iderView != null && iderView.status !== 'idle'
-  const iderMedia = iderView == null ? [] : [iderView.floppy, iderView.cdrom].filter((m) => m != null)
-  const iderLabel = iderMedia.length > 0 ? `${S.kvmIder} ${iderMedia.map((m) => m?.name).join(', ')}` : S.kvmIder
+  const { live: iderLive, connected: iderConnected, label: iderLabel } = iderSummary(ider?.view.value ?? null)
 
   /**
    * Blank the device screen, now.
@@ -499,6 +488,44 @@ export function KvmPage() {
     })
   }
 
+  /*
+   * Viewer settings live here, under the monitor icon, rather than behind a
+   * separate gear dialog: they are all properties of what the display shows, and
+   * a menu makes each one a single click instead of open-dialog / change / OK.
+   *
+   * Every toggle stages through `applySettings`, which persists and pushes to the
+   * live session -- only the pixel format needs the video re-opened, and that is
+   * `applySettings`'s own rule.
+   */
+  if (FEAT_DesktopSettings) {
+    const formats = graySupported ? GRAY_PIXEL_FORMATS.concat(PIXEL_FORMATS) : PIXEL_FORMATS
+    displayMenu.push({ id: 'view-h', heading: S.kvmViewerSettings })
+    displayMenu.push({
+      id: 'pixel',
+      label: S.kvmPixelFormat,
+      select: {
+        value: String(settings.encflags),
+        options: formats.map((f) => ({ value: String(f.value), label: f.label })),
+        onChange: (v) => applySettings({ ...settings, encflags: Number(v) }),
+      },
+    })
+    for (const [key, label] of [
+      ['showmouse', S.kvmShowLocalCursor],
+      ['showcad', S.kvmShowCad],
+      ['limitFrameRate', S.kvmLimitFrameRate],
+      ['reverseMouseWheel', S.kvmReverseWheel],
+      ...(FEAT_DesktopFocus ? ([['showfocus', S.kvmShowFocusTool]] as const) : []),
+      ...(FEAT_DesktopRotation ? ([['noMouseRotate', S.kvmNoMouseRotate]] as const) : []),
+    ] as [keyof KvmSettings, string][]) {
+      displayMenu.push({
+        id: 'set-' + key,
+        label,
+        checked: settings[key] as boolean,
+        onSelect: () => applySettings({ ...settings, [key]: !settings[key] }),
+      })
+    }
+  }
+
   /**
    * `focus-h` etc: focus, rotation and screen switching collapse into the
    * display menu. Keyboard input does the same in its own menu, so one bar can
@@ -534,16 +561,52 @@ export function KvmPage() {
   }
 
   return (
-    <div class={'media-page kvm-page' + (full ? ' kvm-fullscreen' : '')}>
+    <div class={'media-page' + (full ? ' kvm-fullscreen' : '')}>
       {/*
         One actions bar, one screen, one status bar: the layout a virtual machine
         window has. Everything that does not fit in the bar lives behind a menu or
         a dialog -- display placement, viewer settings, keyboard input and IDE-R.
+
+        The groups are ordered to line up with the Serial-over-LAN window, which
+        shares the session button and the view-menu + IDE-R pair: those two sit at
+        the same offsets in both bars, and only the window/mode group and the
+        keyboard menu are Remote Desktop's own.
       */}
-      <div class="media-bar kvm-bar">
+      <div class="media-bar">
         <button type="button" class="btn" onClick={live ? () => channelRef.current?.Stop() : start}>
           {live ? S.kvmDisconnect : S.kvmConnect}
         </button>
+
+        <span class="bar-sep" aria-hidden="true" />
+
+        {displayMenu.length > 0 && (
+          <IconMenu
+            label={S.kvmDisplay}
+            icon={<NavIcon name="kvm" size={14} />}
+            entries={displayMenu}
+            onOpenChange={(open) => {
+              // Grayscale needs a device that offers it (index.html:8977), and
+              // the answer decides which pixel formats the menu can list.
+              const stack = getStack()
+              if (open && stack != null && amtVersion.value > 15) {
+                stack.Get('IPS_KVMRedirectionSettingData', (_s, _n, resp) => {
+                  setGraySupported(resp?.Body?.['GrayscalePixelFormatSupported'] === true)
+                })
+              }
+            }}
+          />
+        )}
+        {FEAT_IDER && (
+          <IderSessionButton
+            engine={ider}
+            onOpenChange={(open) => {
+              dialogOpen.current = open
+            }}
+          />
+        )}
+
+        <span class="bar-sep" aria-hidden="true" />
+
         <button
           type="button"
           class="btn"
@@ -553,48 +616,6 @@ export function KvmPage() {
         >
           <ExpandIcon size={14} />
         </button>
-
-        <span class="kvm-sep" aria-hidden="true" />
-
-        {displayMenu.length > 0 && (
-          <IconMenu label={S.kvmDisplay} icon={<NavIcon name="kvm" size={14} />} entries={displayMenu} />
-        )}
-        {FEAT_DesktopSettings && (
-          <button
-            type="button"
-            class="btn"
-            title={S.kvmSettings}
-            aria-label={S.kvmSettings}
-            onClick={() => {
-              const stack = getStack()
-              // Grayscale needs a device that offers it (index.html:8977).
-              if (stack != null && amtVersion.value > 15) {
-                stack.Get('IPS_KVMRedirectionSettingData', (_s, _n, resp) => {
-                  setGraySupported(resp?.Body?.['GrayscalePixelFormatSupported'] === true)
-                })
-              }
-              setDraft(settings)
-              dialogOpen.current = true
-              setShowSettings(true)
-            }}
-          >
-            <SettingsIcon size={14} />
-          </button>
-        )}
-        {FEAT_IDER && (
-          <button
-            type="button"
-            class={'btn' + (iderLive ? ' btn-primary' : '')}
-            title={S.iderSession}
-            aria-pressed={iderLive}
-            onClick={() => setShowIder(true)}
-          >
-            {S.kvmIder}
-          </button>
-        )}
-
-        <span class="kvm-sep" aria-hidden="true" />
-
         {amtVersion.value > 9 && blankSupported !== false && (
           <button
             type="button"
@@ -616,7 +637,7 @@ export function KvmPage() {
           {S.kvmViewOnly}
         </button>
 
-        <span class="kvm-sep" aria-hidden="true" />
+        <span class="bar-sep" aria-hidden="true" />
 
         <IconMenu label={S.kvmKeyboard} icon={S.kvmKeyboard} entries={keyboardMenu} />
       </div>
@@ -669,7 +690,7 @@ export function KvmPage() {
           <span class={'status-' + linkClass}>{statusText}</span>
           <span class="header-spacer" />
           {iderLive && (
-            <span class={'kvm-mode' + (iderView?.status === 'live' ? ' kvm-mode-live' : '')}>
+            <span class={'kvm-mode' + (iderConnected ? ' kvm-mode-live' : '')}>
               {iderLabel}
             </span>
           )}
@@ -684,66 +705,6 @@ export function KvmPage() {
           {blankScreen && <span class="kvm-mode">{S.kvmBlankScreen}</span>}
           {viewOnly && <span class="kvm-mode">{S.kvmViewOnly}</span>}
         </div>
-
-      {/*
-        IDE-R is a dialog rather than a bar of its own: the controls are only
-        wanted while an image is being mounted, and the engine above keeps the
-        session alive whether this is open or not.
-      */}
-      {showIder && ider != null && (
-        <Dialog title={S.iderSession} onClose={() => setShowIder(false)}>
-          <IderOverlay
-            view={ider.view}
-            onStart={(floppy, cdrom, mode) => ider.start({ floppy, cdrom, mode })}
-            onEject={(device) => ider.eject(device)}
-            onStop={() => ider.stop()}
-          />
-        </Dialog>
-      )}
-
-      {showSettings && (
-        <Dialog
-          title={S.kvmViewerSettings}
-          onClose={(v) => {
-            dialogOpen.current = false
-            setShowSettings(false)
-            if (v === 'ok') applySettings(draft)
-          }}
-          buttons={[
-            { label: S.ok, value: 'ok', primary: true },
-            { label: S.cancel, value: 'cancel' },
-          ]}
-        >
-          <div class="kvm-dialog-field">
-            <span>{S.kvmPixelFormat}</span>
-            <select
-              value={String(draft.encflags)}
-              onChange={(e) => setDraft({ ...draft, encflags: Number(e.currentTarget.value) })}
-            >
-              {(graySupported ? GRAY_PIXEL_FORMATS.concat(PIXEL_FORMATS) : PIXEL_FORMATS).map((f) => (
-                <option key={f.value} value={f.value}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          {(
-            [
-              ['showmouse', S.kvmShowLocalCursor],
-              ['showcad', S.kvmShowCad],
-              ['limitFrameRate', S.kvmLimitFrameRate],
-              ['reverseMouseWheel', S.kvmReverseWheel],
-              ...(FEAT_DesktopFocus ? ([['showfocus', S.kvmShowFocusTool]] as const) : []),
-              ...(FEAT_DesktopRotation ? ([['noMouseRotate', S.kvmNoMouseRotate]] as const) : []),
-            ] as [keyof KvmSettings, string][]
-          ).map(([key, label]) => (
-            <label class="kvm-dialog-field" key={key}>
-              <span>{label}</span>
-              <input type="checkbox" checked={draft[key] as boolean} onChange={(e) => setDraft({ ...draft, [key]: e.currentTarget.checked })} />
-            </label>
-          ))}
-        </Dialog>
-      )}
 
       {showType && (
         <Dialog

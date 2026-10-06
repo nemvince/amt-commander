@@ -139,8 +139,8 @@ commands
                            unless --name or --out already point at one
   features                 list the feature ids --features accepts
   themes                   list the theme ids --theme accepts
-  measure                  re-measure the size table with real builds (slow:
-                           one build per feature)
+  measure                  re-measure the size table with real builds (slow;
+                           one build per feature, every theme unless --theme)
 
 selection
   --features <a,b,c>       exact feature ids, e.g. --features Desktop,Terminal,IDER
@@ -389,15 +389,27 @@ async function cmdMeasure(a: Args): Promise<number> {
   const ids = selectIds(a)
   const theme = resolveTheme(a.theme)
   const tty = process.stdout.isTTY === true
+  /*
+   * Every theme by default. A theme is a CSS file, so its sizes differ, and the
+   * promo site shows the numbers for *whichever* theme is selected -- measuring
+   * one theme and shipping that table leaves three quarters of the picker
+   * falling back to another palette's figures. `--theme` still narrows it.
+   */
+  const themes = a.theme != null && a.theme.trim() !== '' ? [theme] : THEMES.map((t) => t.id)
   // The cache is a shared marginal table: core baseline plus every feature on
   // top of it, so one refresh makes `estimateSize` exact for any selection.
-  console.log(`${bold('measure')}  baseline ${MANDATORY.length} core features, +${ROWS.length - MANDATORY.length} marginals, theme ${theme}`)
-  await refreshMeasurements({ features: MANDATORY, theme }, (label, done, total) => {
-    const line = `  [${done}/${total}] ${label}`
-    if (tty) process.stdout.write(`\r\x1b[K${line}`)
-    else process.stdout.write(line + '\n')
-  })
-  if (tty) process.stdout.write('\r\x1b[K')
+  console.log(
+    `${bold('measure')}  baseline ${MANDATORY.length} core features, +${ROWS.length - MANDATORY.length} marginals, ` +
+      `themes ${themes.join(', ')}`,
+  )
+  for (const t of themes) {
+    await refreshMeasurements({ features: MANDATORY, theme: t }, (label, done, total) => {
+      const line = `  ${t} [${done}/${total}] ${label}`
+      if (tty) process.stdout.write(`\r\x1b[K${line}`)
+      else process.stdout.write(line + '\n')
+    })
+    if (tty) process.stdout.write('\r\x1b[K')
+  }
   const est = estimateSize(ids, theme)
   console.log(`selection  ${ids.length} features, ${bytes(est.bytes)}  ${est.exact ? paint('32', 'MEASURED') : paint('33', 'ESTIMATE')}`)
   if (est.unmeasured.length > 0) console.log(`unmeasured ${est.unmeasured.join(', ')}`)

@@ -1,4 +1,4 @@
-import { analyzer } from 'vite-bundle-analyzer'
+import { visualizer } from 'rollup-plugin-visualizer'; // For bundle analysis
 import preact from '@preact/preset-vite'
 import { defineConfig } from 'vite'
 import { DEFAULT_TIER, FEATURE_IDS, flagName, resolveFeatures } from '@meshcommander/build-system'
@@ -38,7 +38,12 @@ export default defineConfig(({ command }) => ({
     preact(),
     // `ANALYZE=1` writes dist/<build>/bundle-stats.json for the treemap.
     ...(process.env.ANALYZE
-      ? [analyzer({ analyzerMode: 'json', fileName: 'bundle-stats.json', defaultSizes: 'gzip' })]
+      ? [visualizer({
+      open: true,
+      filename: 'bundle-stats.html',
+      gzipSize: true,
+      brotliSize: true,
+    }),]
       : []),
   ],
   define: { ...flagDefines, __THEME__: JSON.stringify(theme) },
