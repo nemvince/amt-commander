@@ -2,13 +2,18 @@ name: Build service
 
 # Ships the on-demand firmware builder to Fly.io.
 #
+# Deployment is opt-in through the repository variable `CI_DEPLOY`, because a
+# fresh clone of this repository has no Fly app and no `FLY_API_TOKEN`, and a
+# workflow that fails on every push until then teaches people to ignore it. Once
+# the app exists and the secret is set:
+#   CI_DEPLOY=true            (repo variable)
+# and the job below fails loudly if `FLY_API_TOKEN` is missing -- a deployment
+# that silently skips is a deployment nobody notices is missing.
+#
 # The image is built here first with the repository root as the build context
 # (that is what `apps/build-service/Dockerfile` expects: it copies the workspace
 # so `bun install` can link `apps/console` and `packages/build-system`), so a
 # broken Dockerfile fails as a build error rather than as a deploy error.
-#
-# FLY_API_TOKEN is required and the job fails loudly without it: a deployment
-# that silently skips is a deployment nobody notices is missing.
 
 on:
   push:
@@ -24,6 +29,7 @@ on:
 
 jobs:
   deploy:
+    if: vars.CI_DEPLOY == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
