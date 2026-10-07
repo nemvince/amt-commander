@@ -21,7 +21,7 @@
  */
 
 import type { AmtStack } from './amt-stack'
-import { intToStr, intToStrX, readShort, shortToStr, shortToStrX } from './bytes'
+import { intToStr, intToStrX, readInt, readIntX, readShort, readShortX, readSInt, shortToStr, shortToStrX } from './bytes'
 import { rstrMd5 } from './md5'
 import { getSidString, sidToBytes } from './sid'
 import {
@@ -35,7 +35,7 @@ import {
   PullSystemDefense,
   PullSystemStatus,
 } from '../state/device'
-import blockFile from './script-blocks.json'
+import blockFile from 'virtual:script-blocks'
 
 /* ------------------------------------------------------------------ blocks */
 
@@ -60,7 +60,7 @@ export interface ScriptBlock {
 export type ScriptBlockInstance = ScriptBlock & { id: number; xname: string }
 
 /** The building-block library, verbatim from scriptblocks.txt. */
-export const SCRIPT_BLOCKS = blockFile.blocks as unknown as Record<string, ScriptBlock>
+export const SCRIPT_BLOCKS = blockFile as unknown as Record<string, ScriptBlock>
 
 /**
  * Clone a library block into a script instance. `%%%name%%%` in the code is replaced
@@ -95,19 +95,6 @@ export function blocksToScript(list: ScriptBlockInstance[]): string {
 
 /* ------------------------------------------------------------ binary helpers */
 
-function readInt(v: string, p: number): number {
-  // * 0x1000000 rather than << 24: the shift would force this into a signed int32.
-  return v.charCodeAt(p) * 0x1000000 + (v.charCodeAt(p + 1) << 16) + (v.charCodeAt(p + 2) << 8) + v.charCodeAt(p + 3)
-}
-function readSInt(v: string, p: number): number {
-  return (v.charCodeAt(p) << 24) + (v.charCodeAt(p + 1) << 16) + (v.charCodeAt(p + 2) << 8) + v.charCodeAt(p + 3)
-}
-function readShortX(v: string, p: number): number {
-  return (v.charCodeAt(p + 1) << 8) + v.charCodeAt(p)
-}
-function readIntX(v: string, p: number): number {
-  return v.charCodeAt(p + 3) * 0x1000000 + (v.charCodeAt(p + 2) << 16) + (v.charCodeAt(p + 1) << 8) + v.charCodeAt(p)
-}
 /** Hex text to the raw string the interpreter actually runs on. */
 function hex2rstr(d: string): string {
   const m = d.match(/../g)

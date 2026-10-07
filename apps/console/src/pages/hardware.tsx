@@ -8,6 +8,7 @@
  * every instance of every class.
  */
 import { useSignal } from '@preact/signals'
+import '../styles/hardware.css'
 import { items, num, text } from '../lib/wsm'
 import { Details, type Field } from '../ui/details'
 import { useEffect } from 'preact/hooks'

@@ -12,3 +12,12 @@ declare const __THEME__: string
  * path on disk.
  */
 declare module 'virtual:theme.css'
+
+/**
+ * Served by `build/script-blocks-plugin.ts`: the block library from
+ * `lib/script-blocks.json` as a plain object literal.
+ */
+declare module 'virtual:script-blocks' {
+  const blocks: Record<string, import('./lib/scripting').ScriptBlock>
+  export default blocks
+}

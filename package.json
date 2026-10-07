@@ -9,6 +9,7 @@
   "scripts": {
     "build": "bun run --filter '*' build",
     "typecheck": "bun run --filter '*' typecheck",
+    "test": "bun test",
     "dev": "bun run --filter '*' dev",
     "console": "bun run --cwd apps/console dev",
     "mock": "bun run --cwd packages/mock dev",

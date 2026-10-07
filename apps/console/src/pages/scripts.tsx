@@ -1,4 +1,5 @@
 import { Fragment } from 'preact'
+import '../styles/scripts.css'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { FEAT_FileSaver, FEAT_ScriptingEditor } from '../features'
 import { S } from '../strings'
@@ -38,7 +39,6 @@ interface MescriptFile {
 const START_VARS = { _interactive: 1, _mode: 'Firmware' }
 
 /** Blocks whose name starts with `_` are structural and never shown in the picker. */
-const LIBRARY = Object.keys(SCRIPT_BLOCKS).filter((k) => k.charCodeAt(0) !== 95)
 
 function varText(v: ScriptVar): string {
   if (v.type == 4 && String(v.value ?? '').length > 0) return '*****'
@@ -163,11 +163,13 @@ export function ScriptsPage() {
   }
 
   const running = (runner.current?.state ?? 0) > 0
-  const shown = LIBRARY.filter((k) => {
-    const f = filter.toLowerCase()
-    const b = SCRIPT_BLOCKS[k]
-    return b.name.toLowerCase().includes(f) || b.desc.toLowerCase().includes(f)
-  })
+  const shown = Object.keys(SCRIPT_BLOCKS)
+    .filter((k) => k.charCodeAt(0) !== 95)
+    .filter((k) => {
+      const f = filter.toLowerCase()
+      const b = SCRIPT_BLOCKS[k]
+      return b.name.toLowerCase().includes(f) || b.desc.toLowerCase().includes(f)
+    })
   function move(from: number, delta: number) {
     const next = list.slice()
     const to = from + delta

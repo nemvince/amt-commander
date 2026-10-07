@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import '../styles/ider.css'
+import '../styles/kvm.css'
 import { FEAT_DesktopFocus, FEAT_DesktopMulti, FEAT_DesktopRotation, FEAT_DesktopSettings, FEAT_DesktopType, FEAT_IDER } from '../features'
 import { S } from '../strings'
 import { amtVersion, getStack, powerState } from '../state/device'

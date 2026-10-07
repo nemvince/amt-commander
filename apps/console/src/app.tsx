@@ -24,13 +24,6 @@ import { SolPage } from './pages/sol'
 import { KvmPage } from './pages/kvm'
 import { InstallPage } from './pages/install'
 import './styles/base.css'
-import './styles/events.css'
-import './styles/hardware.css'
-import './styles/ider.css'
-import './styles/kvm.css'
-import './styles/scripts.css'
-import './styles/users.css'
-
 
 export interface PageDef {
   id: string

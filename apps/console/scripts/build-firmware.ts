@@ -44,9 +44,15 @@ const ENCODING = process.env.ENCODING === 'br' ? 'br' : 'gzip'
  *
  * Zopfli emits ordinary gzip -- the device, the loader and the browser need no
  * changes -- but spends far more CPU picking better encodings: measured 3.7%
- * smaller on this payload (78,447 vs 81,462 bytes for the large tier). It costs
- * a couple of seconds per tier. 15 iterations beat 30 here, so more effort is
- * not monotonic; leave it at 15.
+ * smaller than zlib -9 on this payload. Sweep on a ~292 KB large-tier artifact:
+ *   iterations 15 → 78,922 B  3.3s   |  zlib -9 → 82,090 B 0.02s
+ *   iterations 30 → 78,914 B  4.6s   |  brotli q11 → 70,260 B (hardware ERR_CONTENT_DECODING_FAILED, unusable)
+ *   iterations 50 → 78,904 B  5.5s   ← kept: smallest gz under the 15s budget
+ *   iterations 100→ 78,907 B  9.9s
+ * More effort is not monotonic past 50. A three-tier build at 50 takes ~15s;
+ * callers that need speed can override with NUMITERATIONS. Brotli stays disabled
+ * (AMT replays Content-Encoding: br and the browser then fails to decode).
+ * zopfli is deterministic (mtime:0).
  */
 async function compress(payload: Buffer): Promise<Buffer> {
   if (ENCODING === 'br') {
@@ -54,7 +60,8 @@ async function compress(payload: Buffer): Promise<Buffer> {
       params: { [constants.BROTLI_PARAM_QUALITY]: 11, [constants.BROTLI_PARAM_LGWIN]: 24 },
     })
   }
-  return Buffer.from(await zopfli.gzipAsync(payload, { numiterations: 15 }))
+  const it = Number(process.env.NUMITERATIONS ?? 50)
+  return Buffer.from(await zopfli.gzipAsync(payload, { numiterations: it }))
 }
 
 function decompress(payload: Buffer): Buffer {
@@ -71,7 +78,7 @@ function cap(s: string): string {
 
 /** Strip Vite's crossorigin/modulepreload so the inlined tags stay self-contained. */
 function inlineAssetTags(html: string): string {
-  return html
+  const inlined = html
     .replace(/<script([^>]*)\ssrc="([^"]+)"([^>]*)><\/script>/g, (_m, before, src, after) => {
       const file = join(distDir, currentBuild, src.replace(/^\//, ''))
       if (!existsSync(file)) return _m
@@ -83,6 +90,9 @@ function inlineAssetTags(html: string): string {
       if (!existsSync(file)) return m
       return `<style>${readFileSync(file, 'utf8')}</style>`
     })
+  // Collapse Vite's pretty HTML to one line — do not touch JS/CSS text itself (already minified).
+  // Stripping comments and inter-tag whitespace is safe for the shell markup.
+  return inlined.replace(/<!--[\s\S]*?-->/g, '').replace(/>\s+</g, '><').trim()
 }
 
 /** `src`/`href` values still pointing outside the file: the artifact must be self-contained. */

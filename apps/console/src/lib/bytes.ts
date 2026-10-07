@@ -34,3 +34,20 @@ export function shortToStrX(v: number): string {
 export function readShort(v: string, p: number): number {
   return (v.charCodeAt(p) << 8) + v.charCodeAt(p + 1)
 }
+
+/** Read a 32-bit big-endian unsigned value. */
+export function readInt(v: string, p: number): number {
+  return v.charCodeAt(p) * 0x1000000 + (v.charCodeAt(p + 1) << 16) + (v.charCodeAt(p + 2) << 8) + v.charCodeAt(p + 3)
+}
+
+export function readSInt(v: string, p: number): number {
+  return (v.charCodeAt(p) << 24) + (v.charCodeAt(p + 1) << 16) + (v.charCodeAt(p + 2) << 8) + v.charCodeAt(p + 3)
+}
+
+export function readShortX(v: string, p: number): number {
+  return (v.charCodeAt(p + 1) << 8) + v.charCodeAt(p)
+}
+
+export function readIntX(v: string, p: number): number {
+  return v.charCodeAt(p + 3) * 0x1000000 + (v.charCodeAt(p + 2) << 16) + (v.charCodeAt(p + 1) << 8) + v.charCodeAt(p)
+}

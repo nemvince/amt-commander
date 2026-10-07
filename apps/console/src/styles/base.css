@@ -185,14 +185,6 @@ a:hover {
   font-weight: 600;
 }
 
-.nav-group {
-  padding: 12px 12px 4px;
-  font-size: 11px;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-
 /* ---------- Main ---------- */
 
 .main {
@@ -399,12 +391,6 @@ a:hover {
 
 .menu-field select {
   max-width: 118px;
-}
-
-.menu-sep {
-  height: 1px;
-  margin: 4px 6px;
-  background: var(--border);
 }
 
 .menu-item {

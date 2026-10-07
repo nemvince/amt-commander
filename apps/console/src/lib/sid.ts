@@ -4,16 +4,14 @@
  * AMT hands Kerberos ACL entries and Kerberos audit initiators back as a raw SID
  * byte string, and takes one back when a Kerberos account is added.
  */
+import { readIntX } from './bytes'
 
 /** S-1-5-21-... from raw SID bytes, e.g. `S-1-5-32-544`. */
 export function getSidString(sid: string): string {
   // Revision and the 48 bit authority live at fixed offsets in the header; the
   // sub-authorities that follow are 32 bit little endian.
   let r = 'S-' + sid.charCodeAt(0) + '-' + sid.charCodeAt(7)
-  for (let i = 2; i < sid.length / 4; i++) {
-    const p = i * 4
-    r += '-' + (sid.charCodeAt(p + 3) * 0x1000000 + (sid.charCodeAt(p + 2) << 16) + (sid.charCodeAt(p + 1) << 8) + sid.charCodeAt(p))
-  }
+  for (let i = 2; i < sid.length / 4; i++) r += '-' + readIntX(sid, i * 4)
   return r
 }
 

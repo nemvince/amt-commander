@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import '../styles/ider.css'
 import { FEAT_IDER, FEAT_TerminalEnumationAll, FEAT_TerminalSize } from '../features'
 import { createIder } from '../lib/ider'
 import { createRedirect, type RedirectChannel, type RedirectModule } from '../lib/redirect'

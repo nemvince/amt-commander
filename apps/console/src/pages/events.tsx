@@ -9,6 +9,7 @@
  * object the legacy panel rendered.
  */
 import { useSignal, type Signal } from '@preact/signals'
+import '../styles/events.css'
 import { useEffect, useState } from 'preact/hooks'
 import { format } from '../lib/amt-stack'
 import { PullEventLog, eventLog, getStack, pending } from '../state/device'
