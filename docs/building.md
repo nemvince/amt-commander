@@ -12,8 +12,8 @@ own demo page is generated at build time from this same pipeline.
 Bun 1.4 or newer and a checkout:
 
 ```sh
-git clone https://github.com/nemvince/meshcommander-rewrite
-cd meshcommander-rewrite
+git clone https://github.com/nemvince/amt-commander
+cd amt-commander
 bun install
 ```
 

@@ -27,7 +27,7 @@ import { estimateSize, formatBytes, type SizeTable } from './size'
 import './site.css'
 
 /** The project's own repository; the upstream MeshCommander is a different one. */
-const REPO = 'https://github.com/nemvince/meshcommander-rewrite'
+const REPO = 'https://github.com/nemvince/amt-commander'
 /**
  * Where the "build locally" button points: the CLI guide in this repository.
  * A branch-qualified blob link would rot, so this is the file on the default
@@ -40,7 +40,7 @@ const COFFEE = 'https://buymeacoffee.com/nemvince'
  * The two lines a visitor pastes: get the sources, then let the CLI do the
  * rest. Kept next to the generated command so the page shows them together.
  */
-const CLONE = `git clone ${REPO}.git\ncd meshcommander-rewrite\nbun install`
+const CLONE = `git clone ${REPO}.git\ncd amt-commander\nbun install`
 
 /** The demo build's selection, so the picker opens on something familiar. */
 const DEFAULT_SELECTION = TIERS.medium ?? MANDATORY
@@ -567,7 +567,7 @@ export function App() {
       <footer>
         <p>
           {FEATURES.length} feature flags, {THEMES.length} themes, one file.{' '}
-          <a href={REPO}>github.com/nemvince/meshcommander-rewrite</a>
+          <a href={REPO}>github.com/nemvince/amt-commander</a>
         </p>
         <a class="btn coffee" href={COFFEE}>
           {/* Inline so the icon inherits the button's colour and costs no request. */}
